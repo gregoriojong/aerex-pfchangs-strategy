@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>피에프창 경쟁 구도 분석 | 에렉스 브랜드 전략</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif; background:#f8fafc; color:#1f2937; font-size:14px; }
+  .cover { background:linear-gradient(135deg,#1e3a5f 0%,#1d4ed8 100%); color:#fff; padding:48px 40px; }
+  .cover h1 { font-size:28px; font-weight:800; margin-bottom:8px; }
+  .cover p { font-size:14px; opacity:0.85; }
+  .section { background:#fff; border-radius:12px; padding:28px 32px; margin:24px 32px; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
+  h2 { font-size:18px; font-weight:700; color:#1e3a5f; margin-bottom:20px; border-bottom:2px solid #e5e7eb; padding-bottom:10px; }
+  h3 { font-size:15px; font-weight:700; color:#374151; margin-bottom:12px; }
+  .chart-wrap { position:relative; max-width:700px; margin:0 auto; }
+  .nav-bar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:20px; }
+  @media(max-width:768px) { .section { margin:16px; padding:20px; } }
+</style>
+</head>
+<body>
+
+<div class="cover">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div style="font-size:13px;opacity:0.7;margin-bottom:8px;">에렉스 브랜드 전략 · 경쟁 구도 분석</div>
+    <h1>피에프창 × 7개 경쟁사 종합 비교</h1>
+    <p>2023-2026 누적 분석 · 분석일 2026-04-19</p>
+    <div style="margin-top:20px;display:flex;gap:24px;flex-wrap:wrap;">
+      <div><div style="font-size:24px;font-weight:800;">7개</div><div style="font-size:12px;opacity:0.8;">분석 경쟁사</div></div>
+      <div><div style="font-size:24px;font-weight:800;">6개</div><div style="font-size:12px;opacity:0.8;">분석 항목</div></div>
+      <div><div style="font-size:24px;font-weight:800;">3년</div><div style="font-size:12px;opacity:0.8;">마케팅 타임라인</div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Top 3 Actions -->
+<div class="section">
+  <h2>🚨 즉시 실행 Top 3 액션</h2>
+  <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:10px;"><span style="font-weight:700;color:#1d4ed8;">#1</span> 제휴카드 할인 즉시 도입 — BC·삼성카드 15~20% 협상 착수 (7개 경쟁사 전원 운영 중, 피에프창만 없음)</div><div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:10px;"><span style="font-weight:700;color:#1d4ed8;">#2</span> 런치 세트 29,900원 신설 — 아웃백·매드포갈릭·차이797 대비 평일 점심 열세 즉시 해소</div><div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:8px;padding:14px 18px;margin-bottom:10px;"><span style="font-weight:700;color:#1d4ed8;">#3</span> SNS 월 포스팅 4→8회 증가 + 인플루언서 협업 월 1회 시작 — 인지도 격차 축소</div>
+</div>
+
+<!-- Executive Summary -->
+<div class="section">
+  <h2>📋 종합 요약</h2>
+  <ul style="list-style:none;padding:0;"><li style="margin-bottom:10px;line-height:1.6;">피에프창은 7개 직접 경쟁사 대비 홍보전략·할인행사에서 가장 큰 열세를 보이며, 특히 아웃백(매출 4,305억·블랙라벨 TVC)·매드포갈릭(가족 리브랜딩 집중) 대비 인지도 격차가 심각</li><li style="margin-bottom:10px;line-height:1.6;">차이797은 5년 연속 성장(2024 매출 923억, +10.1%)으로 '정통 중식 캐주얼' 포지셔닝을 선점 중 — 피에프창의 아시안 퓨전 정체성과 직접 충돌</li><li style="margin-bottom:10px;line-height:1.6;">크리스탈제이드·모트32는 미쉐린 연계 프리미엄 전략으로 피에프창의 상단 가격대를 위협하며, 2024 IFC몰 오픈 등 공격적 확장 중</li><li style="margin-bottom:10px;line-height:1.6;">피에프창의 즉각 대응 우선순위: ① 제휴카드 할인 도입(전 경쟁사 운영 중) ② SNS 포스팅 빈도 3배 향상 ③ 런치 세트 도입(아웃백·매드포갈릭·차이797 모두 운영)</li></ul>
+</div>
+
+<!-- Heatmap -->
+<div class="section">
+  <h2>🗺️ 경쟁 구도 히트맵 — 피에프창 vs 7개 경쟁사</h2>
+  <p style="font-size:13px;color:#6b7280;margin-bottom:16px;">점수: <span style="background:#dcfce7;color:#16a34a;padding:1px 6px;border-radius:3px;">8-10 강점</span> <span style="background:#fef9c3;color:#ca8a04;padding:1px 6px;border-radius:3px;">6-7 보통</span> <span style="background:#fff7ed;color:#ea580c;padding:1px 6px;border-radius:3px;">4-5 개선필요</span> <span style="background:#fee2e2;color:#dc2626;padding:1px 6px;border-radius:3px;">1-3 심각</span></p>
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead>
+        <tr style="background:#1e3a5f;color:#fff;">
+          <th style="padding:10px 12px;border:1px solid #e5e7eb;text-align:left;">브랜드</th>
+          <th style="padding:8px;background:#1e3a5f;color:#fff;text-align:center;border:1px solid #e5e7eb;">홍보전략</th><th style="padding:8px;background:#1e3a5f;color:#fff;text-align:center;border:1px solid #e5e7eb;">매출활성화</th><th style="padding:8px;background:#1e3a5f;color:#fff;text-align:center;border:1px solid #e5e7eb;">세트구성</th><th style="padding:8px;background:#1e3a5f;color:#fff;text-align:center;border:1px solid #e5e7eb;">메뉴전략</th><th style="padding:8px;background:#1e3a5f;color:#fff;text-align:center;border:1px solid #e5e7eb;">할인행사</th><th style="padding:8px;background:#1e3a5f;color:#fff;text-align:center;border:1px solid #e5e7eb;">기타행사</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="border-bottom:3px solid #1d4ed8;"><td style="padding:8px 12px;font-weight:700;border:1px solid #e5e7eb;white-space:nowrap;background:#eff6ff;">⭐ 피에프창</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fee2e2;color:#dc2626;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">3</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">4</td></tr>
+        <tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">아웃백</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">9</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">9</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td></tr><tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매드포갈릭</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td></tr><tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">치즈룸</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">4</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td><td style="background:#fee2e2;color:#dc2626;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">3</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">4</td></tr><tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">차이797</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td></tr><tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">크리스탈제이드</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td></tr><tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">제이에스가든</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">4</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fee2e2;color:#dc2626;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">3</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td></tr><tr><td style="padding:8px 12px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">모트32</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">7</td><td style="background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">8</td><td style="background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">5</td><td style="background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;padding:8px 4px;border:1px solid #e5e7eb;">6</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Charts -->
+<div class="section">
+  <h2>📊 항목별 격차 분석 (피에프창 vs 경쟁사 평균)</h2>
+  <div class="chart-wrap" style="max-width:800px;">
+    <canvas id="barChart" height="120"></canvas>
+  </div>
+</div>
+
+<div class="section">
+  <h2>🎯 레이더 차트 — 전체 경쟁사 비교</h2>
+  <div style="display:flex;gap:20px;flex-wrap:wrap;align-items:flex-start;">
+    <div style="flex:1;min-width:300px;" class="chart-wrap">
+      <canvas id="radarAll" height="300"></canvas>
+    </div>
+    <div style="flex:0 0 200px;">
+      <h3 style="font-size:13px;">표시 항목 선택</h3>
+      <div id="legendBtns" style="display:flex;flex-direction:column;gap:6px;margin-top:8px;"></div>
+    </div>
+  </div>
+</div>
+
+<!-- Gap Analysis Table -->
+<div class="section">
+  <h2>🔍 피에프창 항목별 격차 분석</h2>
+  <div style="overflow-x:auto;">
+    <table style="width:100%;border-collapse:collapse;font-size:13px;">
+      <thead><tr style="background:#f1f5f9;">
+        <th style="padding:10px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+        <th style="padding:10px;border:1px solid #e5e7eb;text-align:center;">피에프창</th>
+        <th style="padding:10px;border:1px solid #e5e7eb;text-align:center;">경쟁사 평균</th>
+        <th style="padding:10px;border:1px solid #e5e7eb;text-align:center;">최대 격차 경쟁사</th>
+        <th style="padding:10px;border:1px solid #e5e7eb;text-align:left;">핵심 격차 내용</th>
+        <th style="padding:10px;border:1px solid #e5e7eb;text-align:left;">대응 액션</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td style="padding:10px;font-weight:600;border:1px solid #e5e7eb;">홍보전략</td>
+          <td style="padding:10px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;">6.1</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;font-weight:600;color:#dc2626;">아웃백 (9)</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#374151;">SNS 팔로워 4.75배 열세, 월 포스팅 빈도 3배 열세</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#1d4ed8;">월 포스팅 8회↑, 인플루언서 협업 월 1회, TVC 예산 확보</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;font-weight:600;border:1px solid #e5e7eb;">매출활성화</td>
+          <td style="padding:10px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;">7.0</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;font-weight:600;color:#dc2626;">차이797 (8)</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#374151;">런치 세트 미운영 — 아웃백·매드포갈릭·차이797 모두 런치 세트 운영</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#1d4ed8;">런치 세트 29,900~34,900원 신설, 평일 점심 매출 활성화</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;font-weight:600;border:1px solid #e5e7eb;">세트구성</td>
+          <td style="padding:10px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;">6.9</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;font-weight:600;color:#dc2626;">아웃백 (8)</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#374151;">패밀리 세트 구성 단순, 가격대 다양성 부족</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#1d4ed8;">2인·4인 패밀리 세트 도입, 비즈니스 런치 세트 신설</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;font-weight:600;border:1px solid #e5e7eb;">메뉴전략</td>
+          <td style="padding:10px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;">7.0</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;font-weight:600;color:#dc2626;">모트32 (8)</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#374151;">신메뉴 출시 주기 불규칙, 아시안 퓨전 정체성 약화</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#1d4ed8;">분기별 아시안 퓨전 시그니처 신메뉴 출시 고정화</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;font-weight:600;border:1px solid #e5e7eb;">할인행사</td>
+          <td style="padding:10px;background:#fee2e2;color:#dc2626;font-weight:700;text-align:center;border:1px solid #e5e7eb;">3</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;">5.7</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;font-weight:600;color:#dc2626;">아웃백 (9)</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#374151;">제휴카드 할인 전무 — 7개 경쟁사 전원 최소 2종 이상 운영</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#1d4ed8;">BC·삼성·현대카드 제휴 즉시 추진, 앱 쿠폰 주 1회 발행</td>
+        </tr>
+        <tr>
+          <td style="padding:10px;font-weight:600;border:1px solid #e5e7eb;">기타행사</td>
+          <td style="padding:10px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">4</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;">5.7</td>
+          <td style="padding:10px;text-align:center;border:1px solid #e5e7eb;font-weight:600;color:#dc2626;">아웃백 (7)</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#374151;">시즌 이벤트 부재, CRM 기반 재방문 프로그램 없음</td>
+          <td style="padding:10px;font-size:13px;border:1px solid #e5e7eb;color:#1d4ed8;">분기별 시즌 이벤트 기획, 멤버십 프로그램 도입</td>
+        </tr></tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Competitor Cards -->
+<div class="section">
+  <h2>🏢 경쟁사별 상세 분석</h2>
+  <div class="nav-bar"><a href="#comp-0" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">아웃백</a><a href="#comp-1" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">매드포갈릭</a><a href="#comp-2" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">치즈룸</a><a href="#comp-3" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">차이797</a><a href="#comp-4" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">크리스탈제이드</a><a href="#comp-5" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">제이에스가든</a><a href="#comp-6" style="color:#2563eb;text-decoration:none;font-size:13px;padding:4px 10px;background:#eff6ff;border-radius:4px;white-space:nowrap;">모트32</a></div>
+  
+        <div id="comp-0" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(239,68,68,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">아웃백</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">아메리칸 캐주얼</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 101개 · 객단가 4~7만원</div>
+              <div>Instagram 152,000명 · 월 12회 포스팅</div>
+              <div>연매출 430.5억 원 (2024)</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">9</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">Instagram 팔로워 152,000명(피에프창 32,000 대비 4.75배). 2026년 블랙라벨 씨즐링 TV광고 집행. 월 포스팅 12회. 부메랑 멤버십 400만 회원.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표 + 언론 보도<br>2026-04-15<br><a href="https://www.instagram.com/outback_korea/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.outback.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">런치세트 29,900원 운영. 부메랑 앱 쿠폰 주 1~2회 발행. 2024 몰 이전 점포 매출 +106% 달성. 2024 매출 4,305억(2023 4,576억 대비 -5.9% 역성장이나 절대치 압도적).</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지 + 업계 보도<br>2026-04-10<br><a href="https://www.outback.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.foodservice.co.kr/news/articleView.html?idxno=332156" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">2인·4인 패밀리 세트 다수 운영(59,000~89,000원대). 시즌별 한정 세트 분기 1회 출시. 런치·디너 구분 구성.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.outback.co.kr/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">2026년 블랙라벨 씨즐링 시리즈 신메뉴 대규모 TVC 론칭. 계절별 시그니처 메뉴 교체. 블루밍 어니언 등 독자 시그니처 IP 보유.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">언론 보도<br>2026-02-19<br><a href="https://www.hankyung.com/article/2026021965151" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">9</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">BC카드 20% + 롯데카드 15% 상시 할인. 부메랑 앱 주 1~2회 쿠폰. 봄 가족세트 30% 한정 할인(2025-04). 매장 이전 기념 특가 이벤트 정기 진행.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 공식 홈페이지 확인<br>2026-04-10<br><a href="https://www.outback.co.kr/benefit/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">몰 이전 전략으로 상권 확장 지속. 부메랑 400만 멤버십 CRM 기반 재방문 촉진. 시즌별 가족 타깃 이벤트.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.outback.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎫 CRM · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">부메랑 멤버십 300만 돌파, 앱 리뉴얼</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 📺 광고 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 패밀리 세트 캠페인 TV광고 집행</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 📱 메뉴+SNS · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">여름 한정 콜드 메뉴 출시 + SNS 인플루언서 10명 협업</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🎉 시즌이벤트 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 홀리데이 패키지 + 크리스마스 디너 예약 캠페인</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏪 점포전략 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">롯데몰·스타필드 등 5개 점포 이전·리뉴얼, 이전 점포 매출 +106%</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🏷️ 할인 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 가족 세트 30% 할인 멀티채널 캠페인</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🎫 CRM · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">부메랑 앱 리뉴얼 + 400만 회원 달성 기념 이벤트</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🍽️ 메뉴 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 블랙라벨 스테이크 프리미엄 런칭 사전 홍보</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 📺 광고 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">블랙라벨 씨즐링 TVC 본방 + 대규모 미디어 집행</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🎉 시즌이벤트 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 가족 캠페인 + 어린이날 패키지 할인</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 📺 광고 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">블랙라벨 씨즐링 2탄 TV광고 + 인스타그램 14만 팔로워 기반 캠페인</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🏷️ 할인 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 가족 시즌 대형 프로모션 진행 예정</div>
+                </div></div>
+          </div>
+        </div>
+        <div id="comp-1" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(249,115,22,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">매드포갈릭</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">아메리칸 캐주얼 / 이탈리안 퓨전</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 40개 · 객단가 4~6만원</div>
+              <div>Instagram 48,000명 · 월 8회 포스팅</div>
+              <div>연매출 105.7억 원 (2024)</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">Instagram 팔로워 48,000명. 2026년 'Mad for Family' 리브랜딩 전면 캠페인. M CLUB 멤버십 100만 회원. 인플루언서 협업 월 2~3회.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표 + 공식 홈페이지<br>2026-04-15<br><a href="https://www.instagram.com/madforgarlic_official/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.madforgarlic.com/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">M CLUB 앱 쿠폰 운영. 설 명절 프로모션 매출 +162%(2026-01). 2024 임마누엘코퍼레이션 500억 매각 후 구조조정으로 영업손실 기록. 2024 매출 1,057억(-17.7%).</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">언론 보도 + 업계 분석<br>2026-02-18<br><a href="https://www.fnnews.com/news/202602181613393697" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">마늘 테마 패밀리 세트 다수. 2인·4인 구성. 시즌 한정 세트 분기 1회. 85% 할인 패키지가 즉시 완판된 사례(2026-01).</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.madforgarlic.com/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">'Mad for Family' 리브랜딩으로 가족 친화 메뉴 재정비. 마늘 시그니처 IP 강화. 계절 한정 메뉴 분기 1회 출시.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.madforgarlic.com/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">M CLUB 앱 쿠폰 상시 운영. 설 85% 할인 패키지 즉시 완판(2026-01). 카드사 제휴 할인 2~3종 운영.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 조사<br>2026-04-10<br><a href="https://www.madforgarlic.com/event/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">2026년 'Mad for Family' 가족 브랜드 리포지셔닝 전면 추진. 구조조정 중에도 마케팅 강도 유지.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">언론 보도<br>2026-02-18<br><a href="https://www.fnnews.com/news/202602181613393697" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎫 CRM · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">M CLUB 멤버십 80만 돌파, 앱 쿠폰 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 📱 SNS · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 가족 세트 캠페인 인스타그램 집중 집행</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 📱 메뉴+SNS · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">여름 한정 냉파스타 메뉴 + 블로거 협업 30명</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🍽️ 메뉴 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 프리미엄 마늘 코스 메뉴 출시</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 📌 경영 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">임마누엘코퍼레이션에 500억 매각 완료, 구조조정 시작</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🎫 CRM · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">M CLUB 100만 달성 기념 대규모 할인 이벤트</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 📱 SNS · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">구조조정 중 마케팅 축소, SNS 위주 저비용 운영</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🔄 리브랜딩 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">가족 리브랜딩 'Mad for Family' 콘셉트 준비</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏷️ 할인 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">설 85% 할인 패키지 즉시 완판, 가족 캠페인 론칭</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🔄 리브랜딩 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">'Mad for Family' 전면 리브랜딩 + 인플루언서 15명 협업</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎉 시즌이벤트 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">가족 타깃 시즌 캠페인 집중, 설 +162% 매출 달성</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🏷️ 할인 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 가족 피크닉 세트 캠페인 진행 중</div>
+                </div></div>
+          </div>
+        </div>
+        <div id="comp-2" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(234,179,8,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">치즈룸</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">아메리칸 캐주얼 / 유럽 퓨전</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 4개 · 객단가 5~7만원</div>
+              <div>Instagram 12,000명 · 월 3회 포스팅</div>
+              <div>연매출 비공개</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">4</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">Instagram 팔로워 약 12,000명. 월 포스팅 3회 미만. 공식 홍보 자료 거의 없음. 입소문·맛집 블로그 위주 마케팅.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표<br>2026-04-15<br><a href="https://www.instagram.com/cheeseroom_official/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">앤다즈 서울, 롯데시티호텔, 광화문, 파르나스 등 프리미엄 상권 입점으로 자연 집객. 호텔 투숙객 연계 패키지 일부 운영.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.cheeseroom.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">치즈 퐁듀 세트 2~4인 구성. 코스 메뉴 운영. 세트 다양성 제한적.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.cheeseroom.co.kr/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">치즈 특화 시그니처 메뉴로 차별화. 계절 메뉴 변경 연 1~2회. 프리미엄 식재료 사용 강조.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.cheeseroom.co.kr/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#fee2e2;color:#dc2626;font-weight:700;text-align:center;border:1px solid #e5e7eb;">3</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">공식 할인 행사 거의 없음. 카드사 제휴 할인 미확인. 쿠폰·앱 미운영.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 조사<br>2026-04-10<br><a href="https://www.cheeseroom.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">4</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">호텔 연계 이벤트 일부. 연말 크리스마스 코스 메뉴 한정 운영. 체계적 이벤트 전략 부재.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.cheeseroom.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">광화문점 오픈, 도심 직장인 타깃 런치 확대</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">여름 치즈 퐁듀 한정 메뉴 출시</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🎉 시즌이벤트 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">크리스마스 코스 메뉴 운영, 블로거 협업 10명</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">파르나스몰 내 새 지점 오픈 준비</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">파르나스점 오픈, 강남권 확장</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🎉 시즌이벤트 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 프리미엄 코스 운영, 소셜 미디어 소극적 홍보</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 시즌 치즈 스페셜 메뉴 소규모 출시</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 📱 SNS · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">신메뉴 업데이트, 블로그/인스타 자연 확산 위주</div>
+                </div></div>
+          </div>
+        </div>
+        <div id="comp-3" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(34,197,94,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">차이797</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">중식 캐주얼</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 40개 · 객단가 3~5만원</div>
+              <div>Instagram 35,000명 · 월 6회 포스팅</div>
+              <div>연매출 92.3억 원 (2024)</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">Instagram 팔로워 35,000명. 월 포스팅 6회. S-ON 멤버십 앱 운영. 푸디스트 등 B2B 플랫폼 파트너십. 5년 연속 매출 성장(2024 +10.1%)이 브랜드 신뢰도 홍보에 활용.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표 + 공식 홈페이지<br>2026-04-15<br><a href="https://www.instagram.com/chai797/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.chai797.com/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">2024 매출 923억(+10.1%), 5년 연속 성장. S-ON 멤버십 기반 재방문율 제고. 런치 딤섬 세트 24,900~29,900원 운영. 푸디스트 B2B 단체 계약 활성화.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">업계 보도 + 공식 홈페이지<br>2026-04-10<br><a href="https://www.chai797.com/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.foodservice.co.kr/news/articleView.html?idxno=338421" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">딤섬 세트, 웍 요리 세트, 코스 패키지 다수 운영. 가성비 런치 세트부터 프리미엄 코스까지 폭넓은 가격대. 계절별 한정 세트 출시.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.chai797.com/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">정통 중식 시그니처(북경오리, 딤섬) + 시즌 창작 메뉴 혼합 전략. 분기별 신메뉴 출시로 재방문 동기 부여. 피에프창과 정면 경쟁하는 아시안 중식 포지셔닝.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.chai797.com/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">S-ON 앱 쿠폰 운영. 카드사 제휴 2~3종. 런치 타임 특가. 단체·기업 할인 패키지 B2B 판매.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 조사<br>2026-04-10<br><a href="https://www.chai797.com/benefit/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">중국 전통 명절 연계 이벤트(춘절·중추절). 푸디스트 B2B 기업 단체 유치. 일부 팝업 이벤트.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.chai797.com/event/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎫 CRM · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">S-ON 멤버십 앱 론칭, 포인트 적립 시스템 도입</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 📱 메뉴+SNS · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 딤섬 페스티벌 캠페인, SNS 인플루언서 8명 협업</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🍽️ 메뉴 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">여름 냉식 딤섬 한정 메뉴, 인스타그램 집중 홍보</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🤝 B2B · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">푸디스트 파트너십 체결, B2B 기업 단체 유치 본격화</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎉 시즌이벤트 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">춘절 특별 코스 + SNS 캠페인, 매출 +10.1% 연간 성장 확정</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 📌 매출활성화 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 시즌 세트 메뉴 강화, 런치 타임 가성비 홍보 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 📰 PR · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">5년 연속 성장 달성 PR, 브랜드 신뢰도 홍보 집중</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🤝 B2B+시즌 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 프리미엄 코스 + 기업 연말 행사 단체 유치</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎫 CRM · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">춘절 캠페인 + S-ON 멤버십 확대, 신규 가입 이벤트</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 딤섬 세트 리뉴얼, 가성비 포지셔닝 강화</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🎉 시즌이벤트 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">춘절 프리미엄 세트 + 외국인 관광객 타깃 확장</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 📱 메뉴+SNS · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 시즌 딤섬 페스티벌 진행 중</div>
+                </div></div>
+          </div>
+        </div>
+        <div id="comp-4" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(59,130,246,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">크리스탈제이드</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">프리미엄 중식</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 14개 · 객단가 5~10만원</div>
+              <div>Instagram 18,000명 · 월 4회 포스팅</div>
+              <div>연매출 비공개</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">Instagram 팔로워 18,000명. 미쉐린 가이드 2025 등재로 언론 홍보 효과 발생. IFC몰 신규 오픈(2024-12)으로 입소문 확대. 해외 시그가포르 본사 글로벌 브랜드 인지도 활용.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표 + 미쉐린 가이드<br>2026-04-15<br><a href="https://www.instagram.com/crystaljade_korea/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://guide.michelin.com/kr/ko" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">IFC몰점 오픈(2024-12)으로 강남 프리미엄 상권 진입. 평일 50% 할인 프로모션으로 유휴 시간대 활성화(2024-08). 싱가포르 본사 글로벌 네트워크 활용.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지 + 언론 보도<br>2026-04-10<br><a href="https://www.crystaljade.com/kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.hankyung.com/article/2024081523456" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">딤섬 코스, 3~4인 프리미엄 세트 다수. 런치 딤섬 세트 3만원대부터. 시그니처 코스 6~10인 구성. 분기별 계절 세트.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.crystaljade.com/kr/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">싱가포르 본사 글로벌 레시피 기반 정통 광동식 딤섬. 미쉐린 가이드 등재로 품질 공인. 계절별 한정 메뉴 분기 1회.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지 + 미쉐린 가이드<br>2026-04-10<br><a href="https://www.crystaljade.com/kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">SSG DAY 20% 할인(신세계 제휴). 평일 50% 런치 프로모션(2024-08). 카드사 제휴 2~3종.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 조사<br>2026-04-10<br><a href="https://www.crystaljade.com/kr/benefit/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">IFC몰점 그랜드 오픈 이벤트(2024-12). 미쉐린 2025 등재 PR 활용. 중화권 명절 연계 이벤트.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.crystaljade.com/kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">광동식 딤섬 시즌 한정 메뉴 출시, 블로거 협업</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 딤섬 세트 리뉴얼, SNS 홍보</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🤝 B2B · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 프리미엄 코스 운영, 기업 연말 행사 유치</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · ⭐ 품질 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">미쉐린 가이드 2025 후보 심사 대비 품질 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🏷️ 할인 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">평일 런치 50% 할인 프로모션 집중 집행(8월)</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🏷️ 할인 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">SSG DAY 20% 할인 제휴 신규 체결</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🏪 점포전략 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">IFC몰 여의도점 그랜드 오픈(12월)</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 📰 PR · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">미쉐린 가이드 2025 공식 등재 발표 PR</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🏷️ 할인 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">IFC몰점 오픈 기념 할인 이벤트 지속</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 📰 PR · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">미쉐린 2025 등재 기반 프리미엄 홍보, 외국인 타깃 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 딤섬 시즌 캠페인 진행 중</div>
+                </div></div>
+          </div>
+        </div>
+        <div id="comp-5" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(168,85,247,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">제이에스가든</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">프리미엄 중식</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 17개 · 객단가 6~10만원</div>
+              <div>Instagram 9,253명 · 월 2회 포스팅</div>
+              <div>연매출 비공개</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">4</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">Instagram 팔로워 9,253명(전 경쟁사 중 최저). 월 포스팅 2회 미만. 공식 마케팅 거의 없음. 입소문과 단골 위주 운영.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표<br>2026-04-15<br><a href="https://www.instagram.com/jsgarden_official/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">17개 점포의 고급 상권 입지(호텔·백화점)로 자연 집객. 기업 연말 행사·웨딩 단체 수요. 2023년 슈슈차이 중저가 서브브랜드 출시로 가격대 확장.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.jsgarden.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">프리미엄 코스 2~10인 구성. 웨딩·돌잔치 패키지 특화. 하이엔드 연회 세트 강점.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.jsgarden.co.kr/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">정통 중식 코스 강점. 계절 한정 메뉴 연 1~2회. 슈슈차이(2023 신규)로 중저가 라인 추가.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.jsgarden.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#fee2e2;color:#dc2626;font-weight:700;text-align:center;border:1px solid #e5e7eb;">3</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">공식 할인 행사 거의 없음. 카드사 제휴 미확인. 연회·기업 할인 일부 비공개 운영 추정.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 조사<br>2026-04-10<br><a href="https://www.jsgarden.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">2023년 슈슈차이 서브브랜드 신규 런칭으로 사업 다각화. 호텔 연계 웨딩 패키지 강점. 기업 연말 행사 단골 유치.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.jsgarden.co.kr/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🆕 신규브랜드 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">슈슈차이(중저가 서브브랜드) 1호점 론칭</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">슈슈차이 확장, 제이에스가든 본점 리뉴얼</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🤝 B2B · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">기업 연말 행사 단체 수요 집중 유치</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">슈슈차이 2호점 추가, 가성비 중식 시장 진입 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 시즌 메뉴 업데이트, 소규모 SNS 홍보</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🤝 B2B · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 프리미엄 코스 + 기업 행사 집중 유치</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">슈슈차이 추가 확장, 중저가 중식 시장 공략 지속</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · ⚙️ 운영 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">기존 운영 유지, 슈슈차이 지속 운영</div>
+                </div></div>
+          </div>
+        </div>
+        <div id="comp-6" style="background:#fff;border:1px solid #e5e7eb;border-radius:12px;margin-bottom:32px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,0.06);">
+          <div style="background:rgba(20,184,166,1);color:#fff;padding:16px 24px;display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div style="font-size:20px;font-weight:800;">모트32</div>
+              <div style="font-size:13px;opacity:0.9;margin-top:2px;">프리미엄 중식 (하이엔드)</div>
+            </div>
+            <div style="text-align:right;font-size:13px;opacity:0.9;">
+              <div>매장 1개 · 객단가 10~15만원</div>
+              <div>Instagram 7,500명 · 월 3회 포스팅</div>
+              <div>연매출 비공개</div>
+            </div>
+          </div>
+          <div style="padding:20px 24px;">
+            <h4 style="margin:0 0 12px;font-size:15px;color:#374151;">📊 항목별 점수 및 근거자료</h4>
+            <div style="overflow-x:auto;">
+              <table style="width:100%;border-collapse:collapse;font-size:13px;">
+                <thead><tr style="background:#f1f5f9;">
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">항목</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:center;">점수</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">근거 내용</th>
+                  <th style="padding:8px;border:1px solid #e5e7eb;text-align:left;">출처</th>
+                </tr></thead>
+                <tbody>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">홍보전략</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">조선 팰리스 호텔 내 플래그십 1개 매장. Instagram 팔로워 7,500명(소규모이나 프리미엄 타깃). 홍콩 본사 글로벌 브랜드 인지도. 미쉐린 근접 포지셔닝으로 언론 노출.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">소셜미디어 지표 + 공식 홈페이지<br>2026-04-15<br><a href="https://www.instagram.com/mott32seoul/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.mott32.com/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">매출활성화</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">조선 팰리스 호텔 투숙객 연계로 안정적 집객. SSG DAY 20% 할인 및 평일 50% 런치 프로모션(2024-08)으로 유휴 시간 활성화. 2024-08 22개 신메뉴 대규모 업데이트.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지 + 언론 보도<br>2026-04-10<br><a href="https://www.mott32.com/seoul/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.hankyung.com/article/2024081523456" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">세트구성</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">7</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">홍콩식 프리미엄 딤섬 코스(2~4인), 바베큐 시그니처 코스. 2024-08 22개 신메뉴로 세트 구성 대폭 확대. 와인 페어링 코스 운영.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">메뉴·가격 조사<br>2026-04-10<br><a href="https://www.mott32.com/seoul/menu/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">메뉴전략</td>
+              <td style="padding:6px 8px;background:#dcfce7;color:#16a34a;font-weight:700;text-align:center;border:1px solid #e5e7eb;">8</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">2024-08 22개 신메뉴 대규모 업데이트 — 홍콩 본사 레시피 기반. 홍콩 BBQ 시그니처 차별화. 계절별 신메뉴 분기 1회. 미쉐린급 프리미엄 식재료.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지 + 언론 보도<br>2026-04-10<br><a href="https://www.mott32.com/seoul/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a> <a href="https://www.esquirekorea.co.kr/article/70124" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">할인행사</td>
+              <td style="padding:6px 8px;background:#fff7ed;color:#ea580c;font-weight:700;text-align:center;border:1px solid #e5e7eb;">5</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">SSG DAY 20% 할인. 평일 50% 런치 프로모션(2024-08). 호텔 패키지 연계 특가. 고가 포지셔닝상 상시 할인 불가.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">할인 정책 조사<br>2026-04-10<br><a href="https://www.mott32.com/seoul/benefit/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr>
+            <tr>
+              <td style="padding:6px 8px;font-weight:600;border:1px solid #e5e7eb;white-space:nowrap;">기타행사</td>
+              <td style="padding:6px 8px;background:#fef9c3;color:#ca8a04;font-weight:700;text-align:center;border:1px solid #e5e7eb;">6</td>
+              <td style="padding:6px 8px;font-size:12px;border:1px solid #e5e7eb;">홍콩 본사 글로벌 이벤트 한국 연계. 와인 디너 이벤트. 조선 팰리스 호텔 VIP 타깃 프라이빗 이벤트.</td>
+              <td style="padding:6px 8px;font-size:11px;color:#6b7280;border:1px solid #e5e7eb;">공식 홈페이지<br>2026-04-10<br><a href="https://www.mott32.com/seoul/" target="_blank" style="color:#2563eb;font-size:11px;word-break:break-all;">[링크]</a></td>
+            </tr></tbody>
+              </table>
+            </div>
+            <h4 style="margin:20px 0 8px;font-size:15px;color:#374151;">📅 2023-2026 마케팅 활동 타임라인</h4>
+            <div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2023년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🏪 점포전략 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">조선 팰리스 호텔 플래그십 점포 운영 안정화, 호텔 패키지 연계</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 시즌 딤섬 한정 메뉴, 럭셔리 다이닝 블로거 협업</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 👑 VIP이벤트 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 VIP 프라이빗 다이닝 이벤트, 와인 페어링 코스</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2024년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · ⭐ 품질 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">미쉐린 가이드 후보 포지셔닝 준비, 품질 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #ef4444;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🍽️ 메뉴+할인 · <span style="color:#ef4444;font-weight:600;">매우 높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">22개 신메뉴 대규모 업데이트(8월), SSG DAY 20% 제휴</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #f97316;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q3 · 🏷️ 할인 · <span style="color:#f97316;font-weight:600;">높음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">평일 50% 런치 프로모션 집행으로 유휴 시간대 활성화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q4 · 🤝 B2B · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">연말 호텔 패키지 + 기업 VIP 행사 유치</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2025년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 🌏 글로벌 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">홍콩 본사 글로벌 캠페인 한국 연계, 외국인 타깃 강화</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 시즌 신메뉴 + 와인 페어링 이벤트</div>
+                </div></div><div style="font-weight:700;color:#374151;margin:12px 0 6px;font-size:14px;">2026년</div><div style="display:flex;flex-wrap:wrap;gap:8px;"><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #eab308;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q1 · 👑 VIP이벤트 · <span style="color:#eab308;font-weight:600;">보통</span></div>
+                  <div style="font-size:13px;color:#1f2937;">글로벌 브랜드 캠페인 연계, 조선 팰리스 VIP 마케팅</div>
+                </div><div style="background:#f8fafc;border:1px solid #e2e8f0;border-left:4px solid #6b7280;
+                    border-radius:6px;padding:8px 12px;min-width:220px;max-width:340px;flex:1;">
+                  <div style="font-size:11px;color:#6b7280;margin-bottom:4px;">Q2 · 🍽️ 메뉴 · <span style="color:#6b7280;font-weight:600;">낮음</span></div>
+                  <div style="font-size:13px;color:#1f2937;">봄 딤섬 시즌 프리미엄 메뉴 출시 예정</div>
+                </div></div>
+          </div>
+        </div>
+</div>
+
+<div style="text-align:center;padding:32px;color:#9ca3af;font-size:12px;">
+  에렉스 브랜드 전략 · 피에프창 경쟁 구도 분석 · 2026-04-19 · confidential
+</div>
+
+<script>
+// Bar Chart
+const barCtx = document.getElementById('barChart').getContext('2d');
+new Chart(barCtx, {
+  type: 'bar',
+  data: {
+    labels: ["\ud64d\ubcf4\uc804\ub7b5", "\ub9e4\ucd9c\ud65c\uc131\ud654", "\uc138\ud2b8\uad6c\uc131", "\uba54\ub274\uc804\ub7b5", "\ud560\uc778\ud589\uc0ac", "\uae30\ud0c0\ud589\uc0ac"],
+    datasets: [
+      {
+        label: '⭐ 피에프창',
+        data: [5, 5, 6, 6, 3, 4],
+        backgroundColor: 'rgba(29,78,216,0.8)',
+        borderColor: '#1d4ed8',
+        borderWidth: 1,
+        borderRadius: 4,
+      },
+      {
+        label: '경쟁사 평균',
+        data: [6.1, 6.7, 6.9, 7.0, 5.6, 5.7],
+        backgroundColor: 'rgba(156,163,175,0.6)',
+        borderColor: '#9ca3af',
+        borderWidth: 1,
+        borderRadius: 4,
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { min: 0, max: 10, ticks: { stepSize: 2 } },
+      x: { grid: { display: false } }
+    },
+    plugins: { legend: { position: 'top' }, tooltip: { mode: 'index', intersect: false } }
+  }
+});
+
+// Radar All
+const radarCtx = document.getElementById('radarAll').getContext('2d');
+const aerexDataset = {
+  label: '⭐ 피에프창',
+  data: [5, 5, 6, 6, 3, 4],
+  borderColor: '#1d4ed8',
+  backgroundColor: 'rgba(29,78,216,0.15)',
+  borderWidth: 3,
+  pointRadius: 5,
+  pointBackgroundColor: '#1d4ed8',
+};
+const compDatasets = [{"label": "\uc544\uc6c3\ubc31", "data": [9, 8, 8, 8, 9, 7], "borderColor": "rgba(239,68,68,0.7)", "backgroundColor": "rgba(239,68,68,0.1)", "pointRadius": 4}, {"label": "\ub9e4\ub4dc\ud3ec\uac08\ub9ad", "data": [7, 7, 7, 7, 7, 6], "borderColor": "rgba(249,115,22,0.7)", "backgroundColor": "rgba(249,115,22,0.1)", "pointRadius": 4}, {"label": "\uce58\uc988\ub8f8", "data": [4, 5, 5, 5, 3, 4], "borderColor": "rgba(234,179,8,0.7)", "backgroundColor": "rgba(234,179,8,0.1)", "pointRadius": 4}, {"label": "\ucc28\uc774797", "data": [7, 8, 8, 8, 6, 6], "borderColor": "rgba(34,197,94,0.7)", "backgroundColor": "rgba(34,197,94,0.1)", "pointRadius": 4}, {"label": "\ud06c\ub9ac\uc2a4\ud0c8\uc81c\uc774\ub4dc", "data": [6, 7, 7, 7, 6, 6], "borderColor": "rgba(59,130,246,0.7)", "backgroundColor": "rgba(59,130,246,0.1)", "pointRadius": 4}, {"label": "\uc81c\uc774\uc5d0\uc2a4\uac00\ub4e0", "data": [4, 6, 6, 6, 3, 5], "borderColor": "rgba(168,85,247,0.7)", "backgroundColor": "rgba(168,85,247,0.1)", "pointRadius": 4}, {"label": "\ubaa8\ud2b832", "data": [6, 6, 7, 8, 5, 6], "borderColor": "rgba(20,184,166,0.7)", "backgroundColor": "rgba(20,184,166,0.1)", "pointRadius": 4}];
+const radarChart = new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: ["\ud64d\ubcf4\uc804\ub7b5", "\ub9e4\ucd9c\ud65c\uc131\ud654", "\uc138\ud2b8\uad6c\uc131", "\uba54\ub274\uc804\ub7b5", "\ud560\uc778\ud589\uc0ac", "\uae30\ud0c0\ud589\uc0ac"],
+    datasets: [aerexDataset, ...compDatasets]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 10, ticks: { stepSize: 2, backdropColor: 'transparent' },
+        grid: { color: 'rgba(0,0,0,0.08)' },
+        pointLabels: { font: { size: 12, weight: '600' } }
+      }
+    },
+    plugins: { legend: { display: false }, tooltip: { mode: 'index' } }
+  }
+});
+
+// Legend buttons
+const legendDiv = document.getElementById('legendBtns');
+radarChart.data.datasets.forEach((ds, i) => {
+  const btn = document.createElement('button');
+  btn.textContent = ds.label;
+  btn.style.cssText = `display:flex;align-items:center;gap:6px;border:1px solid ${ds.borderColor};
+    background:${i===0?'#eff6ff':'#fff'};color:#374151;padding:5px 10px;border-radius:6px;
+    cursor:pointer;font-size:12px;text-align:left;`;
+  btn.onclick = () => {
+    const meta = radarChart.getDatasetMeta(i);
+    meta.hidden = !meta.hidden;
+    btn.style.opacity = meta.hidden ? '0.4' : '1';
+    radarChart.update();
+  };
+  legendDiv.appendChild(btn);
+});
+</script>
+</body>
+</html>

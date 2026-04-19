@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>피에프창 2026 위기극복 & 향후 5년 마케팅 전략 | 에렉스</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--blue:#1d4ed8;--dark:#1e3a5f;--red:#dc2626;--orange:#ea580c;--green:#16a34a;--yellow:#ca8a04;--gray:#6b7280}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#f1f5f9;color:#1f2937;font-size:14px;line-height:1.6}
+a{color:var(--blue);text-decoration:none}
+
+/* COVER */
+.cover{background:linear-gradient(135deg,#0f172a 0%,#1e3a8a 60%,#1d4ed8 100%);color:#fff;padding:60px 48px 48px;position:relative;overflow:hidden}
+.cover::before{content:'';position:absolute;top:-40px;right:-60px;width:400px;height:400px;background:rgba(255,255,255,0.04);border-radius:50%}
+.cover-badge{display:inline-block;background:rgba(239,68,68,0.9);color:#fff;font-size:11px;font-weight:700;padding:4px 12px;border-radius:20px;letter-spacing:1px;margin-bottom:16px}
+.cover h1{font-size:32px;font-weight:900;line-height:1.2;margin-bottom:12px}
+.cover h1 span{color:#fbbf24}
+.cover-sub{font-size:15px;opacity:0.85;margin-bottom:32px;max-width:600px}
+.cover-stats{display:flex;gap:40px;flex-wrap:wrap}
+.cover-stat{text-align:center}
+.cover-stat .num{font-size:36px;font-weight:900;color:#fbbf24}
+.cover-stat .lbl{font-size:11px;opacity:0.75;margin-top:2px}
+
+/* TOC */
+.toc{background:#fff;margin:24px 32px;border-radius:12px;padding:24px 32px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.toc h2{font-size:14px;color:var(--gray);font-weight:600;margin-bottom:14px;text-transform:uppercase;letter-spacing:1px}
+.toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:8px}
+.toc-item{background:#f8fafc;border:1px solid #e2e8f0;border-radius:8px;padding:10px 14px;display:flex;align-items:center;gap:10px}
+.toc-num{font-size:20px;font-weight:800;color:var(--blue);line-height:1}
+.toc-text{font-size:12px;font-weight:600;color:#374151}
+
+/* SECTION */
+.section{background:#fff;border-radius:12px;padding:32px 36px;margin:24px 32px;box-shadow:0 2px 8px rgba(0,0,0,0.06)}
+.section-header{display:flex;align-items:center;gap:12px;margin-bottom:24px;padding-bottom:16px;border-bottom:2px solid #e5e7eb}
+.section-num{background:var(--dark);color:#fff;font-size:11px;font-weight:800;padding:4px 10px;border-radius:6px;white-space:nowrap}
+.section h2{font-size:20px;font-weight:800;color:var(--dark)}
+
+/* CRISIS BOX */
+.crisis-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px;margin-bottom:24px}
+.crisis-card{border-radius:10px;padding:20px;border-left:4px solid}
+.crisis-card.red{background:#fff1f2;border-color:#dc2626}
+.crisis-card.orange{background:#fff7ed;border-color:#ea580c}
+.crisis-card.yellow{background:#fefce8;border-color:#ca8a04}
+.crisis-card.blue{background:#eff6ff;border-color:#1d4ed8}
+.crisis-card .cc-title{font-size:13px;font-weight:700;margin-bottom:8px}
+.crisis-card .cc-num{font-size:28px;font-weight:900;margin-bottom:4px}
+.crisis-card .cc-desc{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* TIMELINE */
+.timeline{position:relative;padding-left:24px}
+.timeline::before{content:'';position:absolute;left:8px;top:0;bottom:0;width:2px;background:#e5e7eb}
+.tl-item{position:relative;margin-bottom:20px}
+.tl-dot{position:absolute;left:-20px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid #fff;box-shadow:0 0 0 2px}
+.tl-dot.red{background:#dc2626;box-shadow:0 0 0 2px #dc2626}
+.tl-dot.orange{background:#ea580c;box-shadow:0 0 0 2px #ea580c}
+.tl-dot.blue{background:#1d4ed8;box-shadow:0 0 0 2px #1d4ed8}
+.tl-dot.green{background:#16a34a;box-shadow:0 0 0 2px #16a34a}
+.tl-date{font-size:11px;font-weight:700;color:var(--gray);margin-bottom:2px}
+.tl-content{font-size:13px;font-weight:600;color:#1f2937;margin-bottom:2px}
+.tl-detail{font-size:12px;color:var(--gray)}
+
+/* EXPERT */
+.expert-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:20px}
+.expert-card{border-radius:12px;overflow:hidden}
+.expert-head{padding:16px 20px;color:#fff;display:flex;align-items:center;gap:12px}
+.expert-head .icon{font-size:24px}
+.expert-head .name{font-size:13px;font-weight:700}
+.expert-head .title{font-size:11px;opacity:0.85}
+.expert-body{padding:16px 20px;background:#f8fafc;border:1px solid #e5e7eb;border-top:none;border-radius:0 0 12px 12px}
+.expert-body p{font-size:13px;line-height:1.65;color:#374151;margin-bottom:10px}
+.expert-body p:last-child{margin-bottom:0}
+.expert-rec{background:#fff;border-radius:8px;padding:12px;margin-top:8px}
+.expert-rec .r-title{font-size:11px;font-weight:700;color:var(--blue);margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px}
+.expert-rec li{font-size:12px;color:#374151;margin-bottom:4px;list-style:none;padding-left:14px;position:relative}
+.expert-rec li::before{content:'→';position:absolute;left:0;color:var(--blue)}
+
+/* ROADMAP */
+.roadmap{display:grid;grid-template-columns:repeat(3,1fr);gap:0}
+.rm-phase{border-right:1px dashed #e5e7eb;padding:20px}
+.rm-phase:last-child{border-right:none}
+.rm-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.rm-title{font-size:16px;font-weight:800;margin-bottom:4px}
+.rm-period{font-size:12px;color:var(--gray);margin-bottom:16px}
+.rm-item{background:#f8fafc;border-radius:8px;padding:10px 12px;margin-bottom:8px;font-size:13px;border-left:3px solid}
+
+/* ACTION */
+.action-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px}
+.action-card{border-radius:10px;padding:20px;border:1px solid #e5e7eb}
+.action-num{font-size:32px;font-weight:900;opacity:0.15;position:absolute;top:12px;right:16px}
+.action-card{position:relative;overflow:hidden}
+.action-tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px}
+.action-title{font-size:14px;font-weight:700;margin-bottom:8px;color:#1f2937}
+.action-desc{font-size:13px;color:var(--gray);line-height:1.5;margin-bottom:12px}
+.action-kpi{font-size:12px;font-weight:600;padding:6px 10px;background:#f0fdf4;border-radius:6px;color:var(--green)}
+
+/* COMPETITOR TABLE */
+.comp-table{width:100%;border-collapse:collapse;font-size:13px}
+.comp-table th{background:#1e3a5f;color:#fff;padding:10px 12px;text-align:left;font-weight:600}
+.comp-table td{padding:10px 12px;border-bottom:1px solid #f1f5f9;vertical-align:top}
+.comp-table tr:hover td{background:#f8fafc}
+.move-tag{display:inline-block;font-size:10px;padding:2px 7px;border-radius:10px;font-weight:600;margin-right:4px;margin-bottom:2px}
+.move-tag.high{background:#fee2e2;color:#dc2626}
+.move-tag.med{background:#fff7ed;color:#ea580c}
+.move-tag.low{background:#f0fdf4;color:#16a34a}
+
+/* GLOBAL */
+.global-grid{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.global-item{padding:20px;border-radius:10px;background:#f8fafc;border:1px solid #e5e7eb}
+.global-item h4{font-size:14px;font-weight:700;margin-bottom:10px;color:var(--dark)}
+.global-item p{font-size:13px;color:#374151;line-height:1.6}
+.global-item ul{padding-left:16px;font-size:13px;color:#374151}
+.global-item ul li{margin-bottom:4px}
+
+/* CHART */
+.chart-row{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.chart-box{padding:20px;border:1px solid #e5e7eb;border-radius:10px}
+.chart-box h4{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:16px}
+
+/* HIGHLIGHT */
+.hl-box{background:linear-gradient(135deg,#eff6ff,#dbeafe);border:1px solid #bfdbfe;border-radius:10px;padding:20px 24px;margin:16px 0}
+.hl-box.red{background:linear-gradient(135deg,#fff1f2,#fee2e2);border-color:#fca5a5}
+.hl-box.green{background:linear-gradient(135deg,#f0fdf4,#dcfce7);border-color:#86efac}
+.hl-box.yellow{background:linear-gradient(135deg,#fefce8,#fef9c3);border-color:#fde047}
+.hl-title{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px}
+.hl-body{font-size:13px;line-height:1.65}
+
+/* BADGE */
+.badge{display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;margin:2px}
+
+/* FOOTER */
+footer{text-align:center;padding:40px;color:var(--gray);font-size:12px;border-top:1px solid #e5e7eb;margin-top:32px}
+
+@media(max-width:768px){
+  .cover{padding:32px 20px}.section{margin:16px;padding:20px}
+  .roadmap{grid-template-columns:1fr}.global-grid{grid-template-columns:1fr}
+  .chart-row{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════════════════ COVER -->
+<div class="cover">
+  <div style="max-width:1100px;margin:0 auto;">
+    <div class="cover-badge">⚠️ CONFIDENTIAL · 에렉스 내부 전략 문서</div>
+    <h1>피에프창 <span>위기극복</span> &<br>향후 5년 마케팅 전략</h1>
+    <p class="cover-sub">2025 Q4 ~ 2026 Q2 고객 유입 -20% 진단 · 글로벌 P.F. Chang's 전략 벤치마킹 · 경쟁사 동향 분석 · 2026-2030 성장 로드맵</p>
+    <div class="cover-stats">
+      <div class="cover-stat"><div class="num">-20%</div><div class="lbl">고객 유입 감소<br>(2026 Q1~Q2)</div></div>
+      <div class="cover-stat"><div class="num">7개</div><div class="lbl">분석 경쟁사</div></div>
+      <div class="cover-stat"><div class="num">5년</div><div class="lbl">전략 로드맵<br>2026-2030</div></div>
+      <div class="cover-stat"><div class="num">4인</div><div class="lbl">전문가 패널<br>분석</div></div>
+    </div>
+    <div style="margin-top:24px;font-size:12px;opacity:0.6;">분석일: 2026년 4월 19일 · 작성: 에렉스 브랜드전략팀</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ TOC -->
+<div class="toc">
+  <h2>목차</h2>
+  <div class="toc-grid">
+    <div class="toc-item"><div class="toc-num">1</div><div class="toc-text">위기 현황 진단<br><small style="color:#9ca3af">20% 감소 원인 7가지</small></div></div>
+    <div class="toc-item"><div class="toc-num">2</div><div class="toc-text">글로벌 P.F. Chang's<br><small style="color:#9ca3af">본사 전략 벤치마킹</small></div></div>
+    <div class="toc-item"><div class="toc-num">3</div><div class="toc-text">경쟁사 최신 동향<br><small style="color:#9ca3af">7개 브랜드 2025-2026</small></div></div>
+    <div class="toc-item"><div class="toc-num">4</div><div class="toc-text">5년 마케팅 메가트렌드<br><small style="color:#9ca3af">2026-2030 전략 방향</small></div></div>
+    <div class="toc-item"><div class="toc-num">5</div><div class="toc-text">즉각 실행 액션플랜<br><small style="color:#9ca3af">Q2 2026 회복 전략</small></div></div>
+    <div class="toc-item"><div class="toc-num">6</div><div class="toc-text">전문가 패널 의견<br><small style="color:#9ca3af">마케팅·기획·경영·운영</small></div></div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ §1 위기 진단 -->
+<div class="section" id="s1">
+  <div class="section-header">
+    <div class="section-num">SECTION 01</div>
+    <h2>위기 현황 진단 — 고객 유입 -20% 복합 원인 분석</h2>
+  </div>
+
+  <div class="hl-box red" style="margin-bottom:24px;">
+    <div class="hl-title" style="color:#dc2626;">🚨 위기 요약</div>
+    <div class="hl-body">2025년 4분기~2026년 1분기, 특히 3월 말~4월 고객 유입이 전년 동기 대비 약 20% 감소.
+    이는 <strong>단일 원인이 아닌 7개 요인의 복합 충격</strong>으로, 각 요인이 서로 상승작용을 일으키고 있다.
+    단기 프로모션만으로는 해결이 불가능하며, 브랜드 체질 개선을 병행해야 한다.</div>
+  </div>
+
+  <div class="crisis-grid">
+    <div class="crisis-card red">
+      <div class="cc-title" style="color:#dc2626;">① 한국 경기 침체 & 소비심리 위축</div>
+      <div class="cc-num" style="color:#dc2626;">-1.0%p</div>
+      <div class="cc-desc">KDI 2025년 경제성장률 전망 하향 (1.7%→0.7%). 2025년 외식업 경기지수 73.84 (1.77p ↓). 가구주 67.2%가 외식비를 첫 번째 삭감 항목으로 지목. 12월 식당 매출 전년比 -3.3%.</div>
+    </div>
+    <div class="crisis-card red">
+      <div class="cc-title" style="color:#dc2626;">② 정치적 불안 — 계엄령 사태 충격</div>
+      <div class="cc-num" style="color:#dc2626;">2024.12</div>
+      <div class="cc-desc">2024년 12월 비상계엄 선포 → 탄핵 정국으로 민간 소비 급격히 위축. Q4 2024~Q1 2025 소비 심리 역대 최저 수준. 회복은 2025 Q3~Q4 예상 (범 재정 부양 이후).</div>
+    </div>
+    <div class="crisis-card orange">
+      <div class="cc-title" style="color:#ea580c;">③ 지정학적 불안 — 이란·중동 리스크</div>
+      <div class="cc-num" style="color:#ea580c;">글로벌</div>
+      <div class="cc-desc">이란 핵 긴장 고조 → 원유 가격 변동 → 식재료비·에너지 비용 상승. 글로벌 무역 성장 WTO 전망 2025년 2.5% → 2026년 0.5%로 급감. 원가 압박 = 가격 인상 불가피 → 고객 이탈.</div>
+    </div>
+    <div class="crisis-card orange">
+      <div class="cc-title" style="color:#ea580c;">④ 브랜드 노후화 — 인지도 정체</div>
+      <div class="cc-num" style="color:#ea580c;">경고</div>
+      <div class="cc-desc">Instagram 팔로워 32,000명 (아웃백 236,000 대비 13.6%). 월 포스팅 4회 (아웃백 12회). 신메뉴 출시 불규칙. TVC 부재. MZ세대에 "올드한 브랜드"로 인식 고착화 위험.</div>
+    </div>
+    <div class="crisis-card yellow">
+      <div class="cc-title" style="color:#ca8a04;">⑤ 계절성 패턴 — 3~4월 구조적 공백</div>
+      <div class="cc-num" style="color:#ca8a04;">-17%</div>
+      <div class="cc-desc">3~4월은 가정의 달(5월) 준비로 인한 구조적 소비 유보 기간. 코스·특별메뉴 검색량은 3월 대비 4월 +195~714% 급증. 이 시기 경쟁사는 사전 예약 캠페인으로 수요를 흡수함.</div>
+    </div>
+    <div class="crisis-card yellow">
+      <div class="cc-title" style="color:#ca8a04;">⑥ 경쟁 심화 — 경쟁사 마케팅 강화</div>
+      <div class="cc-num" style="color:#ca8a04;">8/10</div>
+      <div class="cc-desc">아웃백 블랙라벨 TVC 집행(2026 Q1). 매드포갈릭 "Mad for Family" 캠페인. 차이797 5년 연속 성장 PR. 크리스탈제이드 미쉐린 2025 등재. 경쟁사 마케팅 강도 평균 7.3/10.</div>
+    </div>
+    <div class="crisis-card blue">
+      <div class="cc-title" style="color:#1d4ed8;">⑦ 배달 플랫폼 잠식 & 홈파티 트렌드</div>
+      <div class="cc-num" style="color:#1d4ed8;">21%↑</div>
+      <div class="cc-desc">간편식 외부소비 +21%(외식 -9%). MZ세대 "감성 홈파티" 트렌드 급성장. 쿠팡이츠 "무료배달"로 시장 재편. 매장 방문 기회비용 증가 → 재방문 주기 장기화.</div>
+    </div>
+  </div>
+
+  <!-- Timeline of crisis -->
+  <h3 style="margin:28px 0 16px;font-size:15px;color:var(--dark);">📅 위기 전개 타임라인</h3>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2024년 12월</div>
+      <div class="tl-content">비상계엄 선포 → 탄핵 정국 돌입</div>
+      <div class="tl-detail">소비심리 급락, 연말 외식 수요 실종. 패밀리레스토랑 업계 전반 12월 매출 -3.3% (YoY)</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2025년 1분기</div>
+      <div class="tl-content">정치 불안 지속 + 고물가 이중 충격</div>
+      <div class="tl-detail">KDI 성장률 전망 0.7%로 하향. 아웃백 등 경쟁사 "가족 할인" 공세 시작</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot orange"></div>
+      <div class="tl-date">2025년 상반기</div>
+      <div class="tl-content">이란 지정학 리스크 → 식재료비 상승 압박</div>
+      <div class="tl-detail">가공식품 물가 +4.1% (4월). 원가 인상 → 메뉴 가격 인상 불가피. 고객 저항 심화</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot orange"></div>
+      <div class="tl-date">2025년 4분기</div>
+      <div class="tl-content">경쟁사 TVC·멀티채널 공세 집중</div>
+      <div class="tl-detail">아웃백 블랙라벨 씨즐링 TVC. 매드포갈릭 설 +162%. 피에프창 마케팅 강도 미흡으로 쉐어 이탈</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot red"></div>
+      <div class="tl-date">2026년 3월~4월 ← 지금</div>
+      <div class="tl-content">고객 유입 -20% 확인 — 가정의 달 직전 구조적 공백 + 누적 이탈</div>
+      <div class="tl-detail">3-4월 계절 공백 + 브랜드 노후화 + 경쟁사 공세 = 복합 최저점. 즉각 대응 필수</div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot blue"></div>
+      <div class="tl-date">2026년 5~6월 — 목표</div>
+      <div class="tl-content">가정의 달 캠페인 + 충성고객 락인으로 회복 시작</div>
+      <div class="tl-detail">즉각 액션플랜 실행 → 2026 Q2 말 고객 수 전년 수준 회복 목표</div>
+    </div>
+  </div>
+
+  <div class="chart-row" style="margin-top:28px;">
+    <div class="chart-box">
+      <h4>고객 유입 지수 트렌드 (2025 W01 = 100 기준)</h4>
+      <canvas id="trafficChart" height="200"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>원인별 영향도 추정 (복합 -20% 분해)</h4>
+      <canvas id="causeChart" height="200"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ §2 글로벌 -->
+<div class="section" id="s2">
+  <div class="section-header">
+    <div class="section-num">SECTION 02</div>
+    <h2>글로벌 P.F. Chang's 마케팅 전략 벤치마킹</h2>
+  </div>
+
+  <div class="hl-box" style="margin-bottom:24px;">
+    <div class="hl-title" style="color:var(--blue);">📌 핵심 메시지</div>
+    <div class="hl-body">글로벌 본사도 동일한 위기를 경험하고 있다. 2024년 5% 트래픽 감소 → 신임 CEO Jim Mazany 취임(2025.11) → 전략 피벗. 본사 전략에서 <strong>한국 적용 가능한 요소 5가지</strong>를 추출했다.</div>
+  </div>
+
+  <div class="global-grid">
+    <div class="global-item">
+      <h4>🔥 "Light the Fire" 브랜드 플랫폼 (2025.10 론칭)</h4>
+      <p>감성·노스탤지어 중심 브랜드 재정립. TV·디지털·연결TV 동시 집행. <strong>핵심 인사이트: 소셜미디어·로열티 데이터·고객 피드백을 통합 분석해 "다세대 공감 포지셔닝" 도출.</strong></p>
+      <br>
+      <p style="color:var(--blue);font-size:12px;font-weight:600;">🇰🇷 한국 적용: "피에프창에서의 특별한 순간" 캠페인 — 가족·연인·친구 각 세그먼트별 감성 스토리텔링</p>
+    </div>
+    <div class="global-item">
+      <h4>🎬 Disney 콜라보 "Freakier Flavors" (2025.07)</h4>
+      <p>디즈니 "Freakier Friday" 영화 협업 — 색변환 음료, 한정 디저트. <strong>브랜드 최초 영화 타이업.</strong> 젊은 가족 세그먼트 재유입 성과.</p>
+      <br>
+      <p style="color:var(--blue);font-size:12px;font-weight:600;">🇰🇷 한국 적용: 넷플릭스 한국 드라마·게임 IP 콜라보 검토. 매드포갈릭의 게임 콜라보(Summoners War) 선례 있음</p>
+    </div>
+    <div class="global-item">
+      <h4>💎 Platinum 구독 멤버십 ($6.99/월)</h4>
+      <p>기존 포인트 적립(10pt/$1, 2000pt=무료 메인) 위에 <strong>월정액 구독 티어 추가</strong>. 혜택: 무제한 무료배달 + 예약 우선순위 + 고배율 적립. 로열티 DB: 200만 명, 월 2~3억 건 이메일 발송.</p>
+      <br>
+      <p style="color:var(--blue);font-size:12px;font-weight:600;">🇰🇷 한국 적용: 멤버십 앱 도입 1순위. 월 9,900원 구독 → 주 1회 쿠폰 + 예약 우선 + 생일 무료 혜택</p>
+    </div>
+    <div class="global-item">
+      <h4>🥡 가치 전략 — 포션 유연화 & 런치 특가</h4>
+      <p>런치 $13.99~, 하프 사이즈 전채, 미디엄 사이즈 선택 옵션. <strong>"고급 느낌은 유지하면서 진입 장벽을 낮추는"</strong> 가격 레이어링. $8.99 칵테일 신규 라인.</p>
+      <br>
+      <p style="color:var(--blue);font-size:12px;font-weight:600;">🇰🇷 한국 적용: 런치 세트 29,900원 신설 + 하프 포션 전채 옵션 도입 = 평일 점심 회전율 향상</p>
+    </div>
+    <div class="global-item">
+      <h4>🚗 자사 배달(Self-Delivery) 시스템</h4>
+      <p>80개 이상 매장에서 자체 배달 운영. 배달 드라이버 = 피에프창 직원. 제3자 플랫폼(15~30% 수수료) 대신 <strong>자사 채널로 마진 방어.</strong></p>
+      <br>
+      <p style="color:var(--blue);font-size:12px;font-weight:600;">🇰🇷 한국 적용: 단기는 쿠팡이츠 필수 입점. 중장기(2027+) 자체 앱 배달 전환으로 수수료 절감</p>
+    </div>
+    <div class="global-item">
+      <h4>🏗️ CEO 전략 전환 — "Everyday Option"</h4>
+      <p>Jim Mazany CEO(2025.11): <strong>"특별한 날 음식점"에서 "일상적 방문 옵션"으로 포지셔닝 이동.</strong> 단, 폴리시드-캐주얼 품격은 유지. 에이전시 13개→3개 통합으로 메시지 일관성 강화.</p>
+      <br>
+      <p style="color:var(--blue);font-size:12px;font-weight:600;">🇰🇷 한국 적용: "특별한 날만"에서 "매주 한 번 가고 싶은 곳"으로 포지셔닝 재설정. 런치·평일 프로그램 핵심</p>
+    </div>
+  </div>
+
+  <div class="hl-box green" style="margin-top:24px;">
+    <div class="hl-title" style="color:var(--green);">✅ 글로벌 전략 한국 적용 우선순위</div>
+    <div class="hl-body">
+      <strong>즉시(0~3개월):</strong> 멤버십 앱 기획 착수 + 런치 세트 신설 + 쿠팡이츠 입점<br>
+      <strong>단기(3~6개월):</strong> IP 콜라보 1건 실행 + 감성 SNS 캠페인 + 포션 유연화 메뉴 개편<br>
+      <strong>중기(6~18개월):</strong> "일상 방문" 포지셔닝 전환 + 구독 멤버십 론칭 + 자체 배달 테스트
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ §3 경쟁사 -->
+<div class="section" id="s3">
+  <div class="section-header">
+    <div class="section-num">SECTION 03</div>
+    <h2>경쟁사 최신 동향 — 2025-2026 전략적 움직임 분석</h2>
+  </div>
+
+  <table class="comp-table">
+    <thead>
+      <tr>
+        <th style="width:110px;">경쟁사</th>
+        <th style="width:80px;">마케팅<br>강도</th>
+        <th>2025-2026 핵심 움직임</th>
+        <th style="width:160px;">피에프창에 대한 위협</th>
+        <th style="width:160px;">대응 방향</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>아웃백</strong><br><span style="font-size:11px;color:var(--gray);">101개점·4,305억</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#dc2626;">9</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag high">TVC</span> 블랙라벨 씨즐링 2탄 TV광고 2026 Q1 집행<br>
+          <span class="move-tag high">멤버십</span> 부메랑 400만 회원 → 앱 주 1~2회 쿠폰<br>
+          <span class="move-tag high">점포</span> 몰 이전 전략 — 이전 점포 매출 +106%<br>
+          <span class="move-tag med">제휴</span> BC·롯데카드 20% 상시 할인 유지<br>
+          <span class="move-tag med">메뉴</span> 프리미엄 블랙라벨 루비 로브스터 에디션
+        </td>
+        <td><strong style="color:#dc2626;">최대 위협.</strong> TV 광고 + 400만 멤버십 + 상시 카드 할인이 결합된 "전방위 방어망" 구축. 가족 세그먼트 직접 경쟁.</td>
+        <td>카드 제휴 즉시 추진. SNS 빈도 3배. 멤버십 앱으로 재방문율 경쟁</td>
+      </tr>
+      <tr>
+        <td><strong>매드포갈릭</strong><br><span style="font-size:11px;color:var(--gray);">42개점·1,057억</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#ea580c;">7</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag high">리브랜딩</span> "Mad for Family" 2026 미션 선언<br>
+          <span class="move-tag high">CU 협업</span> 편의점 5종 간편식 출시 — 브랜드 노출 극대화<br>
+          <span class="move-tag high">할인</span> 설 85% 패키지 즉시 완판 → 가족 가성비 포지셔닝<br>
+          <span class="move-tag med">게임</span> Summoners War IP 콜라보로 MZ 접점<br>
+          <span class="move-tag med">M CLUB</span> 100만 멤버십 앱 운영 중
+        </td>
+        <td><strong style="color:#ea580c;">가족·MZ 세그먼트 양쪽 공략.</strong> 편의점 채널 확장으로 브랜드 일상 접점 확보. 구조조정 중에도 마케팅 강도 유지.</td>
+        <td>IP 콜라보 1건 신속 추진. 가족 패키지 할인 대항 상품 개발</td>
+      </tr>
+      <tr>
+        <td><strong>차이797</strong><br><span style="font-size:11px;color:var(--gray);">40개점·923억</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#ea580c;">7</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag high">성장PR</span> 5년 연속 성장(+10.1%) 브랜드 신뢰도 홍보<br>
+          <span class="move-tag high">B2B</span> 푸디스트 파트너십 → 기업 단체 물량 확보<br>
+          <span class="move-tag med">S-ON</span> 멤버십 앱으로 재방문율 제고<br>
+          <span class="move-tag med">런치</span> 딤섬 런치 세트 24,900~29,900원 운영
+        </td>
+        <td><strong style="color:#ea580c;">아시안 중식 포지셔닝 직접 충돌.</strong> 5년 성장 스토리로 신뢰도 우위. B2B 단체 수요 선점.</td>
+        <td>아시안 퓨전 차별성 강화. 기업 점심 단체 패키지 도입. 런치 세트 맞불</td>
+      </tr>
+      <tr>
+        <td><strong>크리스탈제이드</strong><br><span style="font-size:11px;color:var(--gray);">14개점</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#ca8a04;">6</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag high">미쉐린</span> 미쉐린 가이드 2025 등재 — 프리미엄 PR 효과<br>
+          <span class="move-tag high">점포</span> IFC몰 여의도점 2024.12 오픈<br>
+          <span class="move-tag med">할인</span> 평일 50% 런치 + SSG DAY 20%<br>
+          <span class="move-tag low">SNS</span> 소극적 SNS, 미쉐린 권위로 대체
+        </td>
+        <td>프리미엄 세그먼트 상단 위협. 미쉐린 권위가 광고보다 강력한 신뢰 신호.</td>
+        <td>시그니처 메뉴 품질 스토리텔링 강화. "아시안 퓨전의 원조" 내러티브</td>
+      </tr>
+      <tr>
+        <td><strong>제이에스가든</strong><br><span style="font-size:11px;color:var(--gray);">17개점</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#ca8a04;">5</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag high">서브브랜드</span> 슈슈차이(중저가) 지속 확장 — 가격대 양방향 포지셔닝<br>
+          <span class="move-tag med">B2B</span> 연말 기업 행사·웨딩 단골 유치 강점<br>
+          <span class="move-tag low">SNS</span> 팔로워 9,253명 — 최저 수준, 위협도 낮음
+        </td>
+        <td>연회·특별 행사 세그먼트 경쟁. 중저가 서브브랜드로 신규 고객 선점 시도.</td>
+        <td>기업 연말 행사 패키지 상품 개발. 웨딩·돌잔치 연계 캐주얼 패키지</td>
+      </tr>
+      <tr>
+        <td><strong>모트32</strong><br><span style="font-size:11px;color:var(--gray);">1개점 (하이엔드)</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#ca8a04;">6</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag high">메뉴</span> 2024.08 신메뉴 22개 대규모 업데이트<br>
+          <span class="move-tag med">할인</span> 평일 50% + SSG DAY 20% — 프리미엄 희석 없이 유휴 활성화<br>
+          <span class="move-tag med">글로벌</span> 홍콩 본사 글로벌 캠페인 연계
+        </td>
+        <td>상위 가격대(10~15만원)로 피에프창 고급 세그먼트 경쟁. 분기별 신메뉴로 화제성 유지.</td>
+        <td>직접 경쟁보다 "합리적 프리미엄" 포지션 명확화. 6~8만원 가격대 차별화</td>
+      </tr>
+      <tr>
+        <td><strong>치즈룸</strong><br><span style="font-size:11px;color:var(--gray);">4개점</span></td>
+        <td style="text-align:center;"><span style="font-size:20px;font-weight:900;color:#16a34a;">4</span><br><span style="font-size:10px;color:var(--gray);">/10</span></td>
+        <td>
+          <span class="move-tag low">점포</span> 호텔·프리미엄 상권 입지 유지<br>
+          <span class="move-tag low">메뉴</span> 소규모 시즌 업데이트<br>
+          <span class="move-tag low">SNS</span> 팔로워 12,000명, 블로그 자연 확산 위주
+        </td>
+        <td>마케팅 소극적 — 직접 위협 낮음. 커플/소규모 데이트 세그먼트 일부 경쟁.</td>
+        <td>당장 대응 우선순위 낮음. 오히려 벤치마킹할 프리미엄 이미지 참고</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="hl-box yellow" style="margin-top:20px;">
+    <div class="hl-title" style="color:var(--yellow);">⚠️ 경쟁 구도 결론</div>
+    <div class="hl-body">아웃백은 이미 "가족 캐주얼 다이닝 1위" 포지션을 점령했다. 피에프창이 정면 대결하면 패배한다.
+    <strong>피에프창의 생존 전략은 "아시안 퓨전 + 합리적 프리미엄" 블루오션 명확화</strong>다.
+    차이797(중식 강자)·크리스탈제이드(프리미엄 중식)·아웃백(아메리칸 캐주얼) 사이의 포지션을 명확히 해야 한다.</div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ §4 메가트렌드 -->
+<div class="section" id="s4">
+  <div class="section-header">
+    <div class="section-num">SECTION 04</div>
+    <h2>향후 5년 마케팅 메가트렌드 & 전략 로드맵 (2026-2030)</h2>
+  </div>
+
+  <div style="margin-bottom:28px;">
+    <h3 style="margin-bottom:16px;font-size:15px;color:var(--dark);">🌊 5대 메가트렌드</h3>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;">
+      <div style="background:#f0fdf4;border-radius:10px;padding:20px;border-left:4px solid #16a34a;">
+        <div style="font-size:22px;margin-bottom:8px;">🎯</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">① 초개인화 마케팅</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">AI 로열티 프로그램 → 재방문율 +30%, 객단가 +25%. 고객 1인당 맞춤 오퍼 자동화. Panera Bread 회원 방문 빈도 비회원 대비 70% 높음. <strong>한국: 카카오·네이버 API 연동 CRM 필수.</strong></div>
+      </div>
+      <div style="background:#eff6ff;border-radius:10px;padding:20px;border-left:4px solid #1d4ed8;">
+        <div style="font-size:22px;margin-bottom:8px;">💎</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">② 구독 멤버십 경제</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">포인트 적립 → 월정액 구독 전환. 52%의 소비자가 이미 레스토랑 멤버십 가입. 멤버 지출 비멤버 대비 5% 높음. <strong>P.F. Chang's $6.99/월 Platinum 모델 한국 도입 검토.</strong></div>
+      </div>
+      <div style="background:#fef9c3;border-radius:10px;padding:20px;border-left:4px solid #ca8a04;">
+        <div style="font-size:22px;margin-bottom:8px;">🎪</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">③ 경험 경제 — 외식=이벤트</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">코스 메뉴 검색량 3~4월 +195~714% 급증. MZ세대는 "인스타그래머블" 경험에 프리미엄 지불. 팝업·한정 이벤트로 FOMO 창출. <strong>매달 1회 "특별 테마 나이트" 기획 필수.</strong></div>
+      </div>
+      <div style="background:#fff1f2;border-radius:10px;padding:20px;border-left:4px solid #dc2626;">
+        <div style="font-size:22px;margin-bottom:8px;">📱</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">④ 옴니채널 — 앱·배달·오프라인</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">배달 플랫폼 매출 비중 11~30%(운영자 45% 해당). 쿠팡이츠·네이버맵 필수 채널. 단, 수수료 15~30% 부담 → 자사 앱 전환 중장기 과제. <strong>단기: 플랫폼 입점. 중기: 자사 앱 구축.</strong></div>
+      </div>
+      <div style="background:#f5f3ff;border-radius:10px;padding:20px;border-left:4px solid #7c3aed;">
+        <div style="font-size:22px;margin-bottom:8px;">🤝</div>
+        <div style="font-weight:700;font-size:14px;margin-bottom:6px;">⑤ IP 콜라보 & 팝업</div>
+        <div style="font-size:12px;color:#374151;line-height:1.6;">엔터·게임·OTT IP 협업으로 신규 고객 접점. P.F. Chang's Disney 협업 성공. 매드포갈릭 게임 콜라보. <strong>한국: 넷플릭스·웹툰·K팝 IP 협업 → MZ 재유입 전략.</strong></div>
+      </div>
+    </div>
+  </div>
+
+  <h3 style="margin:28px 0 16px;font-size:15px;color:var(--dark);">🗺️ 5년 전략 로드맵</h3>
+  <div class="roadmap">
+    <div class="rm-phase">
+      <div class="rm-label" style="color:#dc2626;">PHASE 1</div>
+      <div class="rm-title">위기 탈출</div>
+      <div class="rm-period">2026 Q2~Q4 (6~9개월)</div>
+      <div class="rm-item" style="border-color:#dc2626;">🏷️ 카드사 제휴 할인 즉시 도입<br><small>BC·삼성·현대카드 최소 1종</small></div>
+      <div class="rm-item" style="border-color:#dc2626;">🍱 런치 세트 29,900원 신설<br><small>평일 점심 회전율 즉시 회복</small></div>
+      <div class="rm-item" style="border-color:#dc2626;">📱 쿠팡이츠·네이버맵 입점<br><small>배달 채널 구축</small></div>
+      <div class="rm-item" style="border-color:#dc2626;">📸 SNS 월 8회 이상 게시<br><small>인플루언서 월 1~2명 협업</small></div>
+      <div class="rm-item" style="border-color:#dc2626;">🎉 가정의 달 캠페인 (5월)<br><small>가족 패키지 + 사전예약 20% 할인</small></div>
+    </div>
+    <div class="rm-phase">
+      <div class="rm-label" style="color:#ea580c;">PHASE 2</div>
+      <div class="rm-title">브랜드 재정립</div>
+      <div class="rm-period">2027~2028 (18~36개월)</div>
+      <div class="rm-item" style="border-color:#ea580c;">💎 멤버십 앱 론칭<br><small>구독 9,900원/월 Platinum 티어</small></div>
+      <div class="rm-item" style="border-color:#ea580c;">🎪 IP 콜라보 분기 1회<br><small>K-OTT·웹툰·게임 협업</small></div>
+      <div class="rm-item" style="border-color:#ea580c;">🔄 "일상 방문" 포지셔닝<br><small>테마 나이트 월 1회 고정화</small></div>
+      <div class="rm-item" style="border-color:#ea580c;">📺 디지털 TVC 1편<br><small>유튜브·연결TV 중심</small></div>
+      <div class="rm-item" style="border-color:#ea580c;">🤝 기업 B2B 런치 패키지<br><small>인근 오피스 단체 계약</small></div>
+    </div>
+    <div class="rm-phase">
+      <div class="rm-label" style="color:#16a34a;">PHASE 3</div>
+      <div class="rm-title">성장 확장</div>
+      <div class="rm-period">2029~2030 (37~60개월)</div>
+      <div class="rm-item" style="border-color:#16a34a;">🏪 신규 점포 확장<br><small>멤버십 데이터 기반 상권 선정</small></div>
+      <div class="rm-item" style="border-color:#16a34a;">🛒 리테일 CPG 확장<br><small>시그니처 소스·간편식 편의점 출시</small></div>
+      <div class="rm-item" style="border-color:#16a34a;">🤖 AI 개인화 마케팅<br><small>POS·CRM 통합 CDP 구축</small></div>
+      <div class="rm-item" style="border-color:#16a34a;">🌐 글로벌 관광객 타깃<br><small>외국인 전용 메뉴·안내 강화</small></div>
+      <div class="rm-item" style="border-color:#16a34a;">🎯 자사 배달 앱 전환<br><small>수수료 절감 + 고객 데이터 내재화</small></div>
+    </div>
+  </div>
+
+  <div class="chart-row" style="margin-top:28px;">
+    <div class="chart-box">
+      <h4>단계별 기대 고객 유입 회복 시나리오</h4>
+      <canvas id="recoveryChart" height="220"></canvas>
+    </div>
+    <div class="chart-box">
+      <h4>마케팅 채널별 투자 배분 권고 (2026 기준)</h4>
+      <canvas id="budgetChart" height="220"></canvas>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ §5 즉각 액션 -->
+<div class="section" id="s5">
+  <div class="section-header">
+    <div class="section-num">SECTION 05</div>
+    <h2>즉각 실행 액션플랜 — Q2 2026 고객 유입 회복 (3~6개월)</h2>
+  </div>
+
+  <div class="hl-box red" style="margin-bottom:24px;">
+    <div class="hl-title" style="color:#dc2626;">🚨 지금 당장 실행해야 할 이유</div>
+    <div class="hl-body">5월 가정의 달은 한국 외식 업계 최대 피크 시즌. 코스 메뉴 검색량 +714%, 가족 외식 +5,500% 증가 시기.
+    4월 말까지 사전 예약 캠페인·카드 할인·SNS 광고를 집행하지 않으면, 이 수요는 아웃백·매드포갈릭으로 전부 흡수된다.
+    <strong>타이밍이 전략이다.</strong></div>
+  </div>
+
+  <div class="action-grid">
+    <div class="action-card" style="border-top:4px solid #dc2626;background:#fff1f2;">
+      <span class="action-num">01</span>
+      <span class="action-tag" style="background:#fee2e2;color:#dc2626;">즉시 (4월 내)</span>
+      <div class="action-title">🏷️ 카드사 제휴 할인 협상 착수</div>
+      <div class="action-desc">BC카드·삼성카드 중 1종 이상 10~20% 할인 제휴 체결. 아웃백·매드포갈릭·차이797·크리스탈제이드 등 전 경쟁사가 운영 중인데 피에프창만 없는 상태. 소비자 비교 선택 시 즉각 이탈 요인 1위.</div>
+      <div class="action-kpi">목표 KPI: 신규 고객 전환율 +15%, 재방문율 +10%</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #dc2626;background:#fff1f2;">
+      <span class="action-num">02</span>
+      <span class="action-tag" style="background:#fee2e2;color:#dc2626;">즉시 (4월 내)</span>
+      <div class="action-title">📱 SNS 긴급 캠페인 — 가정의 달 선제 공략</div>
+      <div class="action-desc">"피에프창에서의 특별한 순간" 해시태그 캠페인. 인플루언서 5명(팔로워 1만~10만) 섭외, 가족·커플 다이닝 콘텐츠 5월 1일 전 게시. 리얼 후기 UGC 리그램. 네이버 플레이스 이벤트 등록.</div>
+      <div class="action-kpi">목표 KPI: Instagram 팔로워 +5,000, 예약 링크 클릭 +300%</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #ea580c;background:#fff7ed;">
+      <span class="action-num">03</span>
+      <span class="action-tag" style="background:#ffedd5;color:#ea580c;">4월 말 론칭</span>
+      <div class="action-title">🎁 가정의 달 패밀리 패키지</div>
+      <div class="action-desc">5월 한정 2인·4인 패밀리 세트 (현재 정가 대비 15% 할인 + 디저트 무료). 사전 예약 5% 추가 할인. "어버이날·어린이날 예약 선물 패키지" — 예약권 디지털 선물하기 기능. 경쟁사 아웃백·매드포갈릭 동시기 할인에 직접 대항.</div>
+      <div class="action-kpi">목표 KPI: 5월 매출 전년比 +10%, 예약 건수 +40%</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #ea580c;background:#fff7ed;">
+      <span class="action-num">04</span>
+      <span class="action-tag" style="background:#ffedd5;color:#ea580c;">4월 말 론칭</span>
+      <div class="action-title">🍱 런치 세트 29,900원 신설</div>
+      <div class="action-desc">평일 11:30~14:00 전용. 1인 메인 + 스프 + 음료 구성. 현재 아웃백(29,900원)·차이797(24,900원) 런치 대비 경쟁력 확보. 직장인 단체 런치 타깃으로 네이버 플레이스·카카오맵 "런치 특가" 등록. 주중 회전율 즉시 향상.</div>
+      <div class="action-kpi">목표 KPI: 평일 점심 좌석 회전율 1.2회→2.0회, 객단가 유지</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #ca8a04;background:#fefce8;">
+      <span class="action-num">05</span>
+      <span class="action-tag" style="background:#fef9c3;color:#ca8a04;">5월 론칭</span>
+      <div class="action-title">🎪 "피에프창 와인 나이트" 정기 이벤트</div>
+      <div class="action-desc">매월 둘째 주 목요일 평일 저녁 이벤트. 소믈리에 추천 와인 + 아시안 퓨전 페어링 3코스 (65,000원). 좌석 40석 한정 → FOMO 효과. 인스타 릴스 영상 제작으로 브랜드 프리미엄 이미지 강화. 평일 유휴 좌석 활성화.</div>
+      <div class="action-kpi">목표 KPI: 평일 저녁 매출 +20%, SNS 바이럴 자연 확산</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #ca8a04;background:#fefce8;">
+      <span class="action-num">06</span>
+      <span class="action-tag" style="background:#fef9c3;color:#ca8a04;">5~6월</span>
+      <div class="action-title">📊 쿠팡이츠·네이버맵 배달 채널 구축</div>
+      <div class="action-desc">쿠팡이츠 입점 + WOW 멤버십 무료배달 혜택 활용. 네이버 플레이스 예약·포장 연동. 배달 전용 메뉴(런치박스 세트 19,900원) 별도 구성. 홀 메뉴와 배달 메뉴 분리로 품질 관리 + 마진 확보.</div>
+      <div class="action-kpi">목표 KPI: 배달 채널 매출 비중 15% 달성 (6개월 내)</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #1d4ed8;background:#eff6ff;">
+      <span class="action-num">07</span>
+      <span class="action-tag" style="background:#dbeafe;color:#1d4ed8;">6~9월</span>
+      <div class="action-title">💡 IP 콜라보 1건 기획</div>
+      <div class="action-desc">넷플릭스 한국 드라마 또는 인기 웹툰 IP와 협업. 한정 메뉴 + 포토존 설치 + SNS 인증샷 이벤트. 매드포갈릭(게임 콜라보 성공)·P.F. Chang's(Disney 협업) 선례 확인. MZ세대 신규 유입 및 화제성 창출.</div>
+      <div class="action-kpi">목표 KPI: 캠페인 기간 내 방문 고객 +25%, SNS 노출 100만 회</div>
+    </div>
+    <div class="action-card" style="border-top:4px solid #1d4ed8;background:#eff6ff;">
+      <span class="action-num">08</span>
+      <span class="action-tag" style="background:#dbeafe;color:#1d4ed8;">6~12월</span>
+      <div class="action-title">🎫 멤버십 앱 기획 & 개발 착수</div>
+      <div class="action-desc">포인트 적립(방문 1회 = 1,000P, 1만P = 무료 메인) + 생일 혜택 + 월 쿠폰 자동 발행. 2단계: 구독 티어(9,900원/월 → 주 1회 음료 무료 + 런치 10% 할인 + 예약 우선). 카카오 미니앱으로 MVP 구축 → 비용 최소화. P.F. Chang's 글로벌 로열티 시스템 참고.</div>
+      <div class="action-kpi">목표 KPI: 출시 6개월 내 가입자 1만 명, 재방문율 +20%</div>
+    </div>
+  </div>
+
+  <div style="margin-top:28px;">
+    <h3 style="margin-bottom:16px;font-size:15px;color:var(--dark);">📅 Q2 2026 실행 캘린더</h3>
+    <div style="overflow-x:auto;">
+      <table style="width:100%;border-collapse:collapse;font-size:13px;min-width:600px;">
+        <thead>
+          <tr style="background:#1e3a5f;color:#fff;">
+            <th style="padding:10px;">액션</th>
+            <th style="padding:10px;text-align:center;">4월</th>
+            <th style="padding:10px;text-align:center;">5월</th>
+            <th style="padding:10px;text-align:center;">6월</th>
+            <th style="padding:10px;text-align:center;">7~9월</th>
+            <th style="padding:10px;text-align:center;">10~12월</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">카드사 제휴 협상</td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 시작</td><td style="text-align:center;background:#fee2e2;">진행</td><td style="text-align:center;background:#dcfce7;color:#16a34a;font-weight:700;">✓ 완료</td><td></td><td></td></tr>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">SNS 가정의 달 캠페인</td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 준비</td><td style="text-align:center;background:#fbbf24;color:#fff;font-weight:700;">🔥 피크</td><td></td><td></td><td></td></tr>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">패밀리 패키지 출시</td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 기획</td><td style="text-align:center;background:#fbbf24;color:#fff;font-weight:700;">🔥 운영</td><td></td><td></td><td></td></tr>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">런치 세트 론칭</td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 메뉴개발</td><td style="text-align:center;background:#dcfce7;color:#16a34a;font-weight:700;">✓ 론칭</td><td style="text-align:center;background:#dcfce7;">상시</td><td style="text-align:center;background:#dcfce7;">상시</td><td style="text-align:center;background:#dcfce7;">상시</td></tr>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">와인 나이트 이벤트</td><td></td><td style="text-align:center;background:#dbeafe;color:#1d4ed8;font-weight:700;">▶ 1회</td><td style="text-align:center;background:#dbeafe;">2회</td><td style="text-align:center;background:#dbeafe;">매월</td><td style="text-align:center;background:#dbeafe;">매월</td></tr>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">쿠팡이츠 입점</td><td></td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 신청</td><td style="text-align:center;background:#dcfce7;color:#16a34a;font-weight:700;">✓ 오픈</td><td style="text-align:center;background:#dcfce7;">운영</td><td style="text-align:center;background:#dcfce7;">운영</td></tr>
+          <tr><td style="padding:10px;border-bottom:1px solid #f1f5f9;font-weight:600;">IP 콜라보 기획</td><td></td><td></td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 섭외</td><td style="text-align:center;background:#fbbf24;color:#fff;font-weight:700;">🔥 실행</td><td></td></tr>
+          <tr><td style="padding:10px;font-weight:600;">멤버십 앱 개발</td><td></td><td></td><td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:700;">▶ 기획</td><td style="text-align:center;background:#fee2e2;">개발</td><td style="text-align:center;background:#dcfce7;color:#16a34a;font-weight:700;">✓ 베타</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════════════ §6 전문가 -->
+<div class="section" id="s6">
+  <div class="section-header">
+    <div class="section-num">SECTION 06</div>
+    <h2>전문가 패널 의견 — 4인 전략가 진단 & 제언</h2>
+  </div>
+
+  <div class="expert-grid">
+    <div class="expert-card">
+      <div class="expert-head" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6);">
+        <div class="icon">📣</div>
+        <div><div class="name">마케팅 전략가 (20년 경력)</div><div class="title">브랜드 스토리텔링 · 소비자 접점 전문</div></div>
+      </div>
+      <div class="expert-body">
+        <p>피에프창의 핵심 문제는 <strong>"브랜드 목소리의 부재"</strong>입니다. 아웃백은 블랙라벨 씨즐링으로 "스테이크의 드라마"를, 매드포갈릭은 "마늘 사랑 가족의 이야기"를 일관되게 전달합니다. 피에프창은 무엇을 말하고 있습니까? 아시안 퓨전의 매력을 소비자 언어로 번역하는 데 실패하고 있습니다.</p>
+        <p>글로벌 본사의 "Light the Fire" 플랫폼처럼, <strong>한국 피에프창만의 감성 내러티브를 지금 당장 정의해야</strong> 합니다. 고객은 메뉴가 아닌 경험을 삽니다. "피에프창에서 보내는 특별한 저녁"이라는 감정적 연결고리를 SNS에서 반복 노출시켜야 합니다.</p>
+        <div class="expert-rec">
+          <div class="r-title">핵심 권고사항</div>
+          <ul>
+            <li>브랜드 스토리라인 "아시안 퓨전의 진원지" 확정 및 전 채널 일관 적용</li>
+            <li>인플루언서 월 2명 이상 — 10만 이하 마이크로 인플루언서가 ROI 최고</li>
+            <li>인스타 릴스·쇼츠 주 2회 — 조리 과정·분위기·직원 스토리 등 리얼 콘텐츠</li>
+            <li>네이버 블로그 체험단 월 10명 운영 — 네이버 맛집 검색 상위 노출 확보</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="expert-card">
+      <div class="expert-head" style="background:linear-gradient(135deg,#7c3aed,#a855f7);">
+        <div class="icon">📐</div>
+        <div><div class="name">기획 전략가 (20년 경력)</div><div class="title">메뉴 · 가격 · 세트 기획 전문</div></div>
+      </div>
+      <div class="expert-body">
+        <p>매출 회복의 가장 빠른 경로는 <strong>메뉴 아키텍처 재설계</strong>입니다. 현재 피에프창은 "특별한 날" 포지션에 갇혀 있어 평일 방문 빈도가 낮습니다. 런치 세트 도입(경쟁사 전원 운영)이 이 문제를 해결하는 가장 빠른 방법입니다.</p>
+        <p>포션 유연화도 핵심입니다. 글로벌 본사처럼 <strong>미디엄 사이즈·하프 전채 옵션</strong>을 도입하면, 1인 방문객과 가격 민감 고객을 수용하면서 객단가를 방어할 수 있습니다. "비싸다"는 인식을 깨는 가장 효과적인 수단입니다.</p>
+        <div class="expert-rec">
+          <div class="r-title">핵심 권고사항</div>
+          <ul>
+            <li>런치 세트 29,900원 즉시 신설 — 1인 메인+스프+음료, 평일 전용</li>
+            <li>2인·4인 패밀리 세트 59,000/99,000원대 도입 (현재 부재)</li>
+            <li>하프 포션 전채 4종 추가 — 진입 장벽 낮추기</li>
+            <li>시즌 아시안 퓨전 신메뉴 분기 1회 고정 출시 — 재방문 동기 부여</li>
+            <li>가정의 달 코스 메뉴 49,000/69,000원 2티어 운영</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="expert-card">
+      <div class="expert-head" style="background:linear-gradient(135deg,#065f46,#10b981);">
+        <div class="icon">📊</div>
+        <div><div class="name">경영 전략가 (20년 경력)</div><div class="title">수익성 · 파트너십 · 시장 포지셔닝 전문</div></div>
+      </div>
+      <div class="expert-body">
+        <p>20% 고객 감소는 구조적 문제입니다. 단발성 할인으로는 해결되지 않습니다. <strong>장기 수익성을 확보하려면 "고객 생애가치(CLV)"를 높이는 멤버십 시스템이 핵심</strong>입니다. 멤버십 고객은 비멤버 대비 방문 빈도 +25~50%, 객단가 +5% 높습니다.</p>
+        <p>경쟁 포지셔닝도 재정립이 필요합니다. 아웃백과 정면 대결은 불가능합니다. <strong>"아시안 퓨전 + 합리적 프리미엄 (4~7만원)"</strong>이라는 명확한 블루오션 포지션을 선점해야 합니다. 차이797(중식 가성비)·크리스탈제이드(고급 중식)·아웃백(아메리칸 캐주얼)이 모두 강점을 가진 영역 사이의 공백입니다.</p>
+        <div class="expert-rec">
+          <div class="r-title">핵심 권고사항</div>
+          <ul>
+            <li>멤버십 앱 ROI 시뮬레이션 즉시 수행 → 6개월 내 개발 착수</li>
+            <li>카드사 제휴 협상 — 할인율보다 "데이터 공유" 조건이 핵심</li>
+            <li>B2B 기업 런치 단체 계약 20개사 목표 설정</li>
+            <li>쿠팡이츠 입점 시 마진 구조 분석 → 배달 전용 메뉴 가격 별도 설정</li>
+            <li>2026 하반기 투자 예산 배분: SNS 35%, 할인/프로모 30%, 디지털 광고 25%, 오프라인 10%</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="expert-card">
+      <div class="expert-head" style="background:linear-gradient(135deg,#92400e,#d97706);">
+        <div class="icon">⚙️</div>
+        <div><div class="name">운영 전략가 (20년 경력)</div><div class="title">점포 운영 · 서비스 품질 · 효율화 전문</div></div>
+      </div>
+      <div class="expert-body">
+        <p>고객 유입을 늘려도 <strong>재방문율이 낮으면 지속 성장이 불가능</strong>합니다. 운영 관점에서 최우선 과제는 "첫 방문 고객이 다시 오고 싶어지는 경험 설계"입니다. 아웃백이 몰 이전 점포에서 매출 +106%를 달성한 것은 단순히 위치가 좋아서가 아닙니다. <strong>리뉴얼로 공간 경험이 완전히 달라졌기 때문</strong>입니다.</p>
+        <p>주중·주말 편차도 해결해야 합니다. 금·토 피크, 월~목 유휴의 극단적 격차는 수익성 악화의 주요 원인입니다. 와인 나이트·기업 런치·평일 특가 조합으로 평일 좌석 회전율을 최소 1.5배 이상 끌어올려야 합니다.</p>
+        <div class="expert-rec">
+          <div class="r-title">핵심 권고사항</div>
+          <ul>
+            <li>서비스 표준 재정립 — "아시안 퓨전 전문 지식 갖춘 서버" 교육 강화</li>
+            <li>테이블 회전율 데이터 주간 모니터링 체계 구축</li>
+            <li>예약 시스템(캐치테이블 등) 도입 — 가정의 달 예약 선점</li>
+            <li>평일 이벤트 고정화(와인 나이트, 기업 런치)로 유휴 시간대 수익화</li>
+            <li>포장·배달 전용 픽업존 별도 설치 → 홀 경험 방해 최소화</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hl-box" style="margin-top:24px;">
+    <div class="hl-title" style="color:var(--blue);">🎯 4인 전문가 공통 결론</div>
+    <div class="hl-body">
+      <strong>단기(0~6개월):</strong> 카드 할인 + 런치 세트 + 가정의 달 캠페인 → 즉각적 고객 수 회복<br>
+      <strong>중기(6~18개월):</strong> 멤버십 앱 + IP 콜라보 + "일상 방문" 포지셔닝 → 재방문율·충성고객 기반 구축<br>
+      <strong>장기(18개월+):</strong> AI 개인화 + 리테일 확장 + 자사 배달 → 브랜드 가치 복원 & 지속 성장<br><br>
+      <strong style="color:#dc2626;">지금 가장 위험한 선택은 "기다리는 것"</strong>입니다. 5월 가정의 달을 놓치면 다음 피크는 연말(12월)까지 기다려야 합니다.
+    </div>
+  </div>
+</div>
+
+<footer>
+  피에프창 2026 위기극복 & 향후 5년 마케팅 전략 · 에렉스 브랜드전략팀 · 2026년 4월 19일 · CONFIDENTIAL
+</footer>
+
+<script>
+// ─── Chart 1: Traffic Trend
+const trafficCtx = document.getElementById('trafficChart').getContext('2d');
+new Chart(trafficCtx, {
+  type: 'line',
+  data: {
+    labels: ['25 Q1','25 Q2','25 Q3','25 Q4','26 Q1','26 Q2(예측)','26 Q3(목표)'],
+    datasets: [{
+      label: '고객 유입 지수',
+      data: [100, 97, 95, 88, 82, 88, 96],
+      borderColor: '#1d4ed8', backgroundColor: 'rgba(29,78,216,0.1)',
+      tension: 0.4, fill: true, pointRadius: 6
+    }, {
+      label: '경쟁사 평균',
+      data: [100, 102, 104, 101, 99, 103, 106],
+      borderColor: '#dc2626', backgroundColor: 'transparent',
+      tension: 0.4, borderDash: [6,3], pointRadius: 4
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { min: 70, max: 115, ticks: { callback: v => v + '%' } } },
+    plugins: {
+      legend: { position: 'top' },
+      annotation: {}
+    }
+  }
+});
+
+// ─── Chart 2: Cause Breakdown (Doughnut)
+const causeCtx = document.getElementById('causeChart').getContext('2d');
+new Chart(causeCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['경기침체·소비위축', '계엄·정치불안', '브랜드 노후화', '경쟁사 공세', '계절성 공백', '배달 잠식·홈파티', '이란·원가 상승'],
+    datasets: [{
+      data: [28, 20, 18, 14, 10, 7, 3],
+      backgroundColor: ['#dc2626','#ef4444','#ea580c','#f97316','#ca8a04','#6b7280','#374151'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, boxWidth: 12 } } }
+  }
+});
+
+// ─── Chart 3: Recovery Scenario
+const recoveryCtx = document.getElementById('recoveryChart').getContext('2d');
+new Chart(recoveryCtx, {
+  type: 'line',
+  data: {
+    labels: ['4월(현재)','5월','6월','7월','8월','9월','10월','11월','12월','27Q1'],
+    datasets: [
+      {
+        label: '액션플랜 실행 시',
+        data: [82, 90, 93, 95, 96, 97, 98, 99, 102, 105],
+        borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.1)',
+        tension: 0.4, fill: true, borderWidth: 3
+      },
+      {
+        label: '현 상태 유지 시 (최악)',
+        data: [82, 80, 79, 78, 77, 76, 75, 74, 75, 74],
+        borderColor: '#dc2626', backgroundColor: 'rgba(220,38,38,0.05)',
+        tension: 0.4, fill: true, borderDash: [6,3]
+      },
+      {
+        label: '전년 기준선 (100)',
+        data: [100,100,100,100,100,100,100,100,100,100],
+        borderColor: '#9ca3af', borderDash: [3,3], pointRadius: 0
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: { y: { min: 60, max: 115 } },
+    plugins: { legend: { position: 'top' } }
+  }
+});
+
+// ─── Chart 4: Budget Allocation
+const budgetCtx = document.getElementById('budgetChart').getContext('2d');
+new Chart(budgetCtx, {
+  type: 'bar',
+  data: {
+    labels: ['SNS·인플루언서', '프로모션·할인', '디지털 광고', '이벤트·IP', '멤버십·CRM', '오프라인·PR'],
+    datasets: [{
+      label: '권고 예산 비중 (%)',
+      data: [35, 25, 20, 10, 7, 3],
+      backgroundColor: ['#1d4ed8','#dc2626','#7c3aed','#ca8a04','#16a34a','#6b7280'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      y: { max: 40, ticks: { callback: v => v + '%' } },
+      x: { ticks: { font: { size: 11 } } }
+    },
+    plugins: { legend: { display: false } }
+  }
+});
+</script>
+</body>
+</html>

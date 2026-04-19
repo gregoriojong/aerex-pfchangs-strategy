@@ -1,0 +1,1966 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>피에프창 통합 마스터 대시보드 | 에렉스</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --blue:#1d4ed8;--dark:#0f172a;--red:#dc2626;--green:#16a34a;
+  --orange:#ea580c;--purple:#7c3aed;--yellow:#ca8a04;--gray:#6b7280;
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:#1f2937;font-size:13px}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand .logo{font-size:18px;font-weight:900;letter-spacing:-0.5px}
+.topbar-brand .sub{font-size:10px;opacity:.6;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:12px;font-size:12px}
+.live-badge{background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+
+/* ── TAB NAV ── */
+.tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:52px;z-index:99;overflow-x:auto}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--blue);background:#f8fafc}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-content{display:none;padding:20px 24px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi-card{border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi-card .kpi-label{font-size:11px;font-weight:600;opacity:.75;margin-bottom:6px}
+.kpi-card .kpi-val{font-size:30px;font-weight:900;line-height:1;margin-bottom:4px}
+.kpi-card .kpi-sub{font-size:11px;opacity:.75}
+.kpi-card .kpi-icon{position:absolute;right:14px;top:14px;font-size:28px;opacity:.2}
+.kpi-card.red{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff}
+.kpi-card.orange{background:linear-gradient(135deg,#ea580c,#f97316);color:#fff}
+.kpi-card.blue{background:linear-gradient(135deg,#1d4ed8,#3b82f6);color:#fff}
+.kpi-card.green{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.kpi-card.purple{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.kpi-card.yellow{background:linear-gradient(135deg,#ca8a04,#eab308);color:#fff}
+.kpi-card.dark{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff}
+
+/* ── CHART GRID ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.chart-grid-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.chart-grid-12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+
+/* ── PILL / BADGE ── */
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+.pill.blue{background:#dbeafe;color:#1d4ed8}
+.pill.red{background:#fee2e2;color:#dc2626}
+.pill.green{background:#dcfce7;color:#16a34a}
+.pill.orange{background:#ffedd5;color:#ea580c}
+.pill.purple{background:#ede9fe;color:#7c3aed}
+.pill.yellow{background:#fef9c3;color:#92400e}
+.pill.gray{background:#f3f4f6;color:#374151}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13px;line-height:1.6}
+.alert.red{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626}
+.alert.blue{background:#eff6ff;border:1px solid #93c5fd;border-left:4px solid #1d4ed8}
+.alert.green{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a}
+.alert.yellow{background:#fefce8;border:1px solid #fde047;border-left:4px solid #ca8a04}
+.alert.purple{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed}
+
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{padding:9px 12px;background:#f8fafc;font-weight:700;text-align:left;border-bottom:2px solid var(--border)}
+.dt td{padding:8px 12px;border-bottom:1px solid #f8fafc;vertical-align:top}
+.dt tr:hover td{background:#fafafa}
+
+/* ── SNS PLATFORM ── */
+.sns-platform-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:12px;margin-bottom:16px}
+.sns-card{border-radius:10px;overflow:hidden;border:1px solid var(--border)}
+.sns-card-hd{padding:12px 14px;color:#fff;display:flex;align-items:center;gap:8px}
+.sns-card-hd .sn{font-size:13px;font-weight:700}
+.sns-card-hd .icon{font-size:20px}
+.sns-card-bd{padding:12px 14px;background:#fff}
+.sns-stat{display:flex;justify-content:space-between;margin-bottom:5px;font-size:12px}
+.sns-bar{height:5px;background:#f1f5f9;border-radius:3px;margin:3px 0 8px}
+.sns-bar-fill{height:100%;border-radius:3px;background:var(--blue)}
+
+/* ── STRATEGY STEP ── */
+.strategy-steps{display:flex;flex-direction:column;gap:10px}
+.strategy-step{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:#f8fafc;border-radius:8px;border:1px solid var(--border)}
+.step-num-circle{background:var(--blue);color:#fff;font-size:11px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-content .st{font-size:13px;font-weight:700;margin-bottom:3px}
+.step-content .sd{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* ── NAVER FUNNEL ── */
+.naver-funnel{display:flex;flex-direction:column;gap:8px}
+.funnel-step{padding:12px 20px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;gap:12px}
+.funnel-step .fn{font-size:20px}
+.funnel-step .fc{flex:1}
+.funnel-step .ft{font-size:13px;font-weight:700;color:var(--dark)}
+.funnel-step .fd{font-size:12px;color:var(--gray);margin-top:2px}
+.funnel-step .fkpi{font-size:11px;font-weight:700;white-space:nowrap}
+
+/* ── APP FEATURE ── */
+.app-feature-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:10px}
+.app-feature{border-radius:8px;padding:14px;border:1px solid var(--border);text-align:center}
+.app-feature .af-icon{font-size:28px;margin-bottom:8px}
+.app-feature .af-name{font-size:12px;font-weight:700;margin-bottom:4px;color:var(--dark)}
+.app-feature .af-desc{font-size:11px;color:var(--gray);line-height:1.4}
+.app-feature.priority-now{border-color:#dc2626;background:#fff1f2}
+.app-feature.priority-q3{border-color:#ea580c;background:#fff7ed}
+.app-feature.priority-later{border-color:#6b7280;background:#f9fafb}
+
+/* ── WEEKLY TIMELINE ── */
+.week-timeline{display:flex;flex-direction:column;gap:14px}
+.week-item{background:#fff;border-radius:10px;border:1px solid var(--border);overflow:hidden}
+.week-item-hd{padding:12px 16px;display:flex;justify-content:space-between;align-items:center}
+.week-item-hd .wk{font-size:13px;font-weight:700}
+.week-item-hd .wdate{font-size:11px;color:var(--gray)}
+.week-item-kpis{display:flex;gap:8px;padding:10px 16px;background:#f8fafc;border-top:1px solid var(--border)}
+.week-kpi{text-align:center;flex:1}
+.week-kpi .wkv{font-size:16px;font-weight:800}
+.week-kpi .wkl{font-size:10px;color:var(--gray);margin-top:2px}
+.intensity-bar-wrap{padding:10px 16px;border-top:1px solid var(--border)}
+.int-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px}
+.int-label{width:80px;color:var(--gray);font-weight:600}
+.int-bar{flex:1;height:8px;background:#f1f5f9;border-radius:4px}
+.int-fill{height:100%;border-radius:4px}
+.int-val{font-size:12px;font-weight:700;width:24px;text-align:right}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* ── KEYWORD ── */
+.kw-chip{display:inline-block;background:#f1f5f9;border:1px solid #e2e8f0;border-radius:6px;padding:3px 10px;font-size:11px;margin:2px;font-weight:600}
+.kw-chip.p{background:#dbeafe;border-color:#93c5fd;color:#1d4ed8}
+.kw-chip.s{background:#dcfce7;border-color:#86efac;color:#16a34a}
+.kw-chip.t{background:#ede9fe;border-color:#c4b5fd;color:#7c3aed}
+
+/* ── HEATMAP ── */
+.hm-table{width:100%;border-collapse:collapse;font-size:12px}
+.hm-table th{padding:8px 10px;background:#1e3a5f;color:#fff;text-align:center;font-size:11px}
+.hm-table th:first-child{text-align:left}
+.hm-table td{padding:8px 10px;border:1px solid var(--border);text-align:center;font-weight:700}
+
+/* ── CHECKLIST ── */
+.checklist{list-style:none;padding:0}
+.checklist li{padding:7px 10px 7px 30px;position:relative;border-bottom:1px solid #f8fafc;font-size:12px;line-height:1.5}
+.checklist li::before{content:'□';position:absolute;left:8px;color:var(--blue);font-size:14px;top:6px}
+.checklist li strong{color:var(--dark)}
+
+/* ROI TABLE */
+.roi-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.roi-card{border-radius:10px;padding:16px;border:1px solid var(--border);text-align:center}
+.roi-card .rv{font-size:28px;font-weight:900;color:var(--blue)}
+.roi-card .rl{font-size:11px;color:var(--gray);margin-top:4px}
+
+footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-top:1px solid var(--border);margin-top:24px}
+.iframe-tab{padding:0;max-width:100%}
+.iframe-tab iframe{width:100%;height:calc(100vh - 104px);border:none;display:block}
+@media(max-width:768px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chart-grid-2,.chart-grid-3,.chart-grid-21,.chart-grid-12{grid-template-columns:1fr}
+  .tab-content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div>
+      <div class="logo">⭐ 피에프창 마스터 대시보드</div>
+      <div class="sub">에렉스 브랜드전략 통합 관리 시스템</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="live-badge">● LIVE</span>
+    <span id="nowDate" style="opacity:.7"></span>
+    <span style="opacity:.5">|</span>
+    <span style="opacity:.7">2026-W16 기준</span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <button class="tab-btn active" onclick="showTab('dashboard')">📊 핵심 대시보드</button>
+  <button class="tab-btn" onclick="showTab('weekly')">📅 주간 업데이트</button>
+  <button class="tab-btn" onclick="showTab('competitive')">🏆 경쟁사 분석</button>
+  <button class="tab-btn" onclick="showTab('sns')">📱 SNS 전략</button>
+  <button class="tab-btn" onclick="showTab('naver')">🟢 네이버 전략</button>
+  <button class="tab-btn" onclick="showTab('app')">📲 앱 구축 전략</button>
+  <button class="tab-btn" onclick="showTab('landscape')">🗺️ 경쟁사 랜드스케이프</button>
+  <button class="tab-btn" onclick="showTab('strategy')">📋 2026 전략 리포트</button>
+  <button class="tab-btn" onclick="showTab('sheet')">📚 마케팅 용어·SWOT</button>
+  <button class="tab-btn" onclick="showTab('ai')">🤖 AI 검색 전략</button>
+  <button class="tab-btn" onclick="showTab('factcheck')">✅ 팩트체크</button>
+  <button class="tab-btn" onclick="showTab('snsref')">📸 SNS 참고자료</button>
+  <button class="tab-btn" onclick="showTab('youtube')">▶️ 유튜브 전략</button>
+</div>
+
+<!-- ════════════════════════ TAB 1: 핵심 대시보드 ════════════════════════ -->
+<div id="tab-dashboard" class="tab-content active">
+
+  <!-- KPI 카드 -->
+  <div class="kpi-grid" style="margin-top:4px">
+    <div class="kpi-card red">
+      <div class="kpi-icon">👥</div>
+      <div class="kpi-label">고객 유입 (최근 4주 평균)</div>
+      <div class="kpi-val">-18.5%</div>
+      <div class="kpi-sub">전년 동기 대비 · 3~4월 구조 저점</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">매출 변화 (최근 4주)</div>
+      <div class="kpi-val">-12.3%</div>
+      <div class="kpi-sub">객단가 방어로 고객수 감소 대비 선방</div>
+    </div>
+    <div class="kpi-card yellow">
+      <div class="kpi-icon">🛒</div>
+      <div class="kpi-label">객단가 변화</div>
+      <div class="kpi-val">-0.8%</div>
+      <div class="kpi-sub">안정적 유지 · 가격 민감도 낮은 층 유지</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-icon">⚡</div>
+      <div class="kpi-label">경쟁사 마케팅 강도</div>
+      <div class="kpi-val">8.3<span style="font-size:16px">/10</span></div>
+      <div class="kpi-sub">아웃백 9·매드포갈릭 7·차이797 7</div>
+    </div>
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card blue">
+      <div class="kpi-icon">📣</div>
+      <div class="kpi-label">피에프창 마케팅 강도</div>
+      <div class="kpi-val">3.5<span style="font-size:16px">/10</span></div>
+      <div class="kpi-sub">경쟁사 평균 대비 -4.8pt 열세</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-icon">📱</div>
+      <div class="kpi-label">Instagram 팔로워</div>
+      <div class="kpi-val">32K</div>
+      <div class="kpi-sub">아웃백 236K 대비 13.6% 수준</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">⭐</div>
+      <div class="kpi-label">네이버 플레이스 평점</div>
+      <div class="kpi-val">4.2</div>
+      <div class="kpi-sub">리뷰 수 확대 필요 · 경쟁사 평균 4.4</div>
+    </div>
+    <div class="kpi-card" style="background:linear-gradient(135deg,#0891b2,#06b6d4);color:#fff">
+      <div class="kpi-icon">🎫</div>
+      <div class="kpi-label">멤버십 CRM 회원</div>
+      <div class="kpi-val">0</div>
+      <div class="kpi-sub">아웃백 400만 · 매드포갈릭 100만 · 차이797 S-ON</div>
+    </div>
+  </div>
+
+  <!-- 차트 Row 1 -->
+  <div class="chart-grid-21" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📈 주간 KPI 트렌드 — 마케팅 강도 vs 고객·매출·객단가 변화</div>
+      <canvas id="weeklyTrend" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">🥧 고객 감소 원인 분해 (추정)</div>
+      <canvas id="causeDonut" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- 차트 Row 2 -->
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📊 경쟁사 마케팅 강도 vs 피에프창 KPI 상관</div>
+      <canvas id="corrChart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 레이더 — 피에프창 vs 경쟁사 평균 (6개 항목)</div>
+      <canvas id="radarMain" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- Alert -->
+  <div class="alert red">
+    <strong>🚨 긴급 대응 필요:</strong> 2026년 3~4월 고객 유입 -18.5%. 5월 가정의 달(최대 피크)까지 <strong>카드제휴·런치세트·SNS 캠페인</strong> 동시 실행하지 않으면 다음 회복 시점은 12월 연말.
+  </div>
+
+  <!-- Top 3 Actions -->
+  <div class="sec-title">🚀 즉각 실행 Top 3 (4월 내)</div>
+  <div class="chart-grid-3">
+    <div class="card" style="border-top:4px solid #dc2626">
+      <div style="font-size:32px;font-weight:900;color:#fee2e2">01</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:6px">카드사 제휴 협상 착수</div>
+      <div style="font-size:12px;color:var(--gray)">BC·삼성카드 10~20% 제휴. 전 경쟁사 운영 중, 피에프창만 없음. 고객 이탈 1순위 요인.</div>
+      <div style="margin-top:10px"><span class="pill green">기대효과 +15% 신규</span></div>
+    </div>
+    <div class="card" style="border-top:4px solid #ea580c">
+      <div style="font-size:32px;font-weight:900;color:#ffedd5">02</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:6px">런치 세트 29,900원 신설</div>
+      <div style="font-size:12px;color:var(--gray)">평일 11:30~14:00. 아웃백·차이797 이미 운영. 평일 좌석 회전율 즉시 향상.</div>
+      <div style="margin-top:10px"><span class="pill green">평일 회전율 1.2→2.0회</span></div>
+    </div>
+    <div class="card" style="border-top:4px solid #1d4ed8">
+      <div style="font-size:32px;font-weight:900;color:#dbeafe">03</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:6px">SNS 인플루언서 5명 즉시 섭외</div>
+      <div style="font-size:12px;color:var(--gray)">1만~10만 마이크로 KOL. 가정의 달 콘텐츠 5월 1일 전 게시. 팔로워 +5,000 목표.</div>
+      <div style="margin-top:10px"><span class="pill green">예약 클릭 +300%</span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 2: 주간 업데이트 ════════════════════════ -->
+<div id="tab-weekly" class="tab-content">
+  <div class="chart-grid-21" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📈 주간 KPI 변화율 추적 (2025 W15 ~ 현재)</div>
+      <canvas id="weeklyKPI" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">⚡ 마케팅 강도 비교 (피에프창 vs 경쟁사)</div>
+      <canvas id="weeklyIntensity" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- 주간 데이터 타임라인 -->
+  <div class="sec-title">📅 주간 데이터 기록</div>
+  <div class="week-timeline">
+    <div class="week-item">
+      <div class="week-item-hd" style="background:#f8fafc">
+        <div><div class="wk">2025-W15</div><div class="wdate">2025.04.07 ~ 04.13</div></div>
+        <span class="pill yellow">경쟁사 중간 강도</span>
+      </div>
+      <div class="week-item-kpis">
+        <div class="week-kpi"><div class="wkv" style="color:#ea580c">-1.5%</div><div class="wkl">매출 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#ea580c">-1.2%</div><div class="wkl">고객수 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#6b7280">-0.3%</div><div class="wkl">객단가 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#1d4ed8">98.5</div><div class="wkl">매출지수</div></div>
+      </div>
+      <div class="intensity-bar-wrap">
+        <div class="int-row">
+          <div class="int-label">피에프창</div>
+          <div class="int-bar"><div class="int-fill" style="width:30%;background:#1d4ed8"></div></div>
+          <div class="int-val" style="color:#1d4ed8">3</div>
+        </div>
+        <div class="int-row">
+          <div class="int-label">경쟁사(아웃백)</div>
+          <div class="int-bar"><div class="int-fill" style="width:50%;background:#dc2626"></div></div>
+          <div class="int-val" style="color:#dc2626">5</div>
+        </div>
+        <div style="font-size:11px;color:var(--gray)">📌 경쟁사 봄 시즌 프리뷰 시작. 소폭 영향 감지.</div>
+      </div>
+    </div>
+
+    <div class="week-item">
+      <div class="week-item-hd" style="background:#fff1f2">
+        <div><div class="wk">2025-W16</div><div class="wdate">2025.04.14 ~ 04.20</div></div>
+        <span class="pill red">경쟁사 고강도 집행</span>
+      </div>
+      <div class="week-item-kpis">
+        <div class="week-kpi"><div class="wkv" style="color:#dc2626">-3.2%</div><div class="wkl">매출 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#dc2626">-2.1%</div><div class="wkl">고객수 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#ea580c">-1.0%</div><div class="wkl">객단가 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#dc2626">96.8</div><div class="wkl">매출지수</div></div>
+      </div>
+      <div class="intensity-bar-wrap">
+        <div class="int-row">
+          <div class="int-label">피에프창</div>
+          <div class="int-bar"><div class="int-fill" style="width:40%;background:#1d4ed8"></div></div>
+          <div class="int-val" style="color:#1d4ed8">4</div>
+        </div>
+        <div class="int-row">
+          <div class="int-label">경쟁사(아웃백)</div>
+          <div class="int-bar"><div class="int-fill" style="width:80%;background:#dc2626"></div></div>
+          <div class="int-val" style="color:#dc2626">8</div>
+        </div>
+        <div style="font-size:11px;color:var(--gray)">🚨 아웃백 봄 할인+인플루언서 동시 집행. 주말 고객 급감.</div>
+      </div>
+    </div>
+
+    <div class="week-item">
+      <div class="week-item-hd" style="background:#fff7ed">
+        <div><div class="wk">2025-W17</div><div class="wdate">2025.04.21 ~ 04.27</div></div>
+        <span class="pill orange">피에프창 대응 시작</span>
+      </div>
+      <div class="week-item-kpis">
+        <div class="week-kpi"><div class="wkv" style="color:#ea580c">-2.1%</div><div class="wkl">매출 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#ea580c">-1.5%</div><div class="wkl">고객수 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#6b7280">-0.5%</div><div class="wkl">객단가 변화</div></div>
+        <div class="week-kpi"><div class="wkv" style="color:#ea580c">97.9</div><div class="wkl">매출지수</div></div>
+      </div>
+      <div class="intensity-bar-wrap">
+        <div class="int-row">
+          <div class="int-label">피에프창</div>
+          <div class="int-bar"><div class="int-fill" style="width:60%;background:#1d4ed8"></div></div>
+          <div class="int-val" style="color:#1d4ed8">6</div>
+        </div>
+        <div class="int-row">
+          <div class="int-label">경쟁사(아웃백)</div>
+          <div class="int-bar"><div class="int-fill" style="width:70%;background:#dc2626"></div></div>
+          <div class="int-val" style="color:#dc2626">7</div>
+        </div>
+        <div style="font-size:11px;color:var(--gray)">🔼 어린이날 준비 SNS 강화. 감소폭 축소. 인플루언서 협업 효과 나타남.</div>
+      </div>
+    </div>
+
+    <!-- 새 주차 추가 안내 -->
+    <div class="alert blue" style="margin:0">
+      <strong>📝 주간 데이터 추가 방법:</strong> <code>weekly_data_pfchangs.json</code> 파일에 새 주차 항목 추가 후
+      <code>python scripts/create_weekly_dashboard.py</code> 실행하면 자동 업데이트됩니다.
+      스키마는 <code>references/weekly_schema.md</code> 참조.
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="card-title">📋 주간 업데이트 입력 가이드</div>
+    <table class="dt">
+      <tr><th>수집 항목</th><th>데이터 소스</th><th>수집 주기</th><th>담당</th></tr>
+      <tr><td><strong>매출·고객수·객단가</strong></td><td>POS 시스템</td><td>매주 월요일</td><td>운영팀</td></tr>
+      <tr><td><strong>경쟁사 SNS 게시물</strong></td><td>Instagram·YouTube 직접 확인</td><td>매주 화요일</td><td>마케팅팀</td></tr>
+      <tr><td><strong>경쟁사 할인·이벤트</strong></td><td>공식 홈페이지·앱</td><td>매주 수요일</td><td>기획팀</td></tr>
+      <tr><td><strong>네이버 플레이스 리뷰</strong></td><td>네이버 플레이스 관리자</td><td>매주 목요일</td><td>마케팅팀</td></tr>
+      <tr><td><strong>자사 마케팅 활동 기록</strong></td><td>캠페인 URL·도달률</td><td>실시간</td><td>SNS 담당</td></tr>
+    </table>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 3: 경쟁사 분석 ════════════════════════ -->
+<div id="tab-competitive" class="tab-content">
+
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📊 경쟁사 SNS 팔로워 비교 (Instagram)</div>
+      <canvas id="followerChart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">💪 경쟁사 마케팅 강도 비교 (2026 현재)</div>
+      <canvas id="intensityBar" height="220"></canvas>
+    </div>
+  </div>
+
+  <!-- 히트맵 -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">🗺️ 경쟁력 히트맵 — 피에프창 vs 7개 경쟁사 × 6개 항목</div>
+    <div style="overflow-x:auto">
+    <table class="hm-table">
+      <thead>
+        <tr>
+          <th style="text-align:left;padding-left:12px;width:130px">브랜드</th>
+          <th>홍보전략</th><th>매출활성화</th><th>세트구성</th><th>메뉴전략</th><th>할인행사</th><th>기타행사</th>
+          <th style="background:#1d4ed8">합산</th>
+        </tr>
+      </thead>
+      <tbody id="heatmapBody"></tbody>
+    </table>
+    </div>
+  </div>
+
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">💰 경쟁사 매출 규모 비교 (억원, 최근 공시)</div>
+      <canvas id="revenueBar" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">🏪 경쟁사 점포수 비교</div>
+      <canvas id="storeBar" height="220"></canvas>
+    </div>
+  </div>
+
+  <div class="alert yellow">
+    <strong>⚠️ 경쟁 구도 핵심 인사이트:</strong> 아웃백은 이미 "가족 캐주얼 1위"를 점령. 정면 대결은 불가. 피에프창의 생존 전략은
+    <strong>"아시안 퓨전 + 합리적 프리미엄 (4~7만원)"</strong> 블루오션 명확화. 차이797(중식 가성비)·크리스탈제이드(프리미엄 중식) 사이의 공백 선점.
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 4: SNS 전략 ════════════════════════ -->
+<div id="tab-sns" class="tab-content">
+
+  <div class="chart-grid-21" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📱 경쟁사 SNS 팔로워 격차 — 피에프창 대비 배수</div>
+      <canvas id="snsGapChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">📅 SNS 월 포스팅 빈도 비교</div>
+      <canvas id="postFreqChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- 경쟁사 SNS 전략 카드 -->
+  <div class="sec-title">🔍 경쟁사별 SNS 팔로워 증대 핵심 전략</div>
+  <div class="sns-platform-grid">
+    <div class="sns-card">
+      <div class="sns-card-hd" style="background:#dc2626">
+        <div class="icon">🥩</div>
+        <div class="sn">아웃백 (236K)</div>
+      </div>
+      <div class="sns-card-bd">
+        <div class="sns-stat"><span style="font-weight:600">주요 전략</span></div>
+        <div style="font-size:11px;color:#374151;line-height:1.6">
+          ✅ <b>TVC 연동 SNS</b> — TV광고 후 인스타 연동 해시태그<br>
+          ✅ <b>제품 바이럴</b> — "씨즐링 소리" 영상 자연 확산<br>
+          ✅ <b>주 12회 포스팅</b> — 알고리즘 노출 극대화<br>
+          ✅ <b>스토리 일상화</b> — 매일 스토리 업데이트<br>
+          ✅ <b>맥락 콘텐츠</b> — 가족·연인 상황별 콘텐츠
+        </div>
+      </div>
+    </div>
+    <div class="sns-card">
+      <div class="sns-card-hd" style="background:#ea580c">
+        <div class="icon">🧄</div>
+        <div class="sn">매드포갈릭 (48K)</div>
+      </div>
+      <div class="sns-card-bd">
+        <div style="font-size:11px;color:#374151;line-height:1.6">
+          ✅ <b>IP 콜라보 게시</b> — 게임·캐릭터 협업 화제성<br>
+          ✅ <b>할인 즉시 게시</b> — "85% 완판" FOMO 콘텐츠<br>
+          ✅ <b>팔로워 리그램</b> — UGC 적극 활용<br>
+          ✅ <b>편의점 콘텐츠</b> — CU 출시 알림으로 확산<br>
+          ✅ <b>릴스 중심</b> — 음식 클로즈업 릴스 높은 도달
+        </div>
+      </div>
+    </div>
+    <div class="sns-card">
+      <div class="sns-card-hd" style="background:#ca8a04">
+        <div class="icon">🥟</div>
+        <div class="sn">차이797 (35K)</div>
+      </div>
+      <div class="sns-card-bd">
+        <div style="font-size:11px;color:#374151;line-height:1.6">
+          ✅ <b>성장 스토리</b> — "5년 연속 성장" PR 게시<br>
+          ✅ <b>딤섬 비주얼</b> — 정통 중식 심미적 사진<br>
+          ✅ <b>명절 연계</b> — 춘절·추석 시즌 콘텐츠<br>
+          ✅ <b>S-ON 멤버십</b> — 앱 가입 유도 콘텐츠<br>
+          ✅ <b>주 6회 정기</b> — 일관성 있는 게시 빈도
+        </div>
+      </div>
+    </div>
+    <div class="sns-card">
+      <div class="sns-card-hd" style="background:#7c3aed">
+        <div class="icon">💎</div>
+        <div class="sn">크리스탈제이드 (18K)</div>
+      </div>
+      <div class="sns-card-bd">
+        <div style="font-size:11px;color:#374151;line-height:1.6">
+          ✅ <b>미쉐린 홍보</b> — 권위 인증 반복 게시<br>
+          ✅ <b>신규 오픈</b> — IFC몰 오픈 이벤트 화제<br>
+          ✅ <b>프리미엄 사진</b> — 고퀄리티 플레이팅 사진<br>
+          ✅ <b>평일 할인 알림</b> — 50% 이벤트 즉시 게시
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+  <div class="sec-title">🚀 피에프창 SNS 팔로워 32K → 100K 로드맵 (12개월)</div>
+
+  <div class="chart-grid-12" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📈 팔로워 성장 시나리오</div>
+      <canvas id="followerGrowth" height="220"></canvas>
+    </div>
+    <div class="card" style="padding:0;overflow:hidden">
+      <div style="padding:14px 16px;border-bottom:1px solid var(--border)">
+        <div class="card-title" style="margin:0">🎯 플랫폼별 전략</div>
+      </div>
+      <div style="padding:14px 16px">
+        <div style="margin-bottom:14px">
+          <div style="font-weight:700;font-size:13px;margin-bottom:6px">📸 인스타그램 — 주력 채널</div>
+          <div style="font-size:12px;color:#374151;line-height:1.65">
+            • 릴스 주 3회 (음식 클로즈업, 요리 과정, 매장 분위기)<br>
+            • 스토리 매일 (비하인드, 한정 메뉴, 리뷰 공유)<br>
+            • 해시태그 30개 풀활용: #피에프창 #아시안퓨전 #강남맛집<br>
+            • 마이크로 인플루언서 월 2명 협업 (1만~10만)
+          </div>
+        </div>
+        <div style="margin-bottom:14px">
+          <div style="font-weight:700;font-size:13px;margin-bottom:6px">📺 유튜브 숏츠 — 신규 채널</div>
+          <div style="font-size:12px;color:#374151;line-height:1.65">
+            • 월 4편: "피에프창 추천 메뉴 TOP5", "주방 비하인드"<br>
+            • 제목 키워드: 강남맛집·아시안퓨전·데이트코스<br>
+            • 구독자 1만 달성 시 YouTube 파트너십 연동
+          </div>
+        </div>
+        <div>
+          <div style="font-weight:700;font-size:13px;margin-bottom:6px">🎵 틱톡 — MZ 신규 접점</div>
+          <div style="font-size:12px;color:#374151;line-height:1.65">
+            • 월 4편 "먹방" 형식 — 음식 자르는 장면·리액션<br>
+            • 트렌딩 음악 + #맛집브이로그 #강남맛집<br>
+            • 틱톡 크리에이터 콜라보 1회/분기
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title" style="margin-top:4px">📋 SNS 콘텐츠 캘린더 (주간 기준)</div>
+  <div class="card">
+    <table class="dt">
+      <tr style="background:#1e3a5f;color:#fff">
+        <th style="color:#fff">요일</th><th style="color:#fff">플랫폼</th><th style="color:#fff">콘텐츠 유형</th><th style="color:#fff">핵심 해시태그</th><th style="color:#fff">목적</th>
+      </tr>
+      <tr><td><strong>월요일</strong></td><td>인스타 스토리</td><td>이번 주 특별 메뉴 예고</td><td>#피에프창 #이번주메뉴</td><td>주간 기대감 형성</td></tr>
+      <tr><td><strong>화요일</strong></td><td>인스타 릴스</td><td>시그니처 메뉴 클로즈업 (15초)</td><td>#아시안퓨전 #강남맛집 #먹스타그램</td><td>알고리즘 도달 극대화</td></tr>
+      <tr><td><strong>수요일</strong></td><td>인스타 피드</td><td>매장 분위기·테이블 세팅 사진</td><td>#데이트코스 #분위기좋은식당</td><td>감성 브랜딩</td></tr>
+      <tr><td><strong>목요일</strong></td><td>유튜브 숏츠</td><td>주방 비하인드 or 메뉴 소개</td><td>#강남레스토랑 #아시안음식</td><td>AI 검색 색인 · 신규 유입</td></tr>
+      <tr><td><strong>금요일</strong></td><td>인스타 피드+스토리</td><td>주말 예약 유도 + 할인 쿠폰 게시</td><td>#피에프창예약 #주말외식추천</td><td>예약 전환 극대화</td></tr>
+      <tr><td><strong>토요일</strong></td><td>인스타 스토리</td><td>실시간 방문 고객 UGC 리그램</td><td>#피에프창후기</td><td>사회적 증거 (Social Proof)</td></tr>
+      <tr><td><strong>일요일</strong></td><td>틱톡</td><td>먹방 형식 인기 메뉴 쇼트폼</td><td>#먹방 #맛집브이로그 #강남</td><td>Z세대 신규 접점</td></tr>
+    </table>
+  </div>
+
+  <div class="chart-grid-3" style="margin-top:14px">
+    <div class="card" style="border-top:3px solid #dc2626">
+      <div style="font-size:12px;font-weight:700;margin-bottom:8px">🔥 인플루언서 협업 기준</div>
+      <div style="font-size:12px;color:#374151;line-height:1.7">
+        <b>마이크로 (1만~10만):</b> ROI 최고, 신뢰도 높음, 월 2명<br>
+        <b>미드 (10만~50만):</b> 화제성, 분기 1명<br>
+        <b>메가 (50만+):</b> 예산 高, 연 1회 대형 캠페인시<br><br>
+        <span style="color:#dc2626;font-weight:600">협업 선택 기준:</span> 음식 콘텐츠 비중 40%↑, 인게이지먼트율 3%↑, 강남·서울 팔로워 비중 60%↑
+      </div>
+    </div>
+    <div class="card" style="border-top:3px solid #1d4ed8">
+      <div style="font-size:12px;font-weight:700;margin-bottom:8px">📊 SNS KPI 추적 지표</div>
+      <table style="width:100%;font-size:11px;border-collapse:collapse">
+        <tr><td style="padding:4px 0;border-bottom:1px solid #f1f5f9"><b>팔로워 증가수</b></td><td style="padding:4px 0;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--blue)">월 +500명 목표</td></tr>
+        <tr><td style="padding:4px 0;border-bottom:1px solid #f1f5f9"><b>인게이지먼트율</b></td><td style="padding:4px 0;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--blue)">1.8% → 3.5%</td></tr>
+        <tr><td style="padding:4px 0;border-bottom:1px solid #f1f5f9"><b>릴스 평균 도달</b></td><td style="padding:4px 0;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--blue)">5,000회 목표</td></tr>
+        <tr><td style="padding:4px 0;border-bottom:1px solid #f1f5f9"><b>예약 링크 클릭</b></td><td style="padding:4px 0;border-bottom:1px solid #f1f5f9;text-align:right;color:var(--blue)">주 100회 목표</td></tr>
+        <tr><td style="padding:4px 0"><b>UGC 게시물 수</b></td><td style="padding:4px 0;text-align:right;color:var(--blue)">월 30건 목표</td></tr>
+      </table>
+    </div>
+    <div class="card" style="border-top:3px solid #16a34a">
+      <div style="font-size:12px;font-weight:700;margin-bottom:8px">💡 바이럴 콘텐츠 공식</div>
+      <div style="font-size:12px;color:#374151;line-height:1.7">
+        <b>1. ASMR 음식 영상</b> — 씨즐링·웍 소리<br>
+        <b>2. 비포&애프터</b> — 생재료→완성 요리<br>
+        <b>3. 직원 스토리</b> — 셰프·서버 소개<br>
+        <b>4. 숫자 콘텐츠</b> — "달걀 200개 쓰는 이유"<br>
+        <b>5. 한정 알림</b> — "오늘 딱 20개만" FOMO<br>
+        <b>6. 고객 감동</b> — 서비스 감동 스토리 리그램
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 5: 네이버 전략 ════════════════════════ -->
+<div id="tab-naver" class="tab-content">
+
+  <div class="alert blue" style="margin-bottom:14px">
+    <strong>🟢 네이버 = 한국 맛집 탐색의 핵심 플랫폼.</strong> 한국 검색시장 75% 점유. 네이버 AI(AiSearch)가 블로그·플레이스·리뷰를 통합 분석해 자동 추천.
+    지금 최적화하면 AI 추천 1순위 선점 가능.
+  </div>
+
+  <div class="chart-grid-12" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">🔍 네이버 맛집 탐색 고객 경로 (퍼널)</div>
+      <div class="naver-funnel">
+        <div class="funnel-step" style="background:#f0fdf4;border-color:#86efac">
+          <div class="fn">🔎</div>
+          <div class="fc">
+            <div class="ft">1단계 — 키워드 검색</div>
+            <div class="fd">"강남 가족 외식" · "아시안 퓨전 맛집" · "데이트 코스 강남"</div>
+          </div>
+          <div class="fkpi" style="color:#16a34a">노출 필요</div>
+        </div>
+        <div style="text-align:center;color:var(--gray);font-size:18px">↓</div>
+        <div class="funnel-step" style="background:#eff6ff;border-color:#93c5fd">
+          <div class="fn">📍</div>
+          <div class="fc">
+            <div class="ft">2단계 — 네이버 플레이스 확인</div>
+            <div class="fd">별점·리뷰 수·사진·메뉴·가격 비교. 리뷰 300개↑ = 신뢰</div>
+          </div>
+          <div class="fkpi" style="color:#1d4ed8">목표 300개</div>
+        </div>
+        <div style="text-align:center;color:var(--gray);font-size:18px">↓</div>
+        <div class="funnel-step" style="background:#fefce8;border-color:#fde047">
+          <div class="fn">📝</div>
+          <div class="fc">
+            <div class="ft">3단계 — 네이버 블로그 리뷰 탐색</div>
+            <div class="fd">체험단 후기·방문 리뷰 읽기. "피에프창 후기" 검색량 多</div>
+          </div>
+          <div class="fkpi" style="color:#ca8a04">월 15개 확보</div>
+        </div>
+        <div style="text-align:center;color:var(--gray);font-size:18px">↓</div>
+        <div class="funnel-step" style="background:#fdf2f8;border-color:#f0abfc">
+          <div class="fn">📅</div>
+          <div class="fc">
+            <div class="ft">4단계 — 네이버 예약·포장 클릭</div>
+            <div class="fd">예약 연동 시 우선 노출 알고리즘 혜택. 전환 직결</div>
+          </div>
+          <div class="fkpi" style="color:#7c3aed">즉시 연동</div>
+        </div>
+        <div style="text-align:center;color:var(--gray);font-size:18px">↓</div>
+        <div class="funnel-step" style="background:#f0fdf4;border-color:#86efac">
+          <div class="fn">✅</div>
+          <div class="fc">
+            <div class="ft">5단계 — 방문 후 리뷰 작성 → 선순환</div>
+            <div class="fd">리뷰 요청 QR 테이블 비치. 리뷰 작성 시 다음 방문 쿠폰</div>
+          </div>
+          <div class="fkpi" style="color:#16a34a">선순환 구축</div>
+        </div>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-title">🎯 피에프창 네이버 핵심 키워드 전략</div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;font-weight:700;color:var(--gray);margin-bottom:5px">1차 키워드 (검색량 高)</div>
+          <div>
+            <span class="kw-chip p">강남맛집</span><span class="kw-chip p">아시안퓨전</span>
+            <span class="kw-chip p">가족외식</span><span class="kw-chip p">데이트코스</span>
+            <span class="kw-chip p">피에프창</span>
+          </div>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;font-weight:700;color:var(--gray);margin-bottom:5px">2차 키워드 (차별화)</div>
+          <div>
+            <span class="kw-chip s">아시안퓨전레스토랑</span><span class="kw-chip s">웍요리</span>
+            <span class="kw-chip s">글루텐프리</span><span class="kw-chip s">비즈니스런치</span>
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px;font-weight:700;color:var(--gray);margin-bottom:5px">롱테일 (AI 검색 최적화)</div>
+          <div>
+            <span class="kw-chip t">강남 아시안 가족 외식 추천</span>
+            <span class="kw-chip t">어버이날 외식 어디가 좋아</span>
+            <span class="kw-chip t">비즈니스 미팅 강남 레스토랑</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">📊 네이버 플레이스 최적화 체크리스트</div>
+        <ul class="checklist" style="margin:-4px">
+          <li><strong>기본 정보 완전 작성</strong> — 메뉴·가격·영업시간·주차 정보</li>
+          <li><strong>사진 50장 이상</strong> — 음식·매장·메뉴판·분위기 다양하게</li>
+          <li><strong>리뷰 답변 100%</strong> — 24시간 내 관리 (알고리즘 신뢰도↑)</li>
+          <li><strong>네이버 예약 시스템 연동</strong> — 우선 노출 알고리즘 혜택</li>
+          <li><strong>리뷰 요청 QR 테이블 비치</strong> — 방문객 리뷰 전환율 3배↑</li>
+          <li><strong>월 업데이트</strong> — 신메뉴·이벤트 정보 최신화</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">📝 네이버 블로그 체험단 운영 전략</div>
+  <div class="chart-grid-3">
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">1️⃣ 체험단 모집 방법</div>
+      <div class="strategy-steps">
+        <div class="strategy-step">
+          <div class="step-num-circle">1</div>
+          <div class="step-content"><div class="st">서울 맛집 블로거 DM 직접 섭외</div><div class="sd">월간 방문자 3,000↑, 음식 카테고리 블로거</div></div>
+        </div>
+        <div class="strategy-step">
+          <div class="step-num-circle">2</div>
+          <div class="step-content"><div class="st">레뷰·위블·강남맛집 플랫폼 활용</div><div class="sd">체험단 플랫폼 통해 월 10명 모집</div></div>
+        </div>
+        <div class="strategy-step">
+          <div class="step-num-circle">3</div>
+          <div class="step-content"><div class="st">2인 식사 무료 + 후기 작성</div><div class="sd">필수 키워드 3개 포함 조건 (계약서)</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">2️⃣ 필수 포함 내용 가이드</div>
+      <div style="font-size:12px;color:#374151;line-height:1.8">
+        <b>제목:</b> [강남맛집] 피에프창 OO점 솔직후기 (필수 키워드 포함)<br>
+        <b>본문 키워드:</b> 피에프창, 강남맛집, 아시안퓨전, 가족외식, 데이트코스<br>
+        <b>사진:</b> 최소 10장 (음식·매장·메뉴판)<br>
+        <b>분량:</b> 1,500자 이상<br>
+        <b>태그:</b> #피에프창 #강남맛집 #아시안퓨전 포함<br>
+        <b>예약링크:</b> 본문 내 삽입
+      </div>
+    </div>
+    <div class="card">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">3️⃣ 월별 성과 목표</div>
+      <table class="dt">
+        <tr><th>월차</th><th>체험단수</th><th>누적리뷰</th><th>검색노출</th></tr>
+        <tr><td>1개월</td><td>15건</td><td>15개</td><td>3위권 진입</td></tr>
+        <tr><td>3개월</td><td>15건/월</td><td>45개</td><td>1~2위</td></tr>
+        <tr><td>6개월</td><td>10건/월</td><td>90개</td><td>지속 1위</td></tr>
+        <tr><td>12개월</td><td>5건/월</td><td>150개</td><td>고착화</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 6: 앱 구축 전략 ════════════════════════ -->
+<div id="tab-app" class="tab-content">
+
+  <div class="alert purple" style="margin-bottom:14px">
+    <strong>🎯 앱 전략 핵심:</strong> 멤버십 앱은 피에프창 최대 약점(CRM 0명)을 해결하는 핵심 무기.
+    아웃백 400만·매드포갈릭 100만·차이797 S-ON 대비 현재 <strong>0명</strong>.
+    카카오 미니앱으로 MVP 구축 → 비용 최소화·빠른 출시.
+  </div>
+
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">💎 경쟁사 멤버십 현황 비교</div>
+      <canvas id="membershipChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">📈 멤버십 ROI 시뮬레이션 (12개월 기준)</div>
+      <canvas id="roiChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- 앱 기능 로드맵 -->
+  <div class="sec-title">🗺️ 앱 개발 로드맵 — MVP → 풀버전</div>
+  <div class="chart-grid-3" style="margin-bottom:14px">
+    <div class="card" style="border-top:4px solid #dc2626">
+      <div style="font-size:11px;font-weight:700;color:#dc2626;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">PHASE 1 · MVP (6~9개월)</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:12px">카카오 미니앱</div>
+      <div class="app-feature-grid" style="grid-template-columns:1fr 1fr">
+        <div class="app-feature priority-now"><div class="af-icon">🎫</div><div class="af-name">포인트 적립</div><div class="af-desc">방문 1회=1,000P 1만P=메인 무료</div></div>
+        <div class="app-feature priority-now"><div class="af-icon">🎂</div><div class="af-name">생일 혜택</div><div class="af-desc">생일월 디저트 무료</div></div>
+        <div class="app-feature priority-now"><div class="af-icon">🏷️</div><div class="af-name">월 쿠폰</div><div class="af-desc">매월 1일 자동 발행</div></div>
+        <div class="app-feature priority-now"><div class="af-icon">📅</div><div class="af-name">예약 연동</div><div class="af-desc">앱 내 원터치 예약</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--gray)">예상 개발비: 500~1,000만원<br>목표: 가입 1만명 (6개월)</div>
+    </div>
+    <div class="card" style="border-top:4px solid #ea580c">
+      <div style="font-size:11px;font-weight:700;color:#ea580c;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">PHASE 2 · 성장 (12~18개월)</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:12px">네이티브 앱 전환</div>
+      <div class="app-feature-grid" style="grid-template-columns:1fr 1fr">
+        <div class="app-feature priority-q3"><div class="af-icon">💎</div><div class="af-name">구독 멤버십</div><div class="af-desc">9,900원/월 Platinum</div></div>
+        <div class="app-feature priority-q3"><div class="af-icon">🍽️</div><div class="af-name">메뉴 개인화</div><div class="af-desc">AI 취향 분석 추천</div></div>
+        <div class="app-feature priority-q3"><div class="af-icon">🚗</div><div class="af-name">앱 배달</div><div class="af-desc">자사 배달로 수수료 절감</div></div>
+        <div class="app-feature priority-q3"><div class="af-icon">🎮</div><div class="af-name">게이미피케이션</div><div class="af-desc">방문 도전과제·뱃지</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--gray)">예상 개발비: 3,000~5,000만원<br>목표: 가입 5만명</div>
+    </div>
+    <div class="card" style="border-top:4px solid #6b7280">
+      <div style="font-size:11px;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px">PHASE 3 · 확장 (24개월+)</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:12px">통합 플랫폼</div>
+      <div class="app-feature-grid" style="grid-template-columns:1fr 1fr">
+        <div class="app-feature priority-later"><div class="af-icon">🤖</div><div class="af-name">AI 챗봇</div><div class="af-desc">메뉴 추천·예약 자동화</div></div>
+        <div class="app-feature priority-later"><div class="af-icon">🛒</div><div class="af-name">리테일 연동</div><div class="af-desc">시그니처 소스 앱 구매</div></div>
+        <div class="app-feature priority-later"><div class="af-icon">📊</div><div class="af-name">CDP 통합</div><div class="af-desc">POS·SNS·예약 데이터 통합</div></div>
+        <div class="app-feature priority-later"><div class="af-icon">🌐</div><div class="af-name">글로벌 연동</div><div class="af-desc">P.F. Chang's 본사 앱 연계</div></div>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:var(--gray)">예상 개발비: 1억+<br>목표: 가입 20만명</div>
+    </div>
+  </div>
+
+  <!-- 구독 멤버십 설계 -->
+  <div class="sec-title">💎 구독 멤버십 티어 설계 (벤치마크: P.F. Chang's Platinum $6.99/월)</div>
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <table class="dt">
+        <tr style="background:#1e3a5f;color:#fff">
+          <th style="color:#fff">티어</th><th style="color:#fff">가격</th><th style="color:#fff">핵심 혜택</th><th style="color:#fff">목표 회원</th>
+        </tr>
+        <tr>
+          <td><span class="pill gray">FREE</span><br>일반</td>
+          <td>무료</td>
+          <td>포인트 적립 · 생일 혜택 · 월 쿠폰 1장</td>
+          <td>5만명</td>
+        </tr>
+        <tr style="background:#eff6ff">
+          <td><span class="pill blue">GOLD</span><br>골드</td>
+          <td>9,900원/월</td>
+          <td>음료 무료 1회/주 · 런치 10% · 예약 우선 · 쿠폰 3장/월</td>
+          <td>1만명</td>
+        </tr>
+        <tr style="background:#f5f3ff">
+          <td><span class="pill purple">PLATINUM</span><br>플래티넘</td>
+          <td>19,900원/월</td>
+          <td>전메뉴 10% · 배달 무료 · 시그니처 메뉴 월 1회 무료 · VIP 이벤트</td>
+          <td>2,000명</td>
+        </tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 구독 멤버십 예상 수익 (연간)</div>
+      <div class="roi-grid">
+        <div class="roi-card">
+          <div class="rv">9,000만</div>
+          <div class="rl">GOLD 1만명 × 9,900원 × 12개월</div>
+        </div>
+        <div class="roi-card">
+          <div class="rv">4,776만</div>
+          <div class="rl">PLATINUM 2,000명 × 19,900원 × 12개월</div>
+        </div>
+        <div class="roi-card" style="background:#f0fdf4;border-color:#86efac">
+          <div class="rv" style="color:#16a34a">1.4억+</div>
+          <div class="rl">구독 수익만으로 앱 개발비 회수 가능</div>
+        </div>
+      </div>
+      <div style="margin-top:12px;font-size:12px;color:var(--gray);line-height:1.6">
+        + 멤버십 회원의 방문 빈도 비회원 대비 <b style="color:var(--blue)">+25~50%</b> 증가<br>
+        + 멤버십 회원 객단가 비회원 대비 <b style="color:var(--blue)">+5% 높음</b><br>
+        + CLV(고객 생애가치) 비회원 대비 <b style="color:var(--blue)">3~5배</b>
+      </div>
+    </div>
+  </div>
+
+  <div class="sec-title">🔄 앱 활용 마케팅 자동화 플로우</div>
+  <div class="strategy-steps">
+    <div class="strategy-step">
+      <div class="step-num-circle" style="background:#dc2626">1</div>
+      <div class="step-content">
+        <div class="st">신규 가입 → 웰컴 쿠폰 자동 발송 (즉시)</div>
+        <div class="sd">가입 즉시 런치 세트 30% 할인 쿠폰 → 첫 방문 유도. 전환율 40% 목표</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle" style="background:#ea580c">2</div>
+      <div class="step-content">
+        <div class="st">방문 후 3일 → 리뷰 요청 푸시 알림</div>
+        <div class="sd">방문 감사 메시지 + "리뷰 작성 시 다음 방문 음료 무료" → 리뷰 전환율 30% 목표</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle" style="background:#ca8a04">3</div>
+      <div class="step-content">
+        <div class="st">마지막 방문 14일 경과 → 재방문 유도 쿠폰</div>
+        <div class="sd">"보고 싶어요! 이번 주 런치 10% 할인" 개인화 메시지. 이탈 방지 핵심 트리거</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle" style="background:#1d4ed8">4</div>
+      <div class="step-content">
+        <div class="st">생일 1주 전 → 생일 혜택 알림</div>
+        <div class="sd">생일 선물 예약 → 방문 확정. 생일 기념 방문 고객 객단가 +40%</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle" style="background:#7c3aed">5</div>
+      <div class="step-content">
+        <div class="st">신메뉴 출시 → VIP 먼저 알림</div>
+        <div class="sd">플래티넘·골드 회원에게 출시 24시간 전 사전 예약 오픈. 특별함 경험 → 충성도 강화</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle" style="background:#16a34a">6</div>
+      <div class="step-content">
+        <div class="st">평일 오전 11시 → 런치 추천 푸시</div>
+        <div class="sd">오늘의 런치 메뉴·잔여 좌석 알림. 즉각 예약 연결. 평일 좌석 회전율 극대화</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 12: SNS 참고자료 ════════════════════════ -->
+<div id="tab-snsref" class="tab-content">
+
+  <div class="alert blue" style="margin-bottom:16px">
+    <strong>📸 SNS 참고자료 활용 안내:</strong> 경쟁사 인스타그램 게시물을 직접 캡처하여 각 브랜드 이미지 슬롯에 넣으면 완성됩니다.
+    현재는 핵심 키워드·해시태그·콘텐츠 전략·카피라이팅 톤이 정리되어 있습니다.
+  </div>
+
+  <!-- ── 브랜드 선택 필터 -->
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px">
+    <span style="font-size:12px;font-weight:700;color:var(--gray);line-height:28px">브랜드 필터:</span>
+    <button onclick="filterBrand('all')" id="fb-all" class="fb-btn fb-active" style="padding:4px 14px;border-radius:20px;border:1px solid var(--blue);background:var(--blue);color:#fff;font-size:12px;font-weight:700;cursor:pointer">전체</button>
+    <button onclick="filterBrand('outback')" id="fb-outback" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #dc2626;background:#fff;color:#dc2626;font-size:12px;font-weight:700;cursor:pointer">아웃백</button>
+    <button onclick="filterBrand('mad')" id="fb-mad" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #ea580c;background:#fff;color:#ea580c;font-size:12px;font-weight:700;cursor:pointer">매드포갈릭</button>
+    <button onclick="filterBrand('chai')" id="fb-chai" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #ca8a04;background:#fff;color:#ca8a04;font-size:12px;font-weight:700;cursor:pointer">차이797</button>
+    <button onclick="filterBrand('crystal')" id="fb-crystal" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #7c3aed;background:#fff;color:#7c3aed;font-size:12px;font-weight:700;cursor:pointer">크리스탈제이드</button>
+    <button onclick="filterBrand('js')" id="fb-js" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #16a34a;background:#fff;color:#16a34a;font-size:12px;font-weight:700;cursor:pointer">제이에스가든</button>
+    <button onclick="filterBrand('mott')" id="fb-mott" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #374151;background:#fff;color:#374151;font-size:12px;font-weight:700;cursor:pointer">모트32</button>
+    <button onclick="filterBrand('pf')" id="fb-pf" class="fb-btn" style="padding:4px 14px;border-radius:20px;border:1px solid #1d4ed8;background:#fff;color:#1d4ed8;font-size:12px;font-weight:700;cursor:pointer">피에프창(자사)</button>
+  </div>
+
+  <!-- ── 아웃백 -->
+  <div class="snsref-block" data-brand="outback" style="background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden">
+    <div style="background:linear-gradient(90deg,#dc2626,#ef4444);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-size:16px;font-weight:800">🥩 아웃백 스테이크하우스</span>
+        <span style="font-size:11px;opacity:.8;margin-left:12px">@outback_korea · 팔로워 약 236,000명 · 월 12회 게시</span>
+      </div>
+      <span style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700">마케팅 강도 9/10</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0">
+
+      <!-- 키워드 -->
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">🔑 핵심 포지셔닝 키워드</div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">브랜드 핵심어</div>
+          <span class="pill red">가족외식 No.1</span><span class="pill red">씨즐링</span><span class="pill red">블랙라벨</span><span class="pill red">스테이크</span><span class="pill red">부메랑</span>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">검색 해시태그 (상위)</div>
+          <span class="pill gray">#아웃백</span><span class="pill gray">#아웃백스테이크</span><span class="pill gray">#가족외식</span><span class="pill gray">#스테이크맛집</span><span class="pill gray">#부메랑</span><span class="pill gray">#블루밍어니언</span><span class="pill gray">#씨즐링스테이크</span><span class="pill gray">#어린이날외식</span>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">카피라이팅 톤</div>
+          <div style="font-size:12px;color:#374151;line-height:1.7;background:#f8fafc;border-radius:6px;padding:8px 10px">
+            <b>"온 가족이 행복한 그날"</b><br>
+            따뜻하고 감성적·가족 중심·축하 분위기<br>
+            이모지 다용: 🥩🔥👨‍👩‍👧‍👦✨<br>
+            CTA: "지금 예약하세요" "오늘만 특가"
+          </div>
+        </div>
+      </div>
+
+      <!-- 콘텐츠 전략 -->
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">📋 콘텐츠 유형 & 패턴</div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse">
+          <tr style="background:#f8fafc"><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">유형</th><th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border)">비중</th><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">예시</th></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">🎬 릴스</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626;font-weight:700">40%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">씨즐링 소리·불판 영상</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📸 피드</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626;font-weight:700">35%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">메뉴·가족 테이블 사진</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📖 스토리</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626;font-weight:700">25%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">쿠폰·이벤트 타이머</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#374151;line-height:1.7;background:#fff1f2;border-radius:6px;padding:8px 10px;border-left:3px solid #dc2626">
+          <b>성공 패턴:</b><br>
+          ① TV광고 후 72시간 내 SNS 연동 게시<br>
+          ② "씨즐링 소리" ASMR 릴스 → 자연 바이럴<br>
+          ③ 할인 쿠폰 스토리 → 24시간 한정 FOMO<br>
+          ④ 이전 매장 오픈 이벤트 → 지역 태그 활용
+        </div>
+      </div>
+
+      <!-- 이미지 슬롯 -->
+      <div style="padding:16px 18px">
+        <div class="card-title">🖼️ 대표 게시물 참고 슬롯</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px">
+            <div style="font-size:20px;margin-bottom:4px">📷</div>
+            <div style="font-size:10px;color:var(--gray)">릴스<br>씨즐링 영상</div>
+          </div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px">
+            <div style="font-size:20px;margin-bottom:4px">📷</div>
+            <div style="font-size:10px;color:var(--gray)">피드<br>가족 테이블</div>
+          </div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px">
+            <div style="font-size:20px;margin-bottom:4px">📷</div>
+            <div style="font-size:10px;color:var(--gray)">스토리<br>쿠폰 이벤트</div>
+          </div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px">
+            <div style="font-size:20px;margin-bottom:4px">📷</div>
+            <div style="font-size:10px;color:var(--gray)">피드<br>블랙라벨 신메뉴</div>
+          </div>
+        </div>
+        <div style="margin-top:8px;font-size:10px;color:var(--gray);text-align:center">캡처 이미지를 슬롯에 교체하세요</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 매드포갈릭 -->
+  <div class="snsref-block" data-brand="mad" style="background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden">
+    <div style="background:linear-gradient(90deg,#ea580c,#f97316);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-size:16px;font-weight:800">🧄 매드포갈릭</span>
+        <span style="font-size:11px;opacity:.8;margin-left:12px">@madforgarlic_official · 팔로워 약 48,000명 · 월 8회 게시</span>
+      </div>
+      <span style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700">마케팅 강도 7/10 ⚠️ 역성장 중</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0">
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">🔑 핵심 포지셔닝 키워드</div>
+        <div style="margin-bottom:10px">
+          <span class="pill orange">마늘요리</span><span class="pill orange">이탈리안퓨전</span><span class="pill orange">Mad for Family</span><span class="pill orange">M CLUB</span><span class="pill orange">가족외식</span>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">검색 해시태그</div>
+          <span class="pill gray">#매드포갈릭</span><span class="pill gray">#마늘요리</span><span class="pill gray">#이탈리안</span><span class="pill gray">#가족맛집</span><span class="pill gray">#파스타맛집</span><span class="pill gray">#브런치</span><span class="pill gray">#MadforGarlic</span>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">카피라이팅 톤</div>
+          <div style="font-size:12px;color:#374151;line-height:1.7;background:#f8fafc;border-radius:6px;padding:8px 10px">
+            <b>"마늘로 완성되는 특별한 한끼"</b><br>
+            감성적·따뜻함·가족·일상<br>
+            이모지: 🧄🍝👨‍👩‍👧✨<br>
+            CTA: "85% 완판 기념" "한정수량"
+          </div>
+        </div>
+      </div>
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">📋 콘텐츠 유형 & 패턴</div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse">
+          <tr style="background:#f8fafc"><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">유형</th><th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border)">비중</th><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">예시</th></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">🎬 릴스</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#ea580c;font-weight:700">45%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">음식 클로즈업·요리과정</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📸 피드</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#ea580c;font-weight:700">30%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">메뉴·세트 사진</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📖 스토리</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#ea580c;font-weight:700">25%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">완판 카운트다운·UGC</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#374151;line-height:1.7;background:#fff7ed;border-radius:6px;padding:8px 10px;border-left:3px solid #ea580c">
+          <b>성공 패턴:</b><br>
+          ① "85% 완판" FOMO 콘텐츠 → 즉시 예약 급증<br>
+          ② CU 편의점 신제품 연동 SNS 확산<br>
+          ③ UGC 리그램으로 콘텐츠 비용 절감<br>
+          ④ 할인 즉시 게시 → 48시간 집중 트래픽
+        </div>
+      </div>
+      <div style="padding:16px 18px">
+        <div class="card-title">🖼️ 대표 게시물 참고 슬롯</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">릴스<br>마늘빵 클로즈업</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">피드<br>패밀리 세트</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">스토리<br>완판 이벤트</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">피드<br>UGC 리그램</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 차이797 -->
+  <div class="snsref-block" data-brand="chai" style="background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden">
+    <div style="background:linear-gradient(90deg,#ca8a04,#eab308);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-size:16px;font-weight:800">🥟 차이797</span>
+        <span style="font-size:11px;opacity:.8;margin-left:12px">@chai797_official · 팔로워 약 35,000명 · 월 6회 게시</span>
+      </div>
+      <span style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700">마케팅 강도 7/10</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0">
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">🔑 핵심 포지셔닝 키워드</div>
+        <div style="margin-bottom:10px">
+          <span class="pill yellow">정통중식</span><span class="pill yellow">딤섬</span><span class="pill yellow">S-ON멤버십</span><span class="pill yellow">5년연속성장</span><span class="pill yellow">중식캐주얼</span>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">검색 해시태그</div>
+          <span class="pill gray">#차이797</span><span class="pill gray">#딤섬맛집</span><span class="pill gray">#중식레스토랑</span><span class="pill gray">#정통중식</span><span class="pill gray">#차이나타운</span><span class="pill gray">#딤섬브런치</span><span class="pill gray">#강남중식</span>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">카피라이팅 톤</div>
+          <div style="font-size:12px;color:#374151;line-height:1.7;background:#f8fafc;border-radius:6px;padding:8px 10px">
+            <b>"정통의 맛, 797의 자부심"</b><br>
+            권위·정통성·믿음·일상<br>
+            이모지: 🥟🍜🏆🌟<br>
+            CTA: "S-ON 멤버 혜택" "오늘 예약"
+          </div>
+        </div>
+      </div>
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">📋 콘텐츠 유형 & 패턴</div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse">
+          <tr style="background:#f8fafc"><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">유형</th><th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border)">비중</th><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">예시</th></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📸 피드</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#ca8a04;font-weight:700">50%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">딤섬 플레이팅 사진</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">🎬 릴스</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#ca8a04;font-weight:700">30%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">요리과정·딤섬 만들기</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📖 스토리</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#ca8a04;font-weight:700">20%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">멤버십 혜택·명절 이벤트</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#374151;line-height:1.7;background:#fefce8;border-radius:6px;padding:8px 10px;border-left:3px solid #ca8a04">
+          <b>성공 패턴:</b><br>
+          ① 딤섬 심미적 플레이팅 → 저장률 높은 피드<br>
+          ② 춘절·추석 명절 시즌 콘텐츠 집중<br>
+          ③ S-ON 멤버십 앱 가입 유도 스토리<br>
+          ④ "5년 연속 성장" PR 게시로 신뢰 구축
+        </div>
+      </div>
+      <div style="padding:16px 18px">
+        <div class="card-title">🖼️ 대표 게시물 참고 슬롯</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">피드<br>딤섬 플레이팅</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">릴스<br>딤섬 제조과정</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">스토리<br>멤버십 이벤트</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">피드<br>명절 시즌메뉴</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 크리스탈제이드 -->
+  <div class="snsref-block" data-brand="crystal" style="background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden">
+    <div style="background:linear-gradient(90deg,#7c3aed,#a855f7);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-size:16px;font-weight:800">💎 크리스탈제이드</span>
+        <span style="font-size:11px;opacity:.8;margin-left:12px">@crystaljade_korea · 팔로워 약 18,000명 · 월 4회 게시</span>
+      </div>
+      <span style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700">마케팅 강도 6/10</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:0">
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">🔑 핵심 포지셔닝 키워드</div>
+        <div style="margin-bottom:10px">
+          <span class="pill purple">미쉐린</span><span class="pill purple">프리미엄중식</span><span class="pill purple">싱가포르발</span><span class="pill purple">IFC몰</span><span class="pill purple">광화문</span>
+        </div>
+        <div style="margin-bottom:10px">
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">검색 해시태그</div>
+          <span class="pill gray">#크리스탈제이드</span><span class="pill gray">#미쉐린레스토랑</span><span class="pill gray">#프리미엄중식</span><span class="pill gray">#IFC맛집</span><span class="pill gray">#광화문맛집</span><span class="pill gray">#CrystalJade</span><span class="pill gray">#딤섬파인다이닝</span>
+        </div>
+        <div>
+          <div style="font-size:11px;color:var(--gray);font-weight:700;margin-bottom:5px">카피라이팅 톤</div>
+          <div style="font-size:12px;color:#374151;line-height:1.7;background:#f8fafc;border-radius:6px;padding:8px 10px">
+            <b>"미쉐린이 인정한 그 맛"</b><br>
+            고급스러움·권위·특별한 날·격조<br>
+            이모지: 💎⭐🌸🏆<br>
+            CTA: "특별한 날에" "예약 필수"
+          </div>
+        </div>
+      </div>
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">📋 콘텐츠 유형 & 패턴</div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse">
+          <tr style="background:#f8fafc"><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">유형</th><th style="padding:5px 8px;text-align:center;border-bottom:1px solid var(--border)">비중</th><th style="padding:5px 8px;text-align:left;border-bottom:1px solid var(--border)">예시</th></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📸 피드</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#7c3aed;font-weight:700">65%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">고퀄리티 플레이팅</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">🎬 릴스</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#7c3aed;font-weight:700">20%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">오픈 이벤트·매장 투어</td></tr>
+          <tr><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">📖 스토리</td><td style="padding:5px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#7c3aed;font-weight:700">15%</td><td style="padding:5px 8px;border-bottom:1px solid #f8fafc">평일 50% 할인 공지</td></tr>
+        </table>
+        <div style="margin-top:10px;font-size:11px;color:#374151;line-height:1.7;background:#f5f3ff;border-radius:6px;padding:8px 10px;border-left:3px solid #7c3aed">
+          <b>성공 패턴:</b><br>
+          ① 미쉐린 인증 반복 게시 → 신뢰·권위 구축<br>
+          ② IFC 신규 오픈 화제성 최대 활용<br>
+          ③ 고품질 플레이팅 사진 → 저장·공유 유도<br>
+          ④ 평일 50% 할인으로 역설적 고급 이미지 유지
+        </div>
+      </div>
+      <div style="padding:16px 18px">
+        <div class="card-title">🖼️ 대표 게시물 참고 슬롯</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">피드<br>시그니처 딤섬</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">피드<br>매장 인테리어</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">릴스<br>오픈 이벤트</div></div>
+          <div style="aspect-ratio:1;background:#f8fafc;border:2px dashed #e2e8f0;border-radius:8px;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:8px"><div style="font-size:20px;margin-bottom:4px">📷</div><div style="font-size:10px;color:var(--gray)">스토리<br>평일할인 공지</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 피에프창 (자사 벤치마킹) -->
+  <div class="snsref-block" data-brand="pf" style="background:var(--card);border-radius:12px;border:1px solid var(--border);margin-bottom:18px;overflow:hidden">
+    <div style="background:linear-gradient(90deg,#1d4ed8,#3b82f6);color:#fff;padding:14px 20px;display:flex;justify-content:space-between;align-items:center">
+      <div>
+        <span style="font-size:16px;font-weight:800">⭐ 피에프창 (자사 현황 & 목표)</span>
+        <span style="font-size:11px;opacity:.8;margin-left:12px">@pfchangs_korea · 팔로워 약 14,000명 · 월 4회 게시</span>
+      </div>
+      <span style="background:rgba(255,255,255,.2);padding:3px 10px;border-radius:10px;font-size:11px;font-weight:700">현재 3.5/10 → 목표 7/10</span>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:0">
+      <div style="padding:16px 18px;border-right:1px solid var(--border)">
+        <div class="card-title">🔑 현재 vs 목표 키워드 전략</div>
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;color:#dc2626;font-weight:700;margin-bottom:5px">현재 (약함)</div>
+          <span class="pill gray">#피에프창</span><span class="pill gray">#PFChangs</span><span class="pill gray">#아시안퓨전</span>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;color:#16a34a;font-weight:700;margin-bottom:5px">목표 — 추가 필요 키워드</div>
+          <span class="pill blue">#강남맛집</span><span class="pill blue">#아시안퓨전레스토랑</span><span class="pill blue">#가족외식추천</span><span class="pill blue">#데이트코스강남</span><span class="pill blue">#웍요리</span><span class="pill blue">#비즈니스런치</span><span class="pill blue">#먹스타그램</span><span class="pill blue">#맛스타그램</span>
+        </div>
+        <div style="margin-bottom:12px">
+          <div style="font-size:11px;color:var(--purple);font-weight:700;margin-bottom:5px">AI 검색 롱테일 (네이버·ChatGPT)</div>
+          <span class="pill purple">#강남아시안퓨전가족외식</span><span class="pill purple">#어버이날레스토랑추천</span><span class="pill purple">#비즈니스미팅강남레스토랑</span>
+        </div>
+        <div style="font-size:12px;color:#374151;line-height:1.7;background:#eff6ff;border-radius:6px;padding:8px 10px;border-left:3px solid #1d4ed8">
+          <b>목표 카피라이팅 톤:</b><br>
+          "아시아의 정수, 강남의 테이블에서"<br>
+          세련됨·합리적 프리미엄·일상의 특별함<br>
+          이모지: ⭐🥢🌏✨<br>
+          CTA: "지금 예약" "오늘의 추천메뉴"
+        </div>
+      </div>
+      <div style="padding:16px 18px">
+        <div class="card-title">📈 경쟁사 대비 격차 & 즉시 실행 항목</div>
+        <table style="width:100%;font-size:11px;border-collapse:collapse;margin-bottom:12px">
+          <tr style="background:#1e3a5f;color:#fff"><th style="padding:6px 8px;text-align:left">항목</th><th style="padding:6px 8px;text-align:center">현재</th><th style="padding:6px 8px;text-align:center">경쟁사 평균</th><th style="padding:6px 8px;text-align:center">격차</th></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid #f8fafc">팔로워</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626;font-weight:700">14,000</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc">70,000+</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626">-5배</td></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid #f8fafc">월 게시수</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626;font-weight:700">4회</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc">7회</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626">-3회</td></tr>
+          <tr><td style="padding:6px 8px;border-bottom:1px solid #f8fafc">릴스 비중</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626;font-weight:700">낮음</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc">35~45%</td><td style="padding:6px 8px;text-align:center;border-bottom:1px solid #f8fafc;color:#dc2626">대폭 부족</td></tr>
+          <tr><td style="padding:6px 8px">해시태그 수</td><td style="padding:6px 8px;text-align:center;color:#dc2626;font-weight:700">3~5개</td><td style="padding:6px 8px;text-align:center">20~30개</td><td style="padding:6px 8px;text-align:center;color:#dc2626">-25개</td></tr>
+        </table>
+        <div style="background:#dcfce7;border-radius:8px;padding:12px;border-left:3px solid #16a34a">
+          <div style="font-size:11px;font-weight:700;color:#16a34a;margin-bottom:6px">✅ 즉시 실행 3가지</div>
+          <div style="font-size:12px;color:#374151;line-height:1.8">
+            1️⃣ <b>릴스 주 2회 시작</b> — 시그니처 메뉴 클로즈업 15초<br>
+            2️⃣ <b>해시태그 20개 이상</b> — 위 목표 키워드 즉시 적용<br>
+            3️⃣ <b>스토리 매일</b> — 메뉴·비하인드·고객 리그램
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 글로벌 피에프창 SNS 벤치마크 -->
+  <div class="card" style="margin-bottom:4px">
+    <div class="card-title">🌏 글로벌 P.F. Chang's SNS 전략 벤치마크 (본사 참고)</div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:14px">
+      <div style="background:#eff6ff;border-radius:8px;padding:14px;border-left:3px solid #1d4ed8">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">🔥 Light the Fire 캠페인</div>
+        <div style="font-size:11px;color:#374151;line-height:1.7">2024년 말 론칭. "불을 지펴라" 에너지 넘치는 브랜드 톤. 홀리데이 메뉴 연동. 미국 본사 Instagram @pfchangs 팔로워 100만+. 릴스 중심 전환.</div>
+      </div>
+      <div style="background:#f0fdf4;border-radius:8px;padding:14px;border-left:3px solid #16a34a">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">🎬 Disney Freakier Friday</div>
+        <div style="font-size:11px;color:#374151;line-height:1.7">2025년 7~9월 Disney 영화 타이인. "Freakier Flavors" LTO 메뉴 SNS 집중 홍보. 원작 영화 가상 중식당이 피에프창 모티브 → 브랜드 스토리텔링 강점.</div>
+      </div>
+      <div style="background:#fefce8;border-radius:8px;padding:14px;border-left:3px solid #ca8a04">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">💎 Platinum 구독 SNS 활용</div>
+        <div style="font-size:11px;color:#374151;line-height:1.7">$6.99/월 구독 멤버 전용 사전 게시·VIP 이벤트 초대. SNS에서 "멤버만 먼저 아는 정보" 콘텐츠로 가입 유도. 한국 적용 시 9,900원/월 Gold 티어로 동일 전략 활용 가능.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════ TAB 13: 유튜브 전략 ════════════════════════ -->
+<div id="tab-youtube" class="tab-content">
+
+  <!-- 현황 요약 KPI -->
+  <div class="kpi-grid" style="margin-bottom:18px">
+    <div class="kpi-card red">
+      <div class="kpi-icon">▶️</div>
+      <div class="kpi-label">아웃백 구독자</div>
+      <div class="kpi-val">6,780</div>
+      <div class="kpi-sub">누적 조회 615만 · 86개 영상</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-icon">📺</div>
+      <div class="kpi-label">피에프창 구독자</div>
+      <div class="kpi-val">미미</div>
+      <div class="kpi-sub">공식 채널 있으나 실질 운영 X</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-icon">📱</div>
+      <div class="kpi-label">Shorts 채널 점유</div>
+      <div class="kpi-val">90%</div>
+      <div class="kpi-sub">YouTube Shorts = 채널 조회의 90%</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">🎬</div>
+      <div class="kpi-label">먹방 1위 유튜버</div>
+      <div class="kpi-val">1,830만</div>
+      <div class="kpi-sub">Jane (ASMR먹방) · 구독자 1위</div>
+    </div>
+  </div>
+
+  <div class="alert yellow" style="margin-bottom:18px">
+    <strong>⚠️ 핵심 현황:</strong> 경쟁사 대부분 유튜브 공식 채널이 없거나 사실상 미운영 상태. 아웃백만 PPL 전략으로 실질 효과를 내고 있음.
+    피에프창에게는 <strong>지금 바로 진입하면 선점 가능한 블루오션</strong>입니다.
+  </div>
+
+  <!-- ── 경쟁사 유튜브 현황 비교표 -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title">📊 경쟁사 유튜브 채널 현황 비교 (2026년 4월 기준)</div>
+    <div style="overflow-x:auto">
+      <table class="dt" style="font-size:12px">
+        <thead>
+          <tr style="background:#1e3a5f;color:#fff">
+            <th style="color:#fff;padding:10px 14px">브랜드</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">공식채널</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">구독자</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">누적 조회</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">영상수</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">주력 콘텐츠</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">PPL 활용</th>
+            <th style="color:#fff;padding:10px 14px;text-align:center">전략 수준</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#fff1f2">
+            <td style="padding:10px 14px;font-weight:700">🥩 아웃백</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill green">운영 중</span></td>
+            <td style="padding:10px 14px;text-align:center;font-weight:700;color:#dc2626">6,780명</td>
+            <td style="padding:10px 14px;text-align:center;font-weight:700">615만회</td>
+            <td style="padding:10px 14px;text-align:center">86개</td>
+            <td style="padding:10px 14px">TV광고 연동·신메뉴 소개·PPL</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill green">적극 활용</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">★★★★★</span></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;font-weight:700">🧄 매드포갈릭</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill yellow">소극적</span></td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">미미</td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">낮음</td>
+            <td style="padding:10px 14px;text-align:center">소수</td>
+            <td style="padding:10px 14px">요리 시연("이렇게 만들죠" 시리즈)</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">미확인</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill orange">★★☆☆☆</span></td>
+          </tr>
+          <tr style="background:#f8fafc">
+            <td style="padding:10px 14px;font-weight:700">🥟 차이797</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">없음</span></td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">—</td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">방문자 리뷰만</td>
+            <td style="padding:10px 14px;text-align:center">—</td>
+            <td style="padding:10px 14px">타인 방문 후기 영상만 존재</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">없음</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">★☆☆☆☆</span></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;font-weight:700">💎 크리스탈제이드</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">없음</span></td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">—</td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">—</td>
+            <td style="padding:10px 14px;text-align:center">—</td>
+            <td style="padding:10px 14px">채널 미존재</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">없음</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">★☆☆☆☆</span></td>
+          </tr>
+          <tr style="background:#f8fafc">
+            <td style="padding:10px 14px;font-weight:700">🍽️ 모트32</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">없음</span></td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">—</td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">다이닝 리뷰만</td>
+            <td style="padding:10px 14px;text-align:center">—</td>
+            <td style="padding:10px 14px">10분 다이닝 리뷰 등 타채널만</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">없음</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">★☆☆☆☆</span></td>
+          </tr>
+          <tr>
+            <td style="padding:10px 14px;font-weight:700">🌿 제이에스가든</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">없음</span></td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">—</td>
+            <td style="padding:10px 14px;text-align:center;color:#6b7280">—</td>
+            <td style="padding:10px 14px;text-align:center">—</td>
+            <td style="padding:10px 14px">채널 미존재</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">없음</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill gray">★☆☆☆☆</span></td>
+          </tr>
+          <tr style="background:#eff6ff;border:2px solid #1d4ed8">
+            <td style="padding:10px 14px;font-weight:800;color:#1d4ed8">⭐ 피에프창</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill yellow">유명무실</span></td>
+            <td style="padding:10px 14px;text-align:center;color:#dc2626;font-weight:700">극소</td>
+            <td style="padding:10px 14px;text-align:center;color:#dc2626">매우 낮음</td>
+            <td style="padding:10px 14px;text-align:center">소수</td>
+            <td style="padding:10px 14px">채널 있으나 실질 미운영</td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">미실행</span></td>
+            <td style="padding:10px 14px;text-align:center"><span class="pill red">★☆☆☆☆</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 아웃백 PPL 전략 상세 (업계 유일 성공 사례) -->
+  <div class="sec-title">🏆 아웃백 유튜브 PPL 전략 — 업계 유일 성공 모델</div>
+  <div class="chart-grid-3" style="margin-bottom:18px">
+    <div class="card" style="border-top:4px solid #dc2626">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">🎬 PPL 협업 채널 유형</div>
+      <div style="font-size:12px;color:#374151;line-height:1.9">
+        <b>① 대형 예능 유튜브</b><br>
+        <span style="color:#6b7280">Shortbox, GiantPengTV 등<br>1,000만+ 구독 채널 PPL 삽입<br>→ 브랜드 자연 노출</span><br><br>
+        <b>② 셀럽 콜라보</b><br>
+        <span style="color:#6b7280">BTS 슈취타(Suchwita) 협찬<br>글로벌 팬덤 동시 노출<br>→ 20~30대 여성 핵심 타깃</span><br><br>
+        <b>③ 라이프스타일 유튜버</b><br>
+        <span style="color:#6b7280">Workdol, Jjanhyung 등<br>일상 콘텐츠 내 자연스러운 방문<br>→ 신뢰도 높은 바이럴</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #dc2626">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">📈 PPL 효과 분석</div>
+      <div style="font-size:12px;color:#374151;line-height:1.9">
+        <b>노출 방식</b><br>
+        <span style="color:#6b7280">영상 내 자연 방문 → 메뉴 시식<br>씨즐링 소리·불판 비주얼 강점<br>구독자 1~5% 이탈 없이 시청</span><br><br>
+        <b>측정 결과</b><br>
+        <span style="color:#6b7280">PPL 영상 공개 후 72시간<br>해당 매장 예약 급증 확인<br>검색량 3~5배 일시 상승</span><br><br>
+        <b>비용 대비 효율</b><br>
+        <span style="color:#6b7280">TV광고 대비 1/10 비용<br>타깃 정밀도 10배 높음<br>댓글·공유로 2차 확산</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #dc2626">
+      <div style="font-size:13px;font-weight:700;margin-bottom:10px">💡 피에프창 적용 포인트</div>
+      <div style="font-size:12px;color:#374151;line-height:1.9">
+        <b>아웃백과 차별화 전략</b><br>
+        <span style="color:#6b7280">→ 아웃백: 가족·예능 PPL<br>→ 피에프창: 데이트·여행·비즈니스</span><br><br>
+        <b>추천 PPL 채널 유형</b><br>
+        <span style="color:#6b7280">✅ 커플 데이트 브이로그<br>✅ 직장인 점심 콘텐츠<br>✅ 맛집 탐방 유튜버<br>✅ 해외여행+국내미식 채널</span><br><br>
+        <b>예산 기준</b><br>
+        <span style="color:#6b7280">마이크로(10만↓): 50~200만원/회<br>미드티어(10~50만): 200~500만원<br>→ 월 300~600만 예산 권장</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 한국 주요 먹방/맛집 유튜버 -->
+  <div class="sec-title">🎤 한국 주요 먹방·맛집 유튜버 협업 타깃</div>
+  <div class="card" style="margin-bottom:18px">
+    <table class="dt" style="font-size:12px">
+      <thead>
+        <tr style="background:#1e3a5f;color:#fff">
+          <th style="color:#fff">유튜버/채널</th>
+          <th style="color:#fff;text-align:center">구독자</th>
+          <th style="color:#fff;text-align:center">콘텐츠 유형</th>
+          <th style="color:#fff;text-align:center">주 시청자</th>
+          <th style="color:#fff;text-align:center">피에프창 적합도</th>
+          <th style="color:#fff">협업 방식 제안</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td style="padding:9px 12px;font-weight:700">Jane (쯔양급 ASMR)</td>
+          <td style="padding:9px 12px;text-align:center;font-weight:700;color:#dc2626">1,830만</td>
+          <td style="padding:9px 12px">ASMR 먹방</td>
+          <td style="padding:9px 12px;text-align:center">20~30대 여성</td>
+          <td style="padding:9px 12px;text-align:center"><span class="pill green">★★★★★</span></td>
+          <td style="padding:9px 12px">웍 요리 ASMR·시그니처 메뉴 먹방</td>
+        </tr>
+        <tr style="background:#f8fafc">
+          <td style="padding:9px 12px;font-weight:700">햄지 (Hamji)</td>
+          <td style="padding:9px 12px;text-align:center;font-weight:700;color:#dc2626">1,000만+</td>
+          <td style="padding:9px 12px">먹방 (해외 시청자 61%)</td>
+          <td style="padding:9px 12px;text-align:center">글로벌+국내</td>
+          <td style="padding:9px 12px;text-align:center"><span class="pill green">★★★★★</span></td>
+          <td style="padding:9px 12px">글로벌 브랜드 정체성 강조 협업</td>
+        </tr>
+        <tr>
+          <td style="padding:9px 12px;font-weight:700">승우아빠</td>
+          <td style="padding:9px 12px;text-align:center;font-weight:700">159만</td>
+          <td style="padding:9px 12px">맛집 탐방·요리</td>
+          <td style="padding:9px 12px;text-align:center">30~40대</td>
+          <td style="padding:9px 12px;text-align:center"><span class="pill blue">★★★★☆</span></td>
+          <td style="padding:9px 12px">주방 투어·셰프 인터뷰 콜라보</td>
+        </tr>
+        <tr style="background:#f8fafc">
+          <td style="padding:9px 12px;font-weight:700">GiantPengTV</td>
+          <td style="padding:9px 12px;text-align:center;font-weight:700">600만+</td>
+          <td style="padding:9px 12px">예능·일상</td>
+          <td style="padding:9px 12px;text-align:center">20~30대</td>
+          <td style="padding:9px 12px;text-align:center"><span class="pill blue">★★★☆☆</span></td>
+          <td style="padding:9px 12px">PPL — 아웃백 활용 채널, 경쟁 가능</td>
+        </tr>
+        <tr>
+          <td style="padding:9px 12px;font-weight:700">맛집 마이크로 유튜버</td>
+          <td style="padding:9px 12px;text-align:center;font-weight:700">1~10만</td>
+          <td style="padding:9px 12px">서울 맛집 탐방</td>
+          <td style="padding:9px 12px;text-align:center">20~40대 서울</td>
+          <td style="padding:9px 12px;text-align:center"><span class="pill green">★★★★★</span></td>
+          <td style="padding:9px 12px">월 3~5명 체험 초대 → 높은 ROI</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ── YouTube Shorts 전략 -->
+  <div class="sec-title">📱 YouTube Shorts 전략 — 가장 빠른 채널 성장 경로</div>
+  <div class="chart-grid-2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">🔥 Shorts가 중요한 이유</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="background:#fff1f2;border-radius:8px;padding:12px;border-left:3px solid #dc2626">
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px">채널 조회의 90%가 Shorts에서</div>
+          <div style="font-size:11px;color:#6b7280">YouTube Korea 2024년 공식 데이터. 롱폼 대비 제작비 1/10, 도달률 10배</div>
+        </div>
+        <div style="background:#eff6ff;border-radius:8px;padding:12px;border-left:3px solid #1d4ed8">
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px">음식 카테고리 Shorts 인게이지먼트 1위</div>
+          <div style="font-size:11px;color:#6b7280">저장·공유율이 타 카테고리 대비 2.3배 높음. 알고리즘 노출 가장 유리한 분야</div>
+        </div>
+        <div style="background:#f0fdf4;border-radius:8px;padding:12px;border-left:3px solid #16a34a">
+          <div style="font-size:12px;font-weight:700;margin-bottom:4px">Shorts 전용 시청자 40% 별도 존재</div>
+          <div style="font-size:11px;color:#6b7280">TikTok·Reels와 중복되지 않는 고유 시청자. 추가 도달 채널로 활용 가능</div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎬 피에프창 Shorts 콘텐츠 공식</div>
+      <table class="dt" style="font-size:11px">
+        <tr style="background:#f8fafc"><th>유형</th><th>시간</th><th>내용</th><th>기대 조회</th></tr>
+        <tr>
+          <td><b>🥢 웍 ASMR</b></td><td>15~30초</td>
+          <td>불꽃·웍 소리·재료 볶는 장면</td>
+          <td style="color:#dc2626;font-weight:700">10만+</td>
+        </tr>
+        <tr>
+          <td><b>🍜 완성 순간</b></td><td>15초</td>
+          <td>재료→완성 시그니처 메뉴 타임랩스</td>
+          <td style="color:#ea580c;font-weight:700">5만+</td>
+        </tr>
+        <tr>
+          <td><b>🏙️ 매장 분위기</b></td><td>30초</td>
+          <td>저녁 매장·테이블·뷰 감성 영상</td>
+          <td style="color:#ca8a04;font-weight:700">3만+</td>
+        </tr>
+        <tr>
+          <td><b>👨‍🍳 셰프 비하인드</b></td><td>60초</td>
+          <td>주방 비하인드·재료 손질 과정</td>
+          <td style="color:#16a34a;font-weight:700">2만+</td>
+        </tr>
+        <tr>
+          <td><b>🎉 이벤트 예고</b></td><td>15초</td>
+          <td>한정메뉴·할인 카운트다운</td>
+          <td style="color:#1d4ed8;font-weight:700">1만+</td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 피에프창 유튜브 실행 로드맵 -->
+  <div class="sec-title">🚀 피에프창 유튜브 채널 구축 로드맵</div>
+  <div class="chart-grid-3" style="margin-bottom:14px">
+    <div class="card" style="border-top:4px solid #dc2626">
+      <div style="font-size:11px;font-weight:700;color:#dc2626;margin-bottom:6px">PHASE 1 · 즉시 (1~3개월)</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px">채널 기반 구축</div>
+      <div style="font-size:12px;color:#374151;line-height:1.8">
+        ✅ 채널 아트·프로필 정비<br>
+        ✅ <b>Shorts 주 2회</b> — 웍·메뉴 ASMR<br>
+        ✅ 마이크로 유튜버 3명 체험 초대<br>
+        ✅ 기존 인스타 릴스 → Shorts 동시 업로드<br>
+        ✅ 해시태그: #피에프창 #강남맛집 #아시안퓨전<br><br>
+        <span style="color:#6b7280;font-size:11px">목표: 구독자 1,000명 · 영상 20개</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #ea580c">
+      <div style="font-size:11px;font-weight:700;color:#ea580c;margin-bottom:6px">PHASE 2 · 단기 (4~6개월)</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px">PPL + 콜라보 확장</div>
+      <div style="font-size:12px;color:#374151;line-height:1.8">
+        ✅ 맛집 유튜버 PPL 월 1~2회<br>
+        ✅ <b>롱폼 1편/월</b> — 주방 투어·셰프 스토리<br>
+        ✅ 먹방 유튜버 시그니처 메뉴 협업<br>
+        ✅ Shorts 주 3회로 확대<br>
+        ✅ 유튜브 커뮤니티 탭 활성화<br><br>
+        <span style="color:#6b7280;font-size:11px">목표: 구독자 5,000명 · 월 5만 조회</span>
+      </div>
+    </div>
+    <div class="card" style="border-top:4px solid #1d4ed8">
+      <div style="font-size:11px;font-weight:700;color:#1d4ed8;margin-bottom:6px">PHASE 3 · 중기 (7~12개월)</div>
+      <div style="font-size:14px;font-weight:800;margin-bottom:10px">브랜드 채널 완성</div>
+      <div style="font-size:12px;color:#374151;line-height:1.8">
+        ✅ 정기 시리즈 런칭 ("피에프창 셰프의 비밀")<br>
+        ✅ 라이브 커머스 — 메뉴 소개+예약 연동<br>
+        ✅ 미드티어 유튜버(10~50만) PPL 확장<br>
+        ✅ YouTube 검색 SEO 최적화<br>
+        ✅ 글로벌 P.F. Chang's 영상 자막 한국화<br><br>
+        <span style="color:#6b7280;font-size:11px">목표: 구독자 1만명 · 월 20만 조회</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 트렌드 인사이트 -->
+  <div class="card">
+    <div class="card-title">📡 2025~2026 한국 외식업 유튜브 마케팅 핵심 트렌드</div>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+      <div style="background:#f5f3ff;border-radius:8px;padding:14px;border-left:3px solid #7c3aed">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">🎯 나노·마이크로 인플루언서</div>
+        <div style="font-size:11px;color:#374151;line-height:1.6">대형보다 1만 이하 전문 채널이 신뢰도·구매 전환율 3배 높음. 음식 전문 채널 우선 선택.</div>
+      </div>
+      <div style="background:#eff6ff;border-radius:8px;padding:14px;border-left:3px solid #1d4ed8">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">🛒 Shoppertainment</div>
+        <div style="font-size:11px;color:#374151;line-height:1.6">라이브 커머스+오프라인 팝업 결합. 영상 시청 → 즉시 예약 버튼 연동이 핵심 전환 포인트.</div>
+      </div>
+      <div style="background:#f0fdf4;border-radius:8px;padding:14px;border-left:3px solid #16a34a">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">🤖 AI 검색 연동</div>
+        <div style="font-size:11px;color:#374151;line-height:1.6">유튜브 영상 제목·설명에 "강남 아시안퓨전 맛집" 등 자연어 키워드 삽입 시 AI 검색 노출 증가.</div>
+      </div>
+      <div style="background:#fff7ed;border-radius:8px;padding:14px;border-left:3px solid #ea580c">
+        <div style="font-size:12px;font-weight:700;margin-bottom:6px">📖 브랜드 스토리텔링</div>
+        <div style="font-size:11px;color:#374151;line-height:1.6">단순 홍보 탈피. "왜 피에프창인가" 브랜드 히스토리·글로벌 스토리 시리즈로 차별화.</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════ TAB 7: 경쟁사 랜드스케이프 ════════════════════════ -->
+<div id="tab-landscape" class="tab-content iframe-tab">
+  <iframe src="pfchangs_landscape_report.html" title="경쟁사 랜드스케이프"></iframe>
+</div>
+
+<!-- ════════════════════════ TAB 8: 2026 전략 리포트 ════════════════════════ -->
+<div id="tab-strategy" class="tab-content iframe-tab">
+  <iframe src="pfchangs_strategy_report_2026.html" title="2026 전략 리포트"></iframe>
+</div>
+
+<!-- ════════════════════════ TAB 9: 마케팅 용어·SWOT ════════════════════════ -->
+<div id="tab-sheet" class="tab-content iframe-tab">
+  <iframe src="pfchangs_strategy_sheet.html" title="마케팅 용어 SWOT"></iframe>
+</div>
+
+<!-- ════════════════════════ TAB 10: AI 검색 전략 ════════════════════════ -->
+<div id="tab-ai" class="tab-content iframe-tab">
+  <iframe src="pfchangs_ai_keyword_strategy.html" title="AI 검색 전략"></iframe>
+</div>
+
+<!-- ════════════════════════ TAB 11: 팩트체크 ════════════════════════ -->
+<div id="tab-factcheck" class="tab-content iframe-tab">
+  <iframe src="pfchangs_factcheck_report.html" title="팩트체크"></iframe>
+</div>
+
+<footer>피에프창 통합 마스터 대시보드 · 에렉스 브랜드전략팀 · 2026.04.19 · CONFIDENTIAL | <span id="footerDate"></span></footer>
+
+<script>
+// ── Date
+const nd = new Date();
+document.getElementById('nowDate').textContent = nd.toLocaleDateString('ko-KR');
+document.getElementById('footerDate').textContent = nd.toLocaleString('ko-KR');
+
+// ── SNS 브랜드 필터
+function filterBrand(brand) {
+  document.querySelectorAll('.snsref-block').forEach(el => {
+    el.style.display = (brand === 'all' || el.dataset.brand === brand) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.fb-btn').forEach(btn => {
+    btn.style.background = '#fff';
+    btn.style.color = btn.style.borderColor;
+  });
+  const active = document.getElementById('fb-' + brand);
+  if (active) { active.style.background = active.style.borderColor; active.style.color = '#fff'; }
+}
+
+// ── Tab switch
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── Color helpers
+function sc(s) {
+  if (s >= 8) return ['#16a34a','#dcfce7'];
+  if (s >= 6) return ['#ca8a04','#fef9c3'];
+  if (s >= 4) return ['#ea580c','#fff7ed'];
+  return ['#dc2626','#fee2e2'];
+}
+
+// ── DATA
+const weeks = ['W15','W16','W17'];
+const revenue  = [-1.5, -3.2, -2.1];
+const customer = [-1.2, -2.1, -1.5];
+const avgSpend = [-0.3, -1.0, -0.5];
+const aeInt    = [3, 4, 6];
+const coInt    = [5, 8, 7];
+
+const compNames    = ['아웃백','매드포갈릭','치즈룸','차이797','크리스탈제이드','제이에스가든','모트32'];
+const compFollower = [236000, 48000, 12000, 35000, 18000, 9253, 7500];
+const compIntensity= [9, 7, 4, 7, 6, 5, 6];
+const compRevenue  = [4305, 1057, 0, 923, 0, 0, 0];
+const compStores   = [101, 42, 4, 40, 14, 17, 1];
+
+const ITEMS = ['홍보전략','매출활성화','세트구성','메뉴전략','할인행사','기타행사'];
+const heatData = {
+  '⭐ 피에프창': [5,5,6,6,3,4],
+  '아웃백':       [9,8,8,8,9,7],
+  '매드포갈릭':   [7,7,7,7,7,6],
+  '차이797':      [7,8,8,8,6,6],
+  '크리스탈제이드':[6,7,7,7,6,6],
+  '제이에스가든': [4,6,6,6,3,5],
+  '모트32':       [6,6,7,8,5,6],
+};
+
+// ── CHART 1: Weekly Trend (mixed)
+new Chart(document.getElementById('weeklyTrend').getContext('2d'), {
+  data: {
+    labels: weeks,
+    datasets: [
+      { type:'bar', label:'경쟁사 강도', data: coInt, backgroundColor:'rgba(220,38,38,0.3)', borderColor:'#dc2626', borderWidth:1.5, yAxisID:'y1' },
+      { type:'bar', label:'피에프창 강도', data: aeInt, backgroundColor:'rgba(29,78,216,0.3)', borderColor:'#1d4ed8', borderWidth:1.5, yAxisID:'y1' },
+      { type:'line', label:'매출변화(%)', data: revenue, borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,0.1)', tension:.4, pointRadius:5, yAxisID:'y2' },
+      { type:'line', label:'고객수변화(%)', data: customer, borderColor:'#ea580c', backgroundColor:'transparent', tension:.4, pointRadius:5, borderDash:[5,3], yAxisID:'y2' },
+      { type:'line', label:'객단가변화(%)', data: avgSpend, borderColor:'#ca8a04', backgroundColor:'transparent', tension:.4, pointRadius:5, borderDash:[3,3], yAxisID:'y2' },
+    ]
+  },
+  options: {
+    responsive:true,
+    scales: {
+      y1:{ type:'linear', position:'left', min:0, max:10, title:{display:true,text:'마케팅 강도'}, grid:{drawOnChartArea:false} },
+      y2:{ type:'linear', position:'right', min:-6, max:2, title:{display:true,text:'변화율 (%)'} }
+    },
+    plugins:{ legend:{ position:'bottom', labels:{ font:{size:11}, boxWidth:12 } } }
+  }
+});
+
+// ── CHART 2: Cause Donut
+new Chart(document.getElementById('causeDonut').getContext('2d'), {
+  type:'doughnut',
+  data:{
+    labels:['경기침체·소비위축','계엄·정치불안','브랜드 노후화','경쟁사 공세','3~4월 계절','배달·홈파티','이란·원가'],
+    datasets:[{ data:[28,20,18,14,10,7,3],
+      backgroundColor:['#dc2626','#ef4444','#ea580c','#f97316','#ca8a04','#6b7280','#374151'],
+      borderWidth:2, borderColor:'#fff' }]
+  },
+  options:{ responsive:true, plugins:{ legend:{ position:'bottom', labels:{ font:{size:10}, boxWidth:10 } } } }
+});
+
+// ── CHART 3: Correlation
+new Chart(document.getElementById('corrChart').getContext('2d'), {
+  type:'scatter',
+  data:{
+    datasets:[{
+      label:'마케팅강도 vs 고객수 변화',
+      data: coInt.map((x,i)=>({x, y: customer[i]})),
+      backgroundColor:'rgba(220,38,38,0.7)', pointRadius:8
+    }]
+  },
+  options:{
+    responsive:true,
+    scales:{
+      x:{ title:{display:true,text:'경쟁사 마케팅 강도'}, min:0, max:10 },
+      y:{ title:{display:true,text:'피에프창 고객수 변화(%)'} }
+    },
+    plugins:{ legend:{ position:'top' }, tooltip:{ callbacks:{ label: ctx=>`W${ctx.dataIndex+15}: 강도 ${ctx.raw.x}, 고객 ${ctx.raw.y}%` } } }
+  }
+});
+
+// ── CHART 4: Radar Main
+new Chart(document.getElementById('radarMain').getContext('2d'), {
+  type:'radar',
+  data:{
+    labels: ITEMS,
+    datasets:[
+      { label:'⭐ 피에프창', data:[5,5,6,6,3,4], borderColor:'#1d4ed8', backgroundColor:'rgba(29,78,216,0.15)', borderWidth:3, pointRadius:5 },
+      { label:'경쟁사 평균', data:[7.0,7.0,6.9,7.0,5.7,5.7], borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,0.1)', borderWidth:2, borderDash:[5,3] }
+    ]
+  },
+  options:{ responsive:true, scales:{ r:{ min:0, max:10, ticks:{ stepSize:2, backdropColor:'transparent' }, pointLabels:{ font:{size:11,weight:'600'} } } }, plugins:{ legend:{ position:'bottom' } } }
+});
+
+// ── CHART 5: Weekly KPI (Tab2)
+new Chart(document.getElementById('weeklyKPI').getContext('2d'), {
+  type:'line',
+  data:{
+    labels: weeks,
+    datasets:[
+      { label:'매출변화(%)', data: revenue, borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,0.08)', tension:.4, fill:true, pointRadius:6 },
+      { label:'고객수변화(%)', data: customer, borderColor:'#ea580c', backgroundColor:'rgba(234,88,12,0.08)', tension:.4, fill:true, pointRadius:6, borderDash:[5,3] },
+      { label:'객단가변화(%)', data: avgSpend, borderColor:'#ca8a04', tension:.4, pointRadius:6, borderDash:[3,3] },
+    ]
+  },
+  options:{ responsive:true, scales:{ y:{ title:{display:true,text:'전주 대비 변화율 (%)'} } }, plugins:{ legend:{ position:'bottom' } } }
+});
+
+// ── CHART 6: Weekly Intensity (Tab2)
+new Chart(document.getElementById('weeklyIntensity').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: weeks,
+    datasets:[
+      { label:'피에프창', data: aeInt, backgroundColor:'rgba(29,78,216,0.7)', borderColor:'#1d4ed8', borderWidth:1, borderRadius:4 },
+      { label:'경쟁사(아웃백)', data: coInt, backgroundColor:'rgba(220,38,38,0.7)', borderColor:'#dc2626', borderWidth:1, borderRadius:4 }
+    ]
+  },
+  options:{ responsive:true, scales:{ y:{ min:0, max:10 } }, plugins:{ legend:{ position:'bottom' } } }
+});
+
+// ── HEATMAP (Tab3)
+const hmBody = document.getElementById('heatmapBody');
+Object.entries(heatData).forEach(([brand, scores]) => {
+  const total = scores.reduce((a,b)=>a+b,0);
+  const isPF = brand.includes('피에프창');
+  const tr = document.createElement('tr');
+  if(isPF) tr.style.cssText='font-weight:700;border-bottom:3px solid #1d4ed8;background:#eff6ff';
+  const nameTd = document.createElement('td');
+  nameTd.style.cssText = 'padding:9px 12px;font-weight:700;border:1px solid #e5e7eb;white-space:nowrap';
+  nameTd.textContent = brand;
+  tr.appendChild(nameTd);
+  scores.forEach(s => {
+    const [fc, bg] = sc(s);
+    const td = document.createElement('td');
+    td.style.cssText = `background:${bg};color:${fc};font-weight:700;border:1px solid #e5e7eb;text-align:center;padding:8px`;
+    td.textContent = s;
+    tr.appendChild(td);
+  });
+  const totalTd = document.createElement('td');
+  totalTd.style.cssText = `background:${isPF?'#dbeafe':'#f8fafc'};color:${isPF?'#1d4ed8':'#374151'};font-weight:800;border:1px solid #e5e7eb;text-align:center;padding:8px`;
+  totalTd.textContent = total;
+  tr.appendChild(totalTd);
+  hmBody.appendChild(tr);
+});
+
+// ── CHART: Follower (Tab3)
+new Chart(document.getElementById('followerChart').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: compNames,
+    datasets:[{ label:'Instagram 팔로워', data: compFollower,
+      backgroundColor:['#dc2626','#ea580c','#6b7280','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius:5 }]
+  },
+  options:{ responsive:true, scales:{ y:{ ticks:{ callback: v=> v>=1000?v/1000+'K':v } } }, plugins:{ legend:{display:false} } }
+});
+
+// ── CHART: Intensity (Tab3)
+new Chart(document.getElementById('intensityBar').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: ['피에프창', ...compNames],
+    datasets:[{ label:'마케팅 강도', data:[3.5, ...compIntensity],
+      backgroundColor:['#1d4ed8','#dc2626','#ea580c','#6b7280','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius:5 }]
+  },
+  options:{ responsive:true, scales:{ y:{ min:0, max:10 } }, plugins:{ legend:{display:false} } }
+});
+
+// ── CHART: Revenue (Tab3)
+new Chart(document.getElementById('revenueBar').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: compNames,
+    datasets:[{ label:'연매출(억원)', data: compRevenue,
+      backgroundColor:['#dc2626','#ea580c','#6b7280','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius:5 }]
+  },
+  options:{ responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{ callback: v=>v+'억' } } } }
+});
+
+// ── CHART: Stores (Tab3)
+new Chart(document.getElementById('storeBar').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: compNames,
+    datasets:[{ label:'점포 수', data: compStores,
+      backgroundColor:['#dc2626','#ea580c','#6b7280','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius:5 }]
+  },
+  options:{ responsive:true, plugins:{ legend:{display:false} } }
+});
+
+// ── SNS Gap Chart (Tab4)
+new Chart(document.getElementById('snsGapChart').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: compNames,
+    datasets:[{ label:'피에프창 대비 배수', data: compFollower.map(f=>+(f/32000).toFixed(1)),
+      backgroundColor:['#dc2626','#ea580c','#6b7280','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius:5 }]
+  },
+  options:{ responsive:true, scales:{ y:{ ticks:{ callback: v=>v+'배' } } }, plugins:{ legend:{display:false},
+    annotation:{ annotations:{ line1:{ type:'line', yMin:1, yMax:1, borderColor:'#1d4ed8', borderWidth:2, borderDash:[4,4] } } } } }
+});
+
+// ── Post Freq (Tab4)
+const postFreqs = [12, 8, 3, 6, 4, 2, 3];
+new Chart(document.getElementById('postFreqChart').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels: ['피에프창(현재)', ...compNames],
+    datasets:[{ label:'월 포스팅 빈도', data:[4, ...postFreqs],
+      backgroundColor:['#1d4ed8','#dc2626','#ea580c','#6b7280','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius:5 }]
+  },
+  options:{ responsive:true, plugins:{ legend:{display:false} }, scales:{ y:{ ticks:{ callback: v=>v+'회' } } } }
+});
+
+// ── Follower Growth Scenario (Tab4)
+new Chart(document.getElementById('followerGrowth').getContext('2d'), {
+  type:'line',
+  data:{
+    labels:['현재','1개월','2개월','3개월','4개월','5개월','6개월','9개월','12개월'],
+    datasets:[
+      { label:'적극 실행 시나리오', data:[32000,34000,37000,41000,47000,55000,63000,80000,100000],
+        borderColor:'#16a34a', backgroundColor:'rgba(22,163,74,0.1)', tension:.4, fill:true, borderWidth:3 },
+      { label:'현 상태 유지', data:[32000,32200,32400,32600,32800,33000,33200,33800,34500],
+        borderColor:'#dc2626', borderDash:[5,3], tension:.4, backgroundColor:'rgba(220,38,38,0.05)', fill:true }
+    ]
+  },
+  options:{ responsive:true, scales:{ y:{ ticks:{ callback: v=>v>=1000?v/1000+'K':v } } }, plugins:{ legend:{ position:'bottom' } } }
+});
+
+// ── Membership Chart (Tab6)
+new Chart(document.getElementById('membershipChart').getContext('2d'), {
+  type:'bar',
+  data:{
+    labels:['피에프창(현재)','아웃백 부메랑','매드포갈릭 M클럽','차이797 S-ON'],
+    datasets:[{ label:'멤버십 회원수', data:[0, 4000000, 1000000, 500000],
+      backgroundColor:['#ef4444','#dc2626','#ea580c','#ca8a04'], borderRadius:5 }]
+  },
+  options:{ responsive:true, plugins:{legend:{display:false}}, scales:{ y:{ ticks:{ callback: v=>v>=1000000?v/1000000+'M':v>=1000?v/1000+'K':v } } } }
+});
+
+// ── ROI Chart (Tab6)
+new Chart(document.getElementById('roiChart').getContext('2d'), {
+  type:'line',
+  data:{
+    labels:['0개월','3개월','6개월','9개월','12개월'],
+    datasets:[
+      { label:'누적 멤버십 수익(만원)', data:[0, 2250, 6750, 12150, 13776],
+        borderColor:'#1d4ed8', backgroundColor:'rgba(29,78,216,0.1)', fill:true, tension:.4, borderWidth:3 },
+      { label:'개발비 손익분기', data:[5000, 5000, 5000, 5000, 5000],
+        borderColor:'#dc2626', borderDash:[5,3], pointRadius:0 }
+    ]
+  },
+  options:{ responsive:true, scales:{ y:{ ticks:{ callback: v=>v+'만' } } }, plugins:{ legend:{ position:'bottom' } } }
+});
+</script>
+</body>
+</html>

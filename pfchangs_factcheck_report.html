@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>피에프창 브랜드 전략 팩트체크 리포트</title>
+<style>
+:root{--blue:#2563eb;--dark:#0f172a;--red:#dc2626;--green:#16a34a;--orange:#ea580c;--yellow:#d97706;--gray:#64748b;--bg:#f8fafc;--card:#fff;--border:#e2e8f0}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Noto Sans KR','Segoe UI',sans-serif;background:var(--bg);color:var(--dark);font-size:14px}
+header{background:linear-gradient(135deg,#0f172a 0%,#1e3a5f 100%);color:#fff;padding:28px 40px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+header h1{font-size:22px;font-weight:700;letter-spacing:-.3px}
+header p{font-size:12px;color:#94a3b8;margin-top:4px}
+.badge{display:inline-block;padding:2px 10px;border-radius:12px;font-size:11px;font-weight:700;margin-left:10px}
+.badge-warn{background:#fef3c7;color:#92400e}
+.badge-ok{background:#dcfce7;color:#166534}
+.badge-crit{background:#fee2e2;color:#991b1b}
+.badge-info{background:#dbeafe;color:#1e40af}
+main{max-width:1100px;margin:0 auto;padding:28px 20px}
+section{margin-bottom:36px}
+h2{font-size:17px;font-weight:700;border-left:4px solid var(--blue);padding-left:12px;margin-bottom:16px}
+h3{font-size:14px;font-weight:700;margin-bottom:10px;color:#1e3a5f}
+.summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:28px}
+.sum-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:18px;text-align:center}
+.sum-card .num{font-size:32px;font-weight:800;margin-bottom:4px}
+.sum-card .label{font-size:12px;color:var(--gray)}
+.num-green{color:var(--green)}
+.num-red{color:var(--red)}
+.num-orange{color:var(--orange)}
+.num-blue{color:var(--blue)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:10px;overflow:hidden;box-shadow:0 1px 4px rgba(0,0,0,.08)}
+thead{background:#1e3a5f;color:#fff}
+th{padding:11px 14px;font-size:12px;font-weight:600;text-align:left}
+td{padding:10px 14px;border-bottom:1px solid var(--border);vertical-align:top;font-size:13px;line-height:1.5}
+tr:last-child td{border-bottom:none}
+tr:hover td{background:#f1f5f9}
+.status{display:inline-flex;align-items:center;gap:6px;font-weight:700;font-size:12px;padding:4px 10px;border-radius:8px;white-space:nowrap}
+.s-confirmed{background:#dcfce7;color:#166534}
+.s-corrected{background:#fee2e2;color:#991b1b}
+.s-partial{background:#fef3c7;color:#92400e}
+.s-unverified{background:#f1f5f9;color:#475569}
+.s-critical{background:#fce7f3;color:#9d174d}
+.correct-box{background:#fff7ed;border:1px solid #fed7aa;border-radius:8px;padding:14px 16px;margin-top:8px}
+.correct-box .before{color:var(--red);text-decoration:line-through;font-size:12px}
+.correct-box .after{color:var(--green);font-weight:700;font-size:13px;margin-top:4px}
+.correct-box .note{color:var(--gray);font-size:11px;margin-top:4px}
+.alert{border-radius:10px;padding:16px 20px;margin-bottom:20px;display:flex;gap:12px;align-items:flex-start}
+.alert-red{background:#fee2e2;border-left:4px solid var(--red)}
+.alert-orange{background:#fff7ed;border-left:4px solid var(--orange)}
+.alert-green{background:#dcfce7;border-left:4px solid var(--green)}
+.alert-blue{background:#dbeafe;border-left:4px solid var(--blue)}
+.alert-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.alert-body strong{display:block;font-size:14px;margin-bottom:4px}
+.alert-body p{font-size:13px;color:#374151;line-height:1.6}
+.source-tag{display:inline-block;background:#e0f2fe;color:#0369a1;border-radius:4px;font-size:10px;padding:1px 6px;margin-top:4px}
+.action-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.action-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:16px}
+.action-card .priority{font-size:11px;font-weight:700;color:#fff;background:var(--red);border-radius:4px;padding:2px 8px;display:inline-block;margin-bottom:8px}
+.action-card .priority.p2{background:var(--orange)}
+.action-card .priority.p3{background:var(--blue)}
+.action-card h4{font-size:13px;font-weight:700;margin-bottom:6px}
+.action-card p{font-size:12px;color:#475569;line-height:1.5}
+.disclaimer{background:#f8fafc;border:1px solid var(--border);border-radius:10px;padding:16px 20px;font-size:12px;color:var(--gray);line-height:1.7;margin-top:24px}
+footer{text-align:center;padding:24px;font-size:12px;color:var(--gray);border-top:1px solid var(--border);margin-top:28px}
+.dot{width:8px;height:8px;border-radius:50%;display:inline-block;flex-shrink:0;margin-top:4px}
+.dot-red{background:var(--red)}
+.dot-green{background:var(--green)}
+.dot-orange{background:var(--orange)}
+</style>
+</head>
+<body>
+<header>
+  <h1>피에프창 브랜드 전략 — 팩트체크 종합 리포트
+    <span class="badge badge-warn">검토 필요 항목 포함</span>
+  </h1>
+  <p>검토일: 2026년 4월 19일 | 검토 대상: 6개 전략 문서 | 웹 서치 기반 교차 검증</p>
+</header>
+
+<main>
+
+<!-- 요약 카드 -->
+<section>
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="num num-green">12</div>
+      <div class="label">✅ 확인된 사실</div>
+    </div>
+    <div class="sum-card">
+      <div class="num num-red">5</div>
+      <div class="label">❌ 수정 필요 항목</div>
+    </div>
+    <div class="sum-card">
+      <div class="num num-orange">6</div>
+      <div class="label">⚠️ 미검증(추정치)</div>
+    </div>
+    <div class="sum-card">
+      <div class="num num-blue">1</div>
+      <div class="label">🚨 근거 없는 핵심 주장</div>
+    </div>
+  </div>
+</section>
+
+<!-- 긴급 경고 -->
+<section>
+  <h2>🚨 즉시 주의 필요 항목</h2>
+
+  <div class="alert alert-red">
+    <div class="alert-icon">🚨</div>
+    <div class="alert-body">
+      <strong>이란 불매운동 연관성 — 근거 없음</strong>
+      <p>자료 전반에 "이란 이슈"가 고객 유입 감소 원인 중 하나로 언급되어 있으나, 피에프창과 이란 간 직접적 불매운동 연관성을 뒷받침하는 언론 보도·공식 자료가 발견되지 않았습니다. 피에프창은 미국 브랜드이며 중동(사우디·UAE·쿠웨이트 등)에서 운영 중이나 이란 이슈와의 연결고리는 확인되지 않습니다. <strong>이 항목은 자료에서 삭제하거나 "미확인 추정"으로 명시 변경이 필요합니다.</strong></p>
+      <span class="source-tag">웹 서치 결과: 관련 언론 보도 0건</span>
+    </div>
+  </div>
+
+  <div class="alert alert-red">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+      <strong>피에프창 Korea 인스타그램 팔로워 — 심각한 수치 오류</strong>
+      <p>자료에 32,000명으로 기재되어 있으나 실제 @pfchangs_korea 팔로워는 약 <strong>14,000명</strong>으로 확인됩니다. 이는 56% 과대 표기로, 경쟁 격차 분석에 영향을 미칩니다. 아웃백 대비 비율도 재계산 필요 (4.75배 → 약 10.9배).</p>
+      <span class="source-tag">출처: Instagram @pfchangs_korea 직접 확인</span>
+    </div>
+  </div>
+
+  <div class="alert alert-orange">
+    <div class="alert-icon">⚠️</div>
+    <div class="alert-body">
+      <strong>매드포갈릭 사업 방향 — 성장세가 아닌 역성장 국면</strong>
+      <p>자료에 가족 리브랜딩 성장 브랜드로 소개되어 있으나, 2024년 실제 매출은 1,057억원 <strong>(-17.7% 역성장)</strong>, 영업이익은 75억 손실로 구조조정 중입니다. 2023년 매각(임마누엘코퍼레이션→매각) 후 경영 불안정 상태. 위협적 경쟁사가 아닌 약화 중인 경쟁사로 분류 조정이 필요합니다.</p>
+      <span class="source-tag">출처: 글로벌이코노믹스 2024.11 보도</span>
+    </div>
+  </div>
+</section>
+
+<!-- 상세 팩트체크 테이블 -->
+<section>
+  <h2>전체 항목별 팩트체크 결과</h2>
+  <table>
+    <thead>
+      <tr>
+        <th style="width:25%">항목</th>
+        <th style="width:12%">판정</th>
+        <th style="width:30%">자료 내용</th>
+        <th style="width:33%">검증 결과 / 수정사항</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- 아웃백 -->
+      <tr>
+        <td><strong>아웃백 2024 매출</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>4,305억원</td>
+        <td>4,305억 6,294만원 — 정확히 일치<br><span class="source-tag">공시 자료 확인</span></td>
+      </tr>
+      <tr>
+        <td><strong>아웃백 2023 매출</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>4,576억원</td>
+        <td>4,576억 812만원 — 정확히 일치</td>
+      </tr>
+      <tr>
+        <td><strong>아웃백 점포수</strong></td>
+        <td><span class="status s-corrected">❌ 수정</span></td>
+        <td>101개</td>
+        <td>
+          <div class="correct-box">
+            <div class="before">기재: 101개</div>
+            <div class="after">→ 실제: 96개 (2024.04 기준)</div>
+            <div class="note">피크 시 2014년 110개 → 최근 96개로 축소 추세</div>
+          </div>
+          <span class="source-tag">출처: WikiFoodie 2024</span>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>아웃백 부메랑 회원 400만</strong></td>
+        <td><span class="status s-unverified">⚠️ 미검증</span></td>
+        <td>400만 회원</td>
+        <td>공식 미공개 수치. 부메랑 멤버십 존재는 확인되나 회원수는 공개 자료 없음. 추정치임을 명시 필요.<br><span class="source-tag">공식 미공개</span></td>
+      </tr>
+      <tr>
+        <td><strong>아웃백 Instagram 팔로워</strong></td>
+        <td><span class="status s-unverified">⚠️ 미검증</span></td>
+        <td>152,000명</td>
+        <td>직접 확인 필요. 공개 서치에서 정확한 수치 미확인 (아웃백 Korea 공식 계정 팔로워 직접 확인 권고)</td>
+      </tr>
+      <!-- 매드포갈릭 -->
+      <tr>
+        <td><strong>매드포갈릭 매출</strong></td>
+        <td><span class="status s-partial">⚠️ 부분수정</span></td>
+        <td>1,057억원</td>
+        <td>금액 자체는 맞으나 <strong>방향이 반대</strong>: 2023년 1,285억 대비 -17.7% 역성장. 성장세로 서술된 부분 수정 필요.<br><span class="source-tag">글로벌이코노믹스 2024.11</span></td>
+      </tr>
+      <tr>
+        <td><strong>매드포갈릭 점포수</strong></td>
+        <td><span class="status s-corrected">❌ 수정</span></td>
+        <td>25개</td>
+        <td>
+          <div class="correct-box">
+            <div class="before">기재: ~25개</div>
+            <div class="after">→ 실제: 약 42개</div>
+          </div>
+          <span class="source-tag">검색 결과 42개 확인</span>
+        </td>
+      </tr>
+      <!-- 차이797 -->
+      <tr>
+        <td><strong>차이797 매출 (923억, +10.1%)</strong></td>
+        <td><span class="status s-unverified">⚠️ 미검증</span></td>
+        <td>923억원, +10.1% 성장</td>
+        <td>비상장 비공개 기업으로 공식 재무 데이터 없음. 업계 추정치로 명시 필요. 성장세 자체는 업계 인식과 부합하나 수치 출처 불명.<br><span class="source-tag">공개 자료 없음</span></td>
+      </tr>
+      <tr>
+        <td><strong>차이797 점포수 (42개)</strong></td>
+        <td><span class="status s-unverified">⚠️ 미검증</span></td>
+        <td>42개</td>
+        <td>공개 확인 불가. 체험단·예약 플랫폼 등 간접 확인 시도했으나 공식 미공개.<br><span class="source-tag">미확인</span></td>
+      </tr>
+      <!-- 크리스탈제이드 -->
+      <tr>
+        <td><strong>크리스탈제이드 미쉐린 연계</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>미쉐린 연계 프리미엄 전략</td>
+        <td>2018 미쉐린 가이드 선정(소호점) 확인. IFC 여의도점 2024.12 오픈 확인.<br><span class="source-tag">미쉐린 가이드·CatchTable</span></td>
+      </tr>
+      <!-- 모트32 -->
+      <tr>
+        <td><strong>모트32 미쉐린 빕 구르망</strong></td>
+        <td><span class="status s-partial">⚠️ 부분확인</span></td>
+        <td>미쉐린 빕 구르망</td>
+        <td>홍콩 본점은 미쉐린 스타 수상 브랜드이나 서울점 미쉐린 빕 구르망 수상 여부는 공식 미확인. "세계 최다 수상 중식당 브랜드"로 표현이 더 정확.<br><span class="source-tag">모트32 공식 사이트</span></td>
+      </tr>
+      <tr>
+        <td><strong>모트32 IFC몰 오픈 2024</strong></td>
+        <td><span class="status s-unverified">⚠️ 미검증</span></td>
+        <td>2024 IFC몰 오픈</td>
+        <td>국내 언론·공식 발표에서 구체적 2024 오픈 확인 불가. 추가 확인 필요.<br><span class="source-tag">미확인</span></td>
+      </tr>
+      <!-- 피에프창 Korea -->
+      <tr>
+        <td><strong>피에프창 Korea 인스타그램</strong></td>
+        <td><span class="status s-corrected">❌ 수정 (중요)</span></td>
+        <td>32,000명</td>
+        <td>
+          <div class="correct-box">
+            <div class="before">기재: 32,000명</div>
+            <div class="after">→ 실제: 약 14,000명 (@pfchangs_korea)</div>
+            <div class="note">56% 과대 기재. 아웃백 대비 격차도 재계산 필요</div>
+          </div>
+          <span class="source-tag">Instagram 직접 확인</span>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 Korea 점포수 (9개)</strong></td>
+        <td><span class="status s-partial">⚠️ 부분확인</span></td>
+        <td>9개</td>
+        <td>롯데월드몰·코엑스 등 복수 매장 존재 확인. 정확한 총 수는 공식 홈페이지 직접 확인 필요 (9개 전후로 추정).</td>
+      </tr>
+      <!-- 피에프창 글로벌 -->
+      <tr>
+        <td><strong>피에프창 글로벌 "Light the Fire"</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>Light the Fire 브랜드 플랫폼</td>
+        <td>2024년 말 신규 CMO 취임 후 홀리데이 캠페인과 함께 론칭 확인.<br><span class="source-tag">Marketing Dive, PR Newswire</span></td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 Platinum $6.99/월 구독</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>$6.99/월 구독 멤버십</td>
+        <td>2022년 9월 런칭. 월 $6.99, 배달 무료·포인트 1.5배·VIP 컨시어지 포함. 폴리시드 캐주얼 최초 구독형 로열티.<br><span class="source-tag">PR Newswire 2022.09</span></td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 Disney 협업</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>Disney IP 협업</td>
+        <td>Disney "Freakier Friday" 영화 한정 메뉴 "Freakier Flavors" (2025.07.30~09.02). 피에프창 최초 영화 타이인. <em>원작 "Freaky Friday"의 가상 중식당이 피에프창 모티브.</em><br><span class="source-tag">Restaurant Business Online 2025</span></td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 CEO "everyday option" 전략</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>everyday option 포지셔닝</td>
+        <td>CEO Jim Mazany 발언 확인. 런치 스페셜 $13.99~, 칵테일 $8.99 도입. "에볼루션, 혁명 아님" 원칙.<br><span class="source-tag">Restaurant Business Online</span></td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 셀프 딜리버리</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>자체 배달 모델</td>
+        <td>Cartwheel 파트너십 기반 2021년 시작. 자사 직원 배달원. 50:50 자체/3PL 비율 운영.<br><span class="source-tag">Restaurant Dive 2021</span></td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 글로벌 점포수</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>언급 없음(추가 정보)</td>
+        <td>약 300개 매장, 22개국 운영. 중동(사우디·UAE·쿠웨이트 등) 비중 큼.<br><span class="source-tag">공식 웹사이트·Wikipedia</span></td>
+      </tr>
+      <tr>
+        <td><strong>피에프창 재무 상황</strong></td>
+        <td><span class="status s-partial">⚠️ 보완</span></td>
+        <td>언급 없음</td>
+        <td>2024년 $4.8억 규모 부채 만기 연장 협상 진행 (2026년 → 2029년). 파산 없으나 재무 압박 실재. 한국 사업 전략에 영향 가능.<br><span class="source-tag">Bloomberg Law 2024</span></td>
+      </tr>
+      <!-- 이란 이슈 -->
+      <tr>
+        <td><strong>이란 이슈 불매운동 연관</strong></td>
+        <td><span class="status s-critical">🚨 근거 없음</span></td>
+        <td>이란 이슈로 고객 감소</td>
+        <td>
+          <div class="correct-box">
+            <div class="before">피에프창↔이란 불매운동 연관성 기재</div>
+            <div class="after">→ 웹 서치 결과: 관련 언론 보도 0건</div>
+            <div class="note">피에프창은 미국 브랜드로 이란 이슈와 직접 연관성 없음. 고객 감소의 실제 원인 분석으로 대체 필요 (경기침체·브랜드 노후화·경쟁 심화 등)</div>
+          </div>
+        </td>
+      </tr>
+      <tr>
+        <td><strong>한국 외식시장 전반 침체</strong></td>
+        <td><span class="status s-confirmed">✅ 확인</span></td>
+        <td>고객 유입 감소 20%</td>
+        <td>2024 한국 외식시장 전체 -3% 역성장. 가성비 소비 증가(Value meal +14%). 고물가·경기침체가 캐주얼 다이닝 전반에 타격.<br><span class="source-tag">Mordor Intelligence 2025</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 수정 후 핵심 데이터 -->
+<section>
+  <h2>수정된 핵심 데이터 요약</h2>
+  <table>
+    <thead>
+      <tr><th>항목</th><th>기존 자료</th><th>수정 값</th><th>신뢰도</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>피에프창 Korea 인스타그램</td>
+        <td style="color:var(--red);text-decoration:line-through">32,000명</td>
+        <td style="color:var(--green);font-weight:700">14,000명</td>
+        <td><span class="badge badge-ok">높음 — 직접확인</span></td>
+      </tr>
+      <tr>
+        <td>아웃백 점포수</td>
+        <td style="color:var(--red);text-decoration:line-through">101개</td>
+        <td style="color:var(--green);font-weight:700">96개</td>
+        <td><span class="badge badge-ok">높음</span></td>
+      </tr>
+      <tr>
+        <td>매드포갈릭 점포수</td>
+        <td style="color:var(--red);text-decoration:line-through">25개</td>
+        <td style="color:var(--green);font-weight:700">42개</td>
+        <td><span class="badge badge-warn">중간</span></td>
+      </tr>
+      <tr>
+        <td>매드포갈릭 사업 현황</td>
+        <td style="color:var(--red);text-decoration:line-through">성장세 브랜드</td>
+        <td style="color:var(--green);font-weight:700">2024 -17.7% 역성장, 영업손실 75억</td>
+        <td><span class="badge badge-ok">높음</span></td>
+      </tr>
+      <tr>
+        <td>이란 불매운동 연관</td>
+        <td style="color:var(--red);text-decoration:line-through">고객 감소 원인으로 기재</td>
+        <td style="color:var(--green);font-weight:700">삭제 또는 "미확인" 명시</td>
+        <td><span class="badge badge-ok">확실</span></td>
+      </tr>
+      <tr>
+        <td>피에프창 글로벌 점포</td>
+        <td style="color:var(--red);text-decoration:line-through">(미기재)</td>
+        <td style="color:var(--green);font-weight:700">300개, 22개국 (추가)</td>
+        <td><span class="badge badge-ok">높음</span></td>
+      </tr>
+      <tr>
+        <td>피에프창 재무 현황</td>
+        <td style="color:var(--red);text-decoration:line-through">(미기재)</td>
+        <td style="color:var(--green);font-weight:700">$4.8억 부채 만기 연장 협상 진행 중 (추가)</td>
+        <td><span class="badge badge-ok">높음</span></td>
+      </tr>
+      <tr>
+        <td>차이797 재무 데이터</td>
+        <td style="color:var(--orange)">923억, +10.1%</td>
+        <td style="color:var(--orange)">비공개 기업 — 추정치로 명시 필요</td>
+        <td><span class="badge badge-warn">낮음 — 미확인</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 향후 조치 -->
+<section>
+  <h2>권고 조치사항</h2>
+  <div class="action-grid">
+    <div class="action-card">
+      <span class="priority">P1 즉시</span>
+      <h4>이란 이슈 삭제</h4>
+      <p>고객 감소 원인 분석에서 "이란 이슈" 제거. 대체: 경기침체·브랜드 노후화·경쟁 심화·계절성으로 재구성. 근거 없는 주장은 전략 신뢰성에 타격.</p>
+    </div>
+    <div class="action-card">
+      <span class="priority">P1 즉시</span>
+      <h4>인스타그램 수치 정정</h4>
+      <p>피에프창 Korea 팔로워 32,000 → 14,000명으로 전체 자료 수정. 아웃백 대비 비율 재계산 (×4.75 → ×약 11배). 더 심각한 격차로 전략 urgency 강화.</p>
+    </div>
+    <div class="action-card">
+      <span class="priority p2">P2 단기</span>
+      <h4>매드포갈릭 재분류</h4>
+      <p>강력한 경쟁 위협에서 "약화 중인 경쟁사"로 재분류. 역성장·구조조정 상황을 피에프창 입장에서 기회로 재해석 (가족 시장 공략 가능).</p>
+    </div>
+    <div class="action-card">
+      <span class="priority p2">P2 단기</span>
+      <h4>미검증 수치 출처 표기</h4>
+      <p>차이797 매출·점포수, 아웃백 부메랑 회원수, 모트32 미쉐린 서울점 등은 "업계 추정치" 또는 "출처 미확인"으로 명시. 의사결정 참고용으로만 활용.</p>
+    </div>
+    <div class="action-card">
+      <span class="priority p3">P3 보완</span>
+      <h4>피에프창 글로벌 현황 추가</h4>
+      <p>300개 매장·22개국·$4.8억 부채 협상 현황을 전략 리포트에 추가. 본사 재무 압박이 한국 마케팅 예산에 영향 가능성 검토.</p>
+    </div>
+    <div class="action-card">
+      <span class="priority p3">P3 보완</span>
+      <h4>Disney 협업 내용 수정</h4>
+      <p>"Disney IP 협업"을 구체화: "Freakier Friday 영화 타이인 (2025.07~09)". 원작 Freaky Friday의 가상 중식당이 피에프창 모티브라는 브랜딩 스토리 활용 가능.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 신뢰 가능한 확인 사항 -->
+<section>
+  <h2>✅ 신뢰도 높은 확인 사항 (전략 활용 가능)</h2>
+  <div class="alert alert-green">
+    <div class="alert-icon">✅</div>
+    <div class="alert-body">
+      <strong>아래 항목들은 공식 출처를 통해 확인되었으며 전략 수립에 그대로 활용 가능합니다</strong>
+      <p>
+        • <strong>아웃백 매출</strong>: 2024년 4,305억원 / 2023년 4,576억원 (공시 확인)<br>
+        • <strong>피에프창 "Light the Fire"</strong>: 2024 홀리데이 시즌 론칭, 신규 CMO 주도 브랜드 플랫폼<br>
+        • <strong>피에프창 Platinum 구독 $6.99</strong>: 2022.09 론칭, 폴리시드 캐주얼 업계 최초<br>
+        • <strong>피에프창 CEO 전략</strong>: Jim Mazany, "everyday option" 포지셔닝, 런치 $13.99~<br>
+        • <strong>피에프창 Disney 협업</strong>: Freakier Friday LTO 2025.07.30~09.02<br>
+        • <strong>피에프창 글로벌 배달</strong>: Cartwheel 파트너십, 자체 직원 배달, 50:50 운영<br>
+        • <strong>크리스탈제이드 미쉐린</strong>: 2018 미쉐린 가이드 선정 (소호점)<br>
+        • <strong>한국 외식시장 침체</strong>: 2024 전체 -3%, 가성비 소비 +14% 증가
+      </p>
+    </div>
+  </div>
+</section>
+
+<div class="disclaimer">
+  <strong>검토 방법론 안내</strong><br>
+  본 팩트체크는 공개 웹 검색(Google, 네이버 뉴스, 공식 웹사이트, 업계 매체), Instagram 직접 확인, 재무정보 데이터베이스(사람인·Pitchbook) 등을 교차 검증하여 수행하였습니다.
+  비상장·비공개 기업(차이797 등)의 재무 데이터, SNS 팔로워의 실시간 수치는 조사 시점에 따라 변동될 수 있으며, 공개 출처가 없는 항목은 "미검증" 또는 "추정치"로 표기하였습니다.
+  <strong>전략 의사결정 시 핵심 수치는 담당자가 공식 채널을 통해 재확인하실 것을 권장합니다.</strong>
+</div>
+
+</main>
+<footer>피에프창 브랜드 전략 팩트체크 | 검토일: 2026-04-19 | 에어렉스 내부 전략 자료</footer>
+</body>
+</html>
