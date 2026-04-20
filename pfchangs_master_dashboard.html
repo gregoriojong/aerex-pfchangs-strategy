@@ -1812,11 +1812,13 @@ function makeRadarDatasets(visible) {
     label: b.label,
     data: b.data,
     borderColor: b.color,
-    backgroundColor: visible[i] ? b.color.replace(')', ',0.08)').replace('rgb','rgba') : 'transparent',
-    borderWidth: i === 0 ? 3 : 2,
+    backgroundColor: 'transparent',
+    borderWidth: i === 0 ? 3 : 1.5,
     borderDash: b.dash,
     pointRadius: i === 0 ? 5 : 3,
     pointBackgroundColor: b.color,
+    pointBorderColor: '#fff',
+    pointBorderWidth: 1,
     hidden: !visible[i],
   }));
 }
