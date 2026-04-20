@@ -1,0 +1,1173 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>포팟·땀땀 브랜드 전략 대시보드 | 에렉스</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#16a34a;--dark:#0f172a;--red:#dc2626;--blue:#1d4ed8;
+  --orange:#ea580c;--purple:#7c3aed;--yellow:#ca8a04;--sky:#0ea5e9;
+  --gray:#6b7280;--bg:#f1f5f9;--card:#fff;--border:#e2e8f0
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:#1f2937;font-size:13px}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand .logo{font-size:16px;font-weight:900;letter-spacing:-.4px}
+.topbar-brand .dot{width:8px;height:8px;background:var(--accent);border-radius:50%;display:inline-block;margin-right:4px}
+.topbar-right{display:flex;align-items:center;gap:12px;font-size:12px}
+.back-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);padding:5px 12px;border-radius:6px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:4px;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.2)}
+.vn-badge{background:var(--accent);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+
+/* ── DISCLAIMER BANNER ── */
+.disclaimer{background:#fefce8;border-bottom:1px solid #fde047;padding:7px 24px;font-size:11px;color:#854d0e;display:flex;align-items:center;gap:6px}
+.disclaimer-icon{font-size:14px}
+
+/* ── TAB NAV ── */
+.tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:52px;z-index:99;overflow-x:auto}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--accent);background:#f0fdf4}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;padding:20px 24px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
+.card-title .ct-dot{width:8px;height:8px;border-radius:50%;display:inline-block}
+
+/* ── KPI GRID ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi-card{border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;color:#fff}
+.kpi-card .kpi-label{font-size:11px;font-weight:600;opacity:.8;margin-bottom:6px}
+.kpi-card .kpi-val{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.kpi-card .kpi-sub{font-size:11px;opacity:.75}
+.kpi-card .kpi-icon{position:absolute;right:14px;top:12px;font-size:30px;opacity:.18}
+.kpi-card.green{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.kpi-card.blue{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+.kpi-card.orange{background:linear-gradient(135deg,#ea580c,#f97316)}
+.kpi-card.purple{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.kpi-card.dark{background:linear-gradient(135deg,#0f172a,#1e3a5f)}
+.kpi-card.yellow{background:linear-gradient(135deg,#ca8a04,#eab308)}
+
+/* ── CHART GRID ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.chart-grid-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.chart-grid-12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+
+/* ── BRAND COMPARE CARDS ── */
+.brand-compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin-bottom:18px}
+.brand-card{border-radius:14px;overflow:hidden;border:1px solid var(--border);box-shadow:0 2px 10px rgba(0,0,0,.07)}
+.brand-card-hd{padding:18px 20px;color:#fff}
+.brand-card-hd .bc-tag{font-size:10px;font-weight:700;opacity:.8;margin-bottom:4px;text-transform:uppercase;letter-spacing:.5px}
+.brand-card-hd .bc-name{font-size:22px;font-weight:900;margin-bottom:2px}
+.brand-card-hd .bc-name-ko{font-size:13px;opacity:.8}
+.brand-card-hd .bc-tagline{font-size:11px;opacity:.7;margin-top:6px;line-height:1.5}
+.brand-card-bd{padding:18px 20px;background:#fff}
+.brand-row{display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:1px solid #f8fafc;font-size:12px}
+.brand-row:last-child{border-bottom:none}
+.brand-row .br-label{color:var(--gray);font-weight:600}
+.brand-row .br-val{font-weight:700;color:var(--dark);text-align:right;max-width:60%}
+.estimate-tag{display:inline-block;background:#fef9c3;color:#854d0e;border:1px solid #fde047;font-size:9px;font-weight:700;padding:1px 5px;border-radius:4px;margin-left:4px;vertical-align:middle}
+
+/* ── STRENGTH / WEAKNESS ── */
+.sw-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.sw-box{border-radius:8px;padding:12px 14px}
+.sw-box.str{background:#f0fdf4;border:1px solid #86efac}
+.sw-box.wk{background:#fff1f2;border:1px solid #fca5a5}
+.sw-box .sw-title{font-size:11px;font-weight:700;margin-bottom:7px;display:flex;align-items:center;gap:4px}
+.sw-box.str .sw-title{color:#16a34a}
+.sw-box.wk .sw-title{color:#dc2626}
+.sw-item{font-size:11px;line-height:1.5;color:#374151;padding:2px 0}
+
+/* ── PILL / BADGE ── */
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+.pill.green{background:#dcfce7;color:#16a34a}
+.pill.blue{background:#dbeafe;color:#1d4ed8}
+.pill.orange{background:#ffedd5;color:#ea580c}
+.pill.purple{background:#ede9fe;color:#7c3aed}
+.pill.yellow{background:#fef9c3;color:#92400e}
+.pill.gray{background:#f3f4f6;color:#374151}
+.pill.red{background:#fee2e2;color:#dc2626}
+.pill.sky{background:#e0f2fe;color:#0369a1}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:10px;padding:13px 16px;margin-bottom:12px;font-size:12px;line-height:1.6}
+.alert.green{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a}
+.alert.blue{background:#eff6ff;border:1px solid #93c5fd;border-left:4px solid #1d4ed8}
+.alert.yellow{background:#fefce8;border:1px solid #fde047;border-left:4px solid #ca8a04}
+.alert.red{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626}
+.alert.purple{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed}
+
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{padding:9px 12px;background:#f8fafc;font-weight:700;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap}
+.dt td{padding:8px 12px;border-bottom:1px solid #f8fafc;vertical-align:middle}
+.dt tr:hover td{background:#f0fdf4}
+.dt .dot-green::before{content:'●';color:#16a34a;margin-right:5px}
+.dt .dot-orange::before{content:'●';color:#ea580c;margin-right:5px}
+.dt .dot-yellow::before{content:'●';color:#ca8a04;margin-right:5px}
+.dt .dot-purple::before{content:'●';color:#7c3aed;margin-right:5px}
+.dt .dot-sky::before{content:'●';color:#0ea5e9;margin-right:5px}
+
+/* ── TOGGLE BUTTONS ── */
+.toggle-group{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:14px}
+.toggle-btn{padding:5px 14px;border-radius:20px;border:2px solid;font-size:12px;font-weight:700;cursor:pointer;transition:all .18s;background:#fff}
+.toggle-btn.active{color:#fff}
+.toggle-btn[data-brand="포팟"]{border-color:#16a34a;color:#16a34a}
+.toggle-btn[data-brand="포팟"].active{background:#16a34a}
+.toggle-btn[data-brand="땀땀"]{border-color:#16a34a;color:#16a34a}
+.toggle-btn[data-brand="땀땀"].active{background:#16a34a}
+.toggle-btn[data-brand="포베이"]{border-color:#ea580c;color:#ea580c}
+.toggle-btn[data-brand="포베이"].active{background:#ea580c}
+.toggle-btn[data-brand="반미앤코"]{border-color:#ca8a04;color:#ca8a04}
+.toggle-btn[data-brand="반미앤코"].active{background:#ca8a04}
+.toggle-btn[data-brand="호아빈"]{border-color:#7c3aed;color:#7c3aed}
+.toggle-btn[data-brand="호아빈"].active{background:#7c3aed}
+.toggle-btn[data-brand="유이"]{border-color:#0ea5e9;color:#0ea5e9}
+.toggle-btn[data-brand="유이"].active{background:#0ea5e9}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-divider{border:none;border-top:1px solid var(--border);margin:20px 0}
+
+/* ── MARKET INSIGHT CARDS ── */
+.insight-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.insight-card{border-radius:10px;padding:16px;border:1px solid var(--border);background:#fff}
+.insight-card .ic-icon{font-size:26px;margin-bottom:8px}
+.insight-card .ic-title{font-size:12px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.insight-card .ic-desc{font-size:11px;color:var(--gray);line-height:1.5}
+.insight-card .ic-num{font-size:22px;font-weight:900;color:var(--accent);margin-bottom:2px}
+
+/* ── ENTRY VENUE CARDS ── */
+.venue-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;margin-bottom:16px}
+.venue-card{border-radius:12px;padding:16px 18px;border:1px solid var(--border);background:#fff;position:relative}
+.venue-card .vc-priority{position:absolute;top:12px;right:12px;font-size:9px;font-weight:800;padding:3px 8px;border-radius:8px}
+.vc-priority.p1{background:#dcfce7;color:#16a34a}
+.vc-priority.p2{background:#dbeafe;color:#1d4ed8}
+.vc-priority.p3{background:#fef9c3;color:#92400e}
+.venue-card .vc-name{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:2px}
+.venue-card .vc-sub{font-size:11px;color:var(--gray);margin-bottom:10px}
+.venue-card .vc-row{display:flex;justify-content:space-between;font-size:11px;padding:4px 0;border-bottom:1px solid #f8fafc}
+.venue-card .vc-row:last-child{border-bottom:none}
+.venue-card .vc-key{color:var(--gray);font-weight:600}
+.venue-card .vc-v{font-weight:700;color:var(--dark)}
+
+/* ── FINANCIAL TABLE ── */
+.fin-grid{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-bottom:14px}
+.fin-row{display:grid;grid-template-columns:140px 1fr 1fr 1fr;align-items:center;gap:0;border-bottom:1px solid #f8fafc;padding:8px 12px;font-size:12px}
+.fin-row.header{background:#f8fafc;font-weight:700;font-size:11px;color:var(--gray)}
+.fin-row .fin-label{font-weight:600;color:var(--dark)}
+.fin-row .fin-val{text-align:center;font-weight:700}
+.fin-row .fin-val.pos{color:#16a34a}
+.fin-row .fin-val.neg{color:#dc2626}
+.fin-row .fin-val.neu{color:#6b7280}
+.fin-wrap{border:1px solid var(--border);border-radius:10px;overflow:hidden}
+
+/* ── PROGRESS BAR ── */
+.prog-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.prog-label{width:70px;color:var(--gray);font-weight:600;text-align:right}
+.prog-bar{flex:1;height:8px;background:#f1f5f9;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;background:var(--accent)}
+.prog-val{width:32px;font-size:11px;font-weight:700;color:var(--dark)}
+
+/* ── TREND LINE ── */
+.trend-list{list-style:none;padding:0}
+.trend-item{display:flex;align-items:flex-start;gap:10px;padding:9px 0;border-bottom:1px solid #f8fafc;font-size:12px;line-height:1.5}
+.trend-item:last-child{border-bottom:none}
+.trend-num{background:var(--accent);color:#fff;font-size:10px;font-weight:800;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.trend-body .tr-t{font-weight:700;color:var(--dark);margin-bottom:2px}
+.trend-body .tr-d{color:var(--gray)}
+
+footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-top:1px solid var(--border);margin-top:24px;background:#fff}
+
+@media(max-width:768px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chart-grid-2,.chart-grid-3,.chart-grid-21,.chart-grid-12{grid-template-columns:1fr}
+  .brand-compare-grid,.venue-grid,.fin-grid,.insight-grid{grid-template-columns:1fr}
+  .tab-content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <span class="dot"></span>
+    <span class="logo">포팟·땀땀 브랜드 전략 대시보드 | 에렉스</span>
+  </div>
+  <div class="topbar-right">
+    <span class="vn-badge">베트남 F&B</span>
+    <a href="aerex_brand_portal.html" class="back-btn">← 포털로 돌아가기</a>
+  </div>
+</div>
+
+<!-- DISCLAIMER BANNER -->
+<div class="disclaimer">
+  <span class="disclaimer-icon">⚠</span>
+  <strong>데이터 안내:</strong>&nbsp;본 자료의 일부 데이터는 업계 추정치입니다. 포팟(Pho Phat)은 신규 론칭 브랜드로 공개 데이터가 없어 업계 평균 및 유사 사례 기반 추정치를 사용하였습니다.
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <button class="tab-btn active" onclick="showTab('overview')">🍜 브랜드 개요</button>
+  <button class="tab-btn" onclick="showTab('competitor')">📊 경쟁사 분석</button>
+  <button class="tab-btn" onclick="showTab('market')">🌏 시장 분석</button>
+  <button class="tab-btn" onclick="showTab('entry')">🏬 입점 전략</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 1: 브랜드 개요
+════════════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-overview">
+
+  <!-- KPI ROW -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-label">땀땀 운영 매장 수</div>
+      <div class="kpi-val">3</div>
+      <div class="kpi-sub">강남역 본점 + 롯데 2개점</div>
+      <div class="kpi-icon">🏪</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">땀땀 대표 메뉴 가격</div>
+      <div class="kpi-val">11K~</div>
+      <div class="kpi-sub">양지 쌀국수 11,000원</div>
+      <div class="kpi-icon">🍜</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">포팟 예상 목표 매장 수 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">5+</div>
+      <div class="kpi-sub">1~2년차 목표 (업계 추정)</div>
+      <div class="kpi-icon">🚀</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">베트남 음식 시장 성장률 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">+12%</div>
+      <div class="kpi-sub">국내 에스닉 F&B YoY</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+  </div>
+
+  <!-- BRAND COMPARE CARDS -->
+  <div class="sec-title">🍜 브랜드 프로필 비교</div>
+  <div class="brand-compare-grid">
+
+    <!-- 포팟 -->
+    <div class="brand-card">
+      <div class="brand-card-hd" style="background:linear-gradient(135deg,#16a34a,#22c55e)">
+        <div class="bc-tag">🆕 신규 론칭 브랜드</div>
+        <div class="bc-name">포팟 <span style="font-size:16px;opacity:.8">Pho Phat</span></div>
+        <div class="bc-tagline">에렉스 신규 베트남 레스토랑 브랜드 — 정통 베트남 쌀국수 전문</div>
+      </div>
+      <div class="brand-card-bd">
+        <div class="alert yellow" style="margin-bottom:12px;font-size:11px">공개 데이터 없음 — 아래 지표는 업계 추정치 기반입니다.</div>
+        <div class="brand-row"><span class="br-label">브랜드 유형</span><span class="br-val">신규 론칭 <span class="estimate-tag">추정치</span></span></div>
+        <div class="brand-row"><span class="br-label">운영 주체</span><span class="br-val">에렉스 (Aerex)</span></div>
+        <div class="brand-row"><span class="br-label">예상 메뉴 단가</span><span class="br-val">10,000~16,000원 <span class="estimate-tag">추정치</span></span></div>
+        <div class="brand-row"><span class="br-label">타깃 고객</span><span class="br-val">20~35세, MZ세대 <span class="estimate-tag">추정치</span></span></div>
+        <div class="brand-row"><span class="br-label">예상 콘셉트</span><span class="br-val">정통 베트남 + 모던 감성 <span class="estimate-tag">추정치</span></span></div>
+        <div class="brand-row"><span class="br-label">목표 채널</span><span class="br-val">백화점·복합몰 입점 <span class="estimate-tag">추정치</span></span></div>
+        <div class="brand-row"><span class="br-label">예상 1호점 시기</span><span class="br-val">2026년 <span class="estimate-tag">추정치</span></span></div>
+        <div class="sw-grid">
+          <div class="sw-box str">
+            <div class="sw-title">✅ 강점 (추정)</div>
+            <div class="sw-item">• 에렉스 유통 네트워크</div>
+            <div class="sw-item">• 신규 브랜드 신선감</div>
+            <div class="sw-item">• 모던 베트남 트렌드 부합</div>
+            <div class="sw-item">• 유연한 메뉴 개발</div>
+          </div>
+          <div class="sw-box wk">
+            <div class="sw-title">⚠ 약점 (추정)</div>
+            <div class="sw-item">• 브랜드 인지도 전무</div>
+            <div class="sw-item">• 고객 신뢰 구축 필요</div>
+            <div class="sw-item">• 초기 투자 비용 高</div>
+            <div class="sw-item">• 운영 노하우 부재</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 땀땀 -->
+    <div class="brand-card">
+      <div class="brand-card-hd" style="background:linear-gradient(135deg,#064e3b,#16a34a)">
+        <div class="bc-tag">⭐ 기존 운영 브랜드</div>
+        <div class="bc-name">땀땀 <span style="font-size:16px;opacity:.8">TamTam</span></div>
+        <div class="bc-tagline">24시간 사골·소꼬리 육수 프리미엄 쌀국수 전문점</div>
+      </div>
+      <div class="brand-card-bd">
+        <div class="brand-row"><span class="br-label">설립</span><span class="br-val">2017년</span></div>
+        <div class="brand-row"><span class="br-label">대표자</span><span class="br-val">심은경 CEO</span></div>
+        <div class="brand-row"><span class="br-label">대표 메뉴</span><span class="br-val">양지쌀국수 11,000원</span></div>
+        <div class="brand-row"><span class="br-label">고가 메뉴</span><span class="br-val">곱창쌀국수 17,000원</span></div>
+        <div class="brand-row"><span class="br-label">운영 매장</span><span class="br-val">강남역 본점, 롯데 본점 B1, 롯데 동탄점</span></div>
+        <div class="brand-row"><span class="br-label">시그니처</span><span class="br-val">24시간 육수 + 무한리필</span></div>
+        <div class="brand-row"><span class="br-label">타깃 고객</span><span class="br-val">20~30대 직장인, 건강식 지향</span></div>
+        <div class="sw-grid">
+          <div class="sw-box str">
+            <div class="sw-title">✅ 강점</div>
+            <div class="sw-item">• 차별화 육수 품질</div>
+            <div class="sw-item">• 롯데 입점 신뢰도</div>
+            <div class="sw-item">• 무한리필 화제성</div>
+            <div class="sw-item">• 건강식 포지셔닝</div>
+          </div>
+          <div class="sw-box wk">
+            <div class="sw-title">⚠ 약점</div>
+            <div class="sw-item">• 매장 수 제한적</div>
+            <div class="sw-item">• 직영 중심 확장 한계</div>
+            <div class="sw-item">• 지역 편중 (수도권)</div>
+            <div class="sw-item">• 높은 식재료 원가</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 포지셔닝 차트 -->
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title"><span class="ct-dot" style="background:#16a34a"></span>가격대별 포지셔닝 맵 <span class="estimate-tag" style="font-size:9px;margin-left:4px">추정치 포함</span></div>
+      <canvas id="positioningChart" height="220"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ct-dot" style="background:#16a34a"></span>땀땀 메뉴 구성</div>
+      <canvas id="menuChart" height="220"></canvas>
+      <div style="margin-top:12px;font-size:11px;color:var(--gray)">* 대표 메뉴 기준 가격대 구성 (공개 데이터)</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 2: 경쟁사 분석
+════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-competitor">
+
+  <div class="alert yellow">업계 추정치 기반 평가 지표입니다. 실제 데이터와 차이가 있을 수 있습니다.</div>
+
+  <!-- RADAR TOGGLE BUTTONS -->
+  <div class="sec-title">📡 브랜드 역량 레이더 차트 (10점 만점)</div>
+  <div class="toggle-group" id="radarToggles">
+    <button class="toggle-btn active" data-brand="포팟" onclick="toggleBrand('포팟',this)">🟢 포팟 (신규)</button>
+    <button class="toggle-btn active" data-brand="땀땀" onclick="toggleBrand('땀땀',this)">🟢 땀땀</button>
+    <button class="toggle-btn active" data-brand="포베이" onclick="toggleBrand('포베이',this)">🟠 포베이</button>
+    <button class="toggle-btn active" data-brand="반미앤코" onclick="toggleBrand('반미앤코',this)">🟡 반미앤코</button>
+    <button class="toggle-btn active" data-brand="호아빈" onclick="toggleBrand('호아빈',this)">🟣 호아빈</button>
+    <button class="toggle-btn active" data-brand="유이" onclick="toggleBrand('유이',this)">🔵 유이</button>
+  </div>
+
+  <div class="chart-grid-2" style="margin-bottom:18px">
+    <div class="card" style="grid-column:1/3">
+      <canvas id="radarChart" height="130"></canvas>
+    </div>
+  </div>
+
+  <!-- COMPETITOR TABLE -->
+  <div class="sec-title">🏢 경쟁 브랜드 현황</div>
+  <div class="card" style="margin-bottom:18px">
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>브랜드</th>
+          <th>포지셔닝</th>
+          <th>주요 메뉴</th>
+          <th>가격대</th>
+          <th>채널 특성</th>
+          <th>강점</th>
+          <th>위협도</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="dot-green"><strong>땀땀</strong></td>
+          <td>프리미엄 쌀국수</td>
+          <td>24시간 육수 쌀국수, 무한리필</td>
+          <td>11,000~17,000원</td>
+          <td>백화점 직영, 강남 상권</td>
+          <td>품질 차별화, 롯데 입점</td>
+          <td><span class="pill green">자사 브랜드</span></td>
+        </tr>
+        <tr>
+          <td class="dot-orange"><strong>포베이</strong></td>
+          <td>캐주얼 다점포</td>
+          <td>쌀국수, 반미, 볶음밥</td>
+          <td>9,000~14,000원</td>
+          <td>가맹 중심, 전국 유통</td>
+          <td>접근성, 가성비, 점포 수</td>
+          <td><span class="pill red">高위협</span></td>
+        </tr>
+        <tr>
+          <td class="dot-yellow"><strong>반미앤코</strong></td>
+          <td>반미 전문</td>
+          <td>반미 샌드위치, 분짜</td>
+          <td>8,000~13,000원</td>
+          <td>스트리트 푸드, MZ 카페형</td>
+          <td>가성비, SNS 감성</td>
+          <td><span class="pill yellow">중위협</span></td>
+        </tr>
+        <tr>
+          <td class="dot-purple"><strong>호아빈</strong></td>
+          <td>정통 베트남</td>
+          <td>쌀국수, 분짜, 반쎄오</td>
+          <td>10,000~16,000원</td>
+          <td>단독 로드샵, 정통 이미지</td>
+          <td>정통성, 메뉴 다양성</td>
+          <td><span class="pill orange">중고위협</span></td>
+        </tr>
+        <tr>
+          <td class="dot-sky"><strong>유이</strong></td>
+          <td>트렌디 베트남</td>
+          <td>쌀국수, 반미, 스프링롤</td>
+          <td>10,000~15,000원</td>
+          <td>SNS 마케팅, 복합몰 입점</td>
+          <td>비주얼, 인스타 화제성</td>
+          <td><span class="pill orange">중고위협</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- STRENGTHS COMPARISON -->
+  <div class="sec-title">🎯 6대 평가 지표 브랜드별 비교</div>
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title">맛 점수 비교 (10점 만점)</div>
+      <canvas id="barTaste" height="180"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">가성비 점수 비교 (10점 만점)</div>
+      <canvas id="barVfm" height="180"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 3: 시장 분석
+════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-market">
+
+  <div class="alert green" style="margin-bottom:16px">국내 베트남 음식 시장은 코로나 이후 에스닉 푸드 붐과 함께 빠르게 성장 중이며, 쌀국수·반미·분짜 중심의 건강 트렌드가 시장을 견인하고 있습니다.</div>
+
+  <!-- MARKET KPI -->
+  <div class="kpi-grid" style="margin-bottom:18px">
+    <div class="kpi-card green">
+      <div class="kpi-label">국내 에스닉 F&B 시장 규모 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">1.2조</div>
+      <div class="kpi-sub">2025년 기준 (원화 추정)</div>
+      <div class="kpi-icon">💰</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">베트남 음식 점포 수 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">3,500+</div>
+      <div class="kpi-sub">전국 기준 (2025년 추정)</div>
+      <div class="kpi-icon">🏪</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">YoY 성장률 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">+12%</div>
+      <div class="kpi-sub">에스닉 카테고리 평균</div>
+      <div class="kpi-icon">📈</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">쌀국수 브랜드 평균 객단가 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">13,500</div>
+      <div class="kpi-sub">원 / 1인 기준</div>
+      <div class="kpi-icon">🍜</div>
+    </div>
+  </div>
+
+  <!-- MARKET TREND CHART -->
+  <div class="chart-grid-21" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title"><span class="ct-dot" style="background:#16a34a"></span>베트남 음식 시장 성장 추이 <span class="estimate-tag">추정치</span></div>
+      <canvas id="marketTrendChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="ct-dot" style="background:#16a34a"></span>에스닉 카테고리별 점유율 <span class="estimate-tag">추정치</span></div>
+      <canvas id="ethnicShareChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <!-- INSIGHT CARDS -->
+  <div class="sec-title">💡 주요 시장 인사이트</div>
+  <div class="insight-grid">
+    <div class="insight-card">
+      <div class="ic-icon">🌱</div>
+      <div class="ic-num">+12%</div>
+      <div class="ic-title">건강식 트렌드 수혜</div>
+      <div class="ic-desc">쌀국수·분짜는 저칼로리·고단백 이미지로 건강 지향 소비자에게 강세. 직장인 점심 수요 꾸준한 증가세.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-icon">📱</div>
+      <div class="ic-num">2위</div>
+      <div class="ic-title">SNS 에스닉 카테고리</div>
+      <div class="ic-desc">베트남 음식은 인스타그램·틱톡 기준 에스닉 F&B 중 일식 다음으로 콘텐츠 생성량 2위. 비주얼 마케팅 효과 높음.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-icon">🏬</div>
+      <div class="ic-num">28%</div>
+      <div class="ic-title">백화점 F&B 성장</div>
+      <div class="ic-desc">2023~2025년 백화점 식품관 F&B 매출 연평균 28% 성장. 프리미엄 에스닉 브랜드에 유리한 환경.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-icon">👥</div>
+      <div class="ic-num">62%</div>
+      <div class="ic-title">MZ세대 주력 소비층</div>
+      <div class="ic-desc">국내 베트남 음식 소비자의 62%가 20~35세. SNS 유입, 가성비+경험 가치 동시 추구.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-icon">⏱</div>
+      <div class="ic-num">11분</div>
+      <div class="ic-title">직장인 평균 식사 시간</div>
+      <div class="ic-desc">직장인 점심 평균 식사시간 단축 추세. 빠른 서비스와 간편한 한 그릇 메뉴에 대한 수요 증가.</div>
+    </div>
+    <div class="insight-card">
+      <div class="ic-icon">🌏</div>
+      <div class="ic-num">4.5배</div>
+      <div class="ic-title">베트남 여행객 급증</div>
+      <div class="ic-desc">코로나 이후 베트남 방문 한국인 수 급증, 현지 식경험 후 국내 정통 베트남 음식 수요로 이어지는 선순환.</div>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- CONSUMER SEGMENT -->
+  <div class="sec-title">🎯 주요 소비자 세그먼트</div>
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title">연령대별 방문 비중 <span class="estimate-tag">추정치</span></div>
+      <canvas id="ageSegChart" height="200"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">방문 시간대 분포 <span class="estimate-tag">추정치</span></div>
+      <canvas id="timeSegChart" height="200"></canvas>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- KEY TRENDS LIST -->
+  <div class="sec-title">📋 시장 주요 트렌드 7선</div>
+  <div class="card">
+    <ul class="trend-list">
+      <li class="trend-item">
+        <span class="trend-num">1</span>
+        <div class="trend-body">
+          <div class="tr-t">프리미엄 육수 차별화 경쟁 심화</div>
+          <div class="tr-d">단순 저가 쌀국수에서 벗어나 사골·소뼈 등 고급 육수를 강조하는 프리미엄 포지셔닝 전략이 시장 주도. 땀땀의 24시간 육수가 대표 사례.</div>
+        </div>
+      </li>
+      <li class="trend-item">
+        <span class="trend-num">2</span>
+        <div class="trend-body">
+          <div class="tr-t">백화점·복합몰 입점 경쟁 가속</div>
+          <div class="tr-d">유동인구와 신뢰도를 동시에 확보할 수 있는 백화점 식품관 및 복합몰 입점 경쟁이 치열. 진입 장벽이 높지만 성공 시 안정적 매출 확보.</div>
+        </div>
+      </li>
+      <li class="trend-item">
+        <span class="trend-num">3</span>
+        <div class="trend-body">
+          <div class="tr-t">반미·분짜 등 메뉴 다각화 트렌드</div>
+          <div class="tr-d">쌀국수 단일 메뉴에서 반미, 분짜, 분보후에, 고이꾸온 등으로 메뉴 포트폴리오 확장 추세. 재방문율 제고 및 객단가 상승 효과.</div>
+        </div>
+      </li>
+      <li class="trend-item">
+        <span class="trend-num">4</span>
+        <div class="trend-body">
+          <div class="tr-t">SNS 비주얼 마케팅 필수화</div>
+          <div class="tr-d">인스타그램·틱톡 포토존, 예쁜 플레이팅, 비주얼 음식이 소비자 유입 핵심 채널로 부상. 유이(Yuiy) 등 트렌디 브랜드가 주도.</div>
+        </div>
+      </li>
+      <li class="trend-item">
+        <span class="trend-num">5</span>
+        <div class="trend-body">
+          <div class="tr-t">런치 세트·직장인 특화 전략</div>
+          <div class="tr-d">오피스 밀집지역 인근 매장의 점심 매출 비중이 60~70% 수준. 강남·여의도·판교 상권 직장인 런치 수요가 안정적 매출 기반.</div>
+        </div>
+      </li>
+      <li class="trend-item">
+        <span class="trend-num">6</span>
+        <div class="trend-body">
+          <div class="tr-t">할랄·비건 옵션 확대 요구 증가</div>
+          <div class="tr-d">다양한 라이프스타일을 수용하는 메뉴 다양화 요구 증가. 글루텐프리·비건 옵션 제공 여부가 브랜드 호감도에 영향.</div>
+        </div>
+      </li>
+      <li class="trend-item">
+        <span class="trend-num">7</span>
+        <div class="trend-body">
+          <div class="tr-t">HMR·밀키트 시장으로 확장</div>
+          <div class="tr-d">성공 브랜드들이 레스토랑 경험을 가정에서 재현할 수 있는 HMR(가정간편식)·밀키트 라인 출시로 수익 다각화 추구.</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════════
+     TAB 4: 입점 전략
+════════════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-entry">
+
+  <div class="alert blue" style="margin-bottom:16px">에렉스 유통 네트워크 및 기존 땀땀 입점 현황을 기반으로 최적 신규 입점 후보지를 분석하였습니다. 포팟 1호점 및 땀땀 확장 전략을 포함합니다.</div>
+
+  <!-- ENTRY KPI -->
+  <div class="kpi-grid">
+    <div class="kpi-card green">
+      <div class="kpi-label">포팟 1호점 목표 매출 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">2.4억</div>
+      <div class="kpi-sub">월 / 백화점 기준</div>
+      <div class="kpi-icon">💵</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">손익분기 예상 기간 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">14개월</div>
+      <div class="kpi-sub">초기 투자 기준</div>
+      <div class="kpi-icon">📅</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-label">목표 일평균 객수 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">180명</div>
+      <div class="kpi-sub">50~60석 기준</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">예상 초기 투자비 <span class="estimate-tag">추정치</span></div>
+      <div class="kpi-val">3.5억</div>
+      <div class="kpi-sub">인테리어+초도비용 포함</div>
+      <div class="kpi-icon">🏗</div>
+    </div>
+  </div>
+
+  <!-- VENUE RECOMMENDATION CARDS -->
+  <div class="sec-title">🏬 입점 후보지 추천</div>
+  <div class="venue-grid">
+    <div class="venue-card">
+      <span class="vc-priority p1">P1 최우선</span>
+      <div class="vc-name">롯데백화점 잠실점</div>
+      <div class="vc-sub">잠실 복합쇼핑몰 / 食品관 B1~B2층</div>
+      <div class="vc-row"><span class="vc-key">추천 브랜드</span><span class="vc-v">포팟 1호점</span></div>
+      <div class="vc-row"><span class="vc-key">일일 유동인구</span><span class="vc-v">약 100,000명+</span></div>
+      <div class="vc-row"><span class="vc-key">핵심 이유</span><span class="vc-v">땀땀 롯데 파트너십 활용, 신규 브랜드 입점 유리</span></div>
+      <div class="vc-row"><span class="vc-key">경쟁 환경</span><span class="vc-v">베트남 직접 경쟁 없음 (추정)</span></div>
+      <div class="vc-row"><span class="vc-key">예상 월매출</span><span class="vc-v">2.5~3.0억원 <span class="estimate-tag">추정치</span></span></div>
+    </div>
+
+    <div class="venue-card">
+      <span class="vc-priority p1">P1 최우선</span>
+      <div class="vc-name">스타필드 수원</div>
+      <div class="vc-sub">수원 신도시 복합몰 / 레스토랑 스트리트</div>
+      <div class="vc-row"><span class="vc-key">추천 브랜드</span><span class="vc-v">포팟 or 땀땀</span></div>
+      <div class="vc-row"><span class="vc-key">일일 유동인구</span><span class="vc-v">약 80,000명</span></div>
+      <div class="vc-row"><span class="vc-key">핵심 이유</span><span class="vc-v">수원·화성·오산 배후 인구 대형 상권, MZ 가족 단위 수요</span></div>
+      <div class="vc-row"><span class="vc-key">경쟁 환경</span><span class="vc-v">베트남 카테고리 공백 (추정)</span></div>
+      <div class="vc-row"><span class="vc-key">예상 월매출</span><span class="vc-v">2.0~2.5억원 <span class="estimate-tag">추정치</span></span></div>
+    </div>
+
+    <div class="venue-card">
+      <span class="vc-priority p2">P2 우선</span>
+      <div class="vc-name">현대백화점 판교점</div>
+      <div class="vc-sub">판교 테크노밸리 / 식품관 B1</div>
+      <div class="vc-row"><span class="vc-key">추천 브랜드</span><span class="vc-v">땀땀 신규 입점</span></div>
+      <div class="vc-row"><span class="vc-key">일일 유동인구</span><span class="vc-v">약 60,000명</span></div>
+      <div class="vc-row"><span class="vc-key">핵심 이유</span><span class="vc-v">IT 직장인 밀집, 고소득 직장인 프리미엄 수요 높음</span></div>
+      <div class="vc-row"><span class="vc-key">경쟁 환경</span><span class="vc-v">포베이 입점 여부 확인 필요</span></div>
+      <div class="vc-row"><span class="vc-key">예상 월매출</span><span class="vc-v">1.8~2.2억원 <span class="estimate-tag">추정치</span></span></div>
+    </div>
+
+    <div class="venue-card">
+      <span class="vc-priority p2">P2 우선</span>
+      <div class="vc-name">롯데백화점 부산본점</div>
+      <div class="vc-sub">부산 광복동 / 食品관</div>
+      <div class="vc-row"><span class="vc-key">추천 브랜드</span><span class="vc-v">땀땀 부산 1호점</span></div>
+      <div class="vc-row"><span class="vc-key">일일 유동인구</span><span class="vc-v">약 70,000명</span></div>
+      <div class="vc-row"><span class="vc-key">핵심 이유</span><span class="vc-v">롯데 기존 파트너십 활용, 수도권 편중 해소 전략</span></div>
+      <div class="vc-row"><span class="vc-key">경쟁 환경</span><span class="vc-v">부산 베트남 프리미엄 공백 (추정)</span></div>
+      <div class="vc-row"><span class="vc-key">예상 월매출</span><span class="vc-v">1.6~2.0억원 <span class="estimate-tag">추정치</span></span></div>
+    </div>
+
+    <div class="venue-card">
+      <span class="vc-priority p3">P3 검토</span>
+      <div class="vc-name">IFC몰 여의도</div>
+      <div class="vc-sub">여의도 금융가 / 식당가 B층</div>
+      <div class="vc-row"><span class="vc-key">추천 브랜드</span><span class="vc-v">포팟 (소형 포맷)</span></div>
+      <div class="vc-row"><span class="vc-key">일일 유동인구</span><span class="vc-v">약 50,000명</span></div>
+      <div class="vc-row"><span class="vc-key">핵심 이유</span><span class="vc-v">금융권 직장인 점심 수요, 프리미엄 감도 높음</span></div>
+      <div class="vc-row"><span class="vc-key">경쟁 환경</span><span class="vc-v">경쟁 밀도 높아 입지 분석 선행 필요</span></div>
+      <div class="vc-row"><span class="vc-key">예상 월매출</span><span class="vc-v">1.4~1.8억원 <span class="estimate-tag">추정치</span></span></div>
+    </div>
+
+    <div class="venue-card">
+      <span class="vc-priority p3">P3 검토</span>
+      <div class="vc-name">더현대 서울</div>
+      <div class="vc-sub">영등포 / 식음 플로어 B2</div>
+      <div class="vc-row"><span class="vc-key">추천 브랜드</span><span class="vc-v">포팟 (트렌디 포맷)</span></div>
+      <div class="vc-row"><span class="vc-key">일일 유동인구</span><span class="vc-v">약 90,000명+</span></div>
+      <div class="vc-row"><span class="vc-key">핵심 이유</span><span class="vc-v">MZ 핵심 집객지, 감성 브랜드에 최적. 입점 경쟁 치열</span></div>
+      <div class="vc-row"><span class="vc-key">경쟁 환경</span><span class="vc-v">높은 입점 경쟁, 임대료 高</span></div>
+      <div class="vc-row"><span class="vc-key">예상 월매출</span><span class="vc-v">2.2~2.8억원 <span class="estimate-tag">추정치</span></span></div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL SIMULATION -->
+  <div class="sec-title">💰 재무 시뮬레이션 (포팟 1호점 기준) <span class="estimate-tag">전체 추정치</span></div>
+  <div class="fin-grid">
+    <div>
+      <div class="fin-wrap">
+        <div class="fin-row header">
+          <div>항목</div>
+          <div style="text-align:center">보수적</div>
+          <div style="text-align:center">기본</div>
+          <div style="text-align:center">낙관적</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">일평균 객수</div>
+          <div class="fin-val neu">140명</div>
+          <div class="fin-val neu">180명</div>
+          <div class="fin-val neu">230명</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">평균 객단가</div>
+          <div class="fin-val neu">13,000원</div>
+          <div class="fin-val neu">13,500원</div>
+          <div class="fin-val neu">14,000원</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">월 매출</div>
+          <div class="fin-val neu">1.82억</div>
+          <div class="fin-val pos">2.43억</div>
+          <div class="fin-val pos">3.22억</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">식재료비 (33%)</div>
+          <div class="fin-val neg">-6,000만</div>
+          <div class="fin-val neg">-8,000만</div>
+          <div class="fin-val neg">-1.06억</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">임대료 (15%)</div>
+          <div class="fin-val neg">-2,730만</div>
+          <div class="fin-val neg">-3,645만</div>
+          <div class="fin-val neg">-4,830만</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">인건비 (25%)</div>
+          <div class="fin-val neg">-4,550만</div>
+          <div class="fin-val neg">-6,075만</div>
+          <div class="fin-val neg">-8,050만</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">영업이익</div>
+          <div class="fin-val neg">-1,280만</div>
+          <div class="fin-val pos">+1,080만</div>
+          <div class="fin-val pos">+3,740만</div>
+        </div>
+        <div class="fin-row">
+          <div class="fin-label">영업이익률</div>
+          <div class="fin-val neg">-7%</div>
+          <div class="fin-val pos">+4.4%</div>
+          <div class="fin-val pos">+11.6%</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="card" style="height:100%">
+        <div class="card-title">월별 손익 추이 (기본 시나리오) <span class="estimate-tag">추정치</span></div>
+        <canvas id="finChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- ENTRY STRATEGY ROADMAP -->
+  <div class="sec-title">🗺 입점 로드맵 2026~2027</div>
+  <div class="card">
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>시기</th>
+          <th>브랜드</th>
+          <th>후보지</th>
+          <th>액션</th>
+          <th>목표</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><span class="pill green">2026 Q2</span></td>
+          <td>포팟</td>
+          <td>롯데백화점 잠실 (검토)</td>
+          <td>MD 협의, 입점 제안서 제출</td>
+          <td>신규 브랜드 파일럿 런칭</td>
+        </tr>
+        <tr>
+          <td><span class="pill green">2026 Q3</span></td>
+          <td>포팟</td>
+          <td>스타필드 수원 (검토)</td>
+          <td>브랜드 인지도 형성 후 2호점 검토</td>
+          <td>수도권 거점 확보</td>
+        </tr>
+        <tr>
+          <td><span class="pill blue">2026 Q4</span></td>
+          <td>땀땀</td>
+          <td>현대백화점 판교</td>
+          <td>롯데 파트너십 기반 현대 채널 확장</td>
+          <td>판교 직장인 시장 공략</td>
+        </tr>
+        <tr>
+          <td><span class="pill blue">2026 Q4</span></td>
+          <td>땀땀</td>
+          <td>롯데 부산본점</td>
+          <td>기존 롯데 채널 지방 확장</td>
+          <td>지역 분산, 수도권 편중 해소</td>
+        </tr>
+        <tr>
+          <td><span class="pill orange">2027 Q1</span></td>
+          <td>포팟</td>
+          <td>IFC몰 여의도 (검토)</td>
+          <td>인지도 확보 후 금융가 진출</td>
+          <td>프리미엄 포지셔닝 공고화</td>
+        </tr>
+        <tr>
+          <td><span class="pill orange">2027 Q2</span></td>
+          <td>포팟</td>
+          <td>더현대 서울 (검토)</td>
+          <td>MZ 핵심 성지 입점 도전</td>
+          <td>브랜드 인지도 퀀텀점프</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  에렉스 브랜드전략팀 · 2026 · CONFIDENTIAL<br>
+  <span style="font-size:10px;margin-top:4px;display:block">본 자료의 일부 데이터는 업계 추정치입니다. 포팟은 신규 브랜드로 공개 데이터를 기반으로 하지 않습니다.</span>
+</footer>
+
+<script>
+// ── TAB SWITCHER ──────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── CHART DEFAULTS ────────────────────────────────────
+Chart.defaults.font.family = "'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif";
+Chart.defaults.font.size = 11;
+Chart.defaults.plugins.legend.labels.boxWidth = 12;
+
+// ── COLOR PALETTE ─────────────────────────────────────
+const COLORS = {
+  포팟:    '#16a34a',
+  땀땀:    '#064e3b',
+  포베이:  '#ea580c',
+  반미앤코:'#ca8a04',
+  호아빈:  '#7c3aed',
+  유이:    '#0ea5e9'
+};
+
+// ── RADAR DATA ────────────────────────────────────────
+const RADAR_LABELS = ['맛', '서비스', '분위기', '가성비', '위생', '접근성'];
+const RADAR_DATA = {
+  포팟:    [6.5, 7.0, 7.5, 7.5, 7.0, 7.5],
+  땀땀:    [8.0, 7.5, 7.5, 8.0, 8.0, 8.0],
+  포베이:  [7.5, 7.0, 7.0, 8.5, 7.5, 8.5],
+  반미앤코:[7.0, 7.0, 6.5, 9.0, 7.5, 8.0],
+  호아빈:  [7.5, 7.0, 7.0, 8.0, 7.5, 7.5],
+  유이:    [7.0, 7.5, 8.5, 7.5, 7.5, 8.0]
+};
+
+// active brands state
+const activeBrands = { 포팟: true, 땀땀: true, 포베이: true, 반미앤코: true, 호아빈: true, 유이: true };
+
+// ── RADAR CHART ───────────────────────────────────────
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+const radarChart = new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: RADAR_LABELS,
+    datasets: Object.entries(RADAR_DATA).map(([name, data]) => ({
+      label: name,
+      data: data,
+      borderColor: COLORS[name],
+      backgroundColor: 'transparent',
+      borderWidth: 2,
+      pointBackgroundColor: COLORS[name],
+      pointRadius: 4,
+      pointHoverRadius: 6
+    }))
+  },
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 5,
+        max: 10,
+        ticks: { stepSize: 1, font: { size: 10 }, color: '#9ca3af', backdropColor: 'transparent' },
+        grid: { color: '#e2e8f0' },
+        angleLines: { color: '#e2e8f0' },
+        pointLabels: { font: { size: 12, weight: '700' }, color: '#374151' }
+      }
+    },
+    plugins: {
+      legend: { position: 'top', labels: { padding: 16, font: { size: 12 } } }
+    }
+  }
+});
+
+function toggleBrand(brand, btn) {
+  activeBrands[brand] = !activeBrands[brand];
+  btn.classList.toggle('active', activeBrands[brand]);
+  radarChart.data.datasets.forEach(ds => {
+    if (ds.label === brand) {
+      ds.hidden = !activeBrands[brand];
+    }
+  });
+  radarChart.update();
+}
+
+// ── POSITIONING SCATTER ───────────────────────────────
+const posCtx = document.getElementById('positioningChart').getContext('2d');
+new Chart(posCtx, {
+  type: 'bubble',
+  data: {
+    datasets: [
+      { label: '포팟(추정)', data: [{ x: 7.0, y: 6.0, r: 9 }], backgroundColor: '#16a34a80', borderColor: '#16a34a', borderWidth: 2 },
+      { label: '땀땀', data: [{ x: 8.5, y: 7.5, r: 10 }], backgroundColor: '#064e3b80', borderColor: '#064e3b', borderWidth: 2 },
+      { label: '포베이', data: [{ x: 6.0, y: 8.5, r: 14 }], backgroundColor: '#ea580c80', borderColor: '#ea580c', borderWidth: 2 },
+      { label: '반미앤코', data: [{ x: 5.5, y: 9.0, r: 11 }], backgroundColor: '#ca8a0480', borderColor: '#ca8a04', borderWidth: 2 },
+      { label: '호아빈', data: [{ x: 7.0, y: 7.5, r: 9 }], backgroundColor: '#7c3aed80', borderColor: '#7c3aed', borderWidth: 2 },
+      { label: '유이', data: [{ x: 7.5, y: 7.0, r: 8 }], backgroundColor: '#0ea5e980', borderColor: '#0ea5e9', borderWidth: 2 }
+    ]
+  },
+  options: {
+    responsive: true,
+    scales: {
+      x: { min: 4, max: 10, title: { display: true, text: '품질/프리미엄 →', font: { size: 10 } }, ticks: { font: { size: 10 } } },
+      y: { min: 4, max: 10, title: { display: true, text: '가성비 →', font: { size: 10 } }, ticks: { font: { size: 10 } } }
+    },
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 10 }, padding: 8 } },
+      tooltip: {
+        callbacks: {
+          label: ctx => `${ctx.dataset.label}: 품질 ${ctx.parsed.x} / 가성비 ${ctx.parsed.y}`
+        }
+      }
+    }
+  }
+});
+
+// ── MENU CHART ────────────────────────────────────────
+const menuCtx = document.getElementById('menuChart').getContext('2d');
+new Chart(menuCtx, {
+  type: 'bar',
+  data: {
+    labels: ['양지쌀국수', '소불고기쌀국수', 'BBQ돼지덮밥', '곱창쌀국수'],
+    datasets: [{
+      label: '가격 (원)',
+      data: [11000, 14000, 14000, 17000],
+      backgroundColor: ['#dcfce7','#bbf7d0','#86efac','#4ade80'],
+      borderColor: '#16a34a',
+      borderWidth: 1,
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: {
+        beginAtZero: false, min: 9000,
+        ticks: { callback: v => v.toLocaleString() + '원', font: { size: 10 } }
+      },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── BAR: TASTE ────────────────────────────────────────
+const tasteCtx = document.getElementById('barTaste').getContext('2d');
+new Chart(tasteCtx, {
+  type: 'bar',
+  data: {
+    labels: ['포팟(추정)', '땀땀', '포베이', '반미앤코', '호아빈', '유이'],
+    datasets: [{
+      label: '맛 점수',
+      data: [6.5, 8.0, 7.5, 7.0, 7.5, 7.0],
+      backgroundColor: ['#16a34a','#064e3b','#ea580c','#ca8a04','#7c3aed','#0ea5e9'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 5, max: 10, ticks: { font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── BAR: VALUE FOR MONEY ──────────────────────────────
+const vfmCtx = document.getElementById('barVfm').getContext('2d');
+new Chart(vfmCtx, {
+  type: 'bar',
+  data: {
+    labels: ['포팟(추정)', '땀땀', '포베이', '반미앤코', '호아빈', '유이'],
+    datasets: [{
+      label: '가성비 점수',
+      data: [7.5, 8.0, 8.5, 9.0, 8.0, 7.5],
+      backgroundColor: ['#16a34a','#064e3b','#ea580c','#ca8a04','#7c3aed','#0ea5e9'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 5, max: 10, ticks: { font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── MARKET TREND LINE ─────────────────────────────────
+const mktCtx = document.getElementById('marketTrendChart').getContext('2d');
+new Chart(mktCtx, {
+  type: 'line',
+  data: {
+    labels: ['2020', '2021', '2022', '2023', '2024', '2025E', '2026E'],
+    datasets: [
+      {
+        label: '베트남 음식 시장(억)',
+        data: [2800, 2950, 3400, 4100, 4900, 5600, 6300],
+        borderColor: '#16a34a', backgroundColor: '#dcfce780', fill: true, tension: 0.4, borderWidth: 2, pointRadius: 4
+      },
+      {
+        label: '에스닉 F&B 전체(억)',
+        data: [7000, 7200, 8100, 9500, 10800, 12000, 13400],
+        borderColor: '#1d4ed8', backgroundColor: 'transparent', tension: 0.4, borderWidth: 2, borderDash: [5,3], pointRadius: 3
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+    scales: {
+      y: { ticks: { callback: v => v.toLocaleString(), font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── ETHNIC SHARE PIE ──────────────────────────────────
+const ethnicCtx = document.getElementById('ethnicShareChart').getContext('2d');
+new Chart(ethnicCtx, {
+  type: 'doughnut',
+  data: {
+    labels: ['베트남', '일식', '중식', '태국', '멕시칸', '기타'],
+    datasets: [{
+      data: [22, 38, 21, 10, 5, 4],
+      backgroundColor: ['#16a34a','#1d4ed8','#ea580c','#ca8a04','#7c3aed','#9ca3af'],
+      borderWidth: 2, borderColor: '#fff'
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position: 'right', labels: { font: { size: 11 }, padding: 10 } },
+      tooltip: { callbacks: { label: ctx => `${ctx.label}: ${ctx.parsed}%` } }
+    }
+  }
+});
+
+// ── AGE SEGMENT ───────────────────────────────────────
+const ageCtx = document.getElementById('ageSegChart').getContext('2d');
+new Chart(ageCtx, {
+  type: 'bar',
+  data: {
+    labels: ['10대', '20대', '30대', '40대', '50대+'],
+    datasets: [{
+      label: '방문 비중 (%)',
+      data: [8, 35, 27, 20, 10],
+      backgroundColor: ['#86efac','#16a34a','#15803d','#166534','#14532d'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { ticks: { callback: v => v + '%', font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── TIME SEGMENT ──────────────────────────────────────
+const timeCtx = document.getElementById('timeSegChart').getContext('2d');
+new Chart(timeCtx, {
+  type: 'bar',
+  data: {
+    labels: ['08-10시', '10-12시', '12-14시', '14-17시', '17-20시', '20-22시'],
+    datasets: [{
+      label: '방문 비중 (%)',
+      data: [5, 12, 42, 10, 23, 8],
+      backgroundColor: ['#bbf7d0','#86efac','#16a34a','#86efac','#22c55e','#4ade80'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { ticks: { callback: v => v + '%', font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── FINANCIAL PROJECTION ──────────────────────────────
+const finCtx = document.getElementById('finChart').getContext('2d');
+new Chart(finCtx, {
+  type: 'bar',
+  data: {
+    labels: ['M1', 'M2', 'M3', 'M4', 'M5', 'M6', 'M7', 'M8', 'M9', 'M10', 'M11', 'M12'],
+    datasets: [
+      {
+        label: '월 매출(만원)',
+        data: [8500, 11000, 14500, 17000, 19500, 21000, 22000, 23000, 23500, 24000, 24300, 24500],
+        backgroundColor: '#dcfce7', borderColor: '#16a34a', borderWidth: 1, borderRadius: 4, yAxisID: 'y'
+      },
+      {
+        label: '영업이익(만원)',
+        data: [-3200, -1800, -500, 400, 700, 900, 950, 1000, 1020, 1050, 1070, 1080],
+        type: 'line',
+        borderColor: '#dc2626', backgroundColor: 'transparent', borderWidth: 2, pointRadius: 3, yAxisID: 'y'
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top', labels: { font: { size: 11 } } } },
+    scales: {
+      y: { ticks: { callback: v => v.toLocaleString() + '만', font: { size: 10 } } },
+      x: { ticks: { font: { size: 10 } } }
+    }
+  }
+});
+</script>
+</body>
+</html>

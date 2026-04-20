@@ -1,0 +1,960 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>마쯔가제 브랜드 전략 대시보드 | 에렉스</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --gold:#ca8a04;--gold-light:#fef9c3;--gold-mid:#fde047;--gold-dark:#92400e;
+  --dark:#0f172a;--red:#dc2626;--green:#16a34a;
+  --orange:#ea580c;--purple:#7c3aed;--blue:#0ea5e9;--amber:#ca8a04;
+  --gray:#6b7280;--bg:#f8f6f0;--card:#fff;--border:#e5e1d5
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:#1f2937;font-size:13px}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.topbar-brand{display:flex;align-items:center;gap:14px}
+.topbar-logo{font-size:19px;font-weight:900;letter-spacing:-0.5px;color:#fff}
+.topbar-logo span{color:var(--gold-mid)}
+.topbar-sub{font-size:10px;opacity:.55;margin-top:2px}
+.topbar-right{display:flex;align-items:center;gap:12px;font-size:12px}
+.back-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.2)}
+.gold-badge{background:var(--gold);color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+
+/* ── BRAND NAME NOTE ── */
+.brand-note{background:linear-gradient(135deg,#fef9c3,#fef3c7);border:1px solid #fde047;border-left:4px solid var(--gold);border-radius:8px;padding:10px 16px;font-size:12px;color:#78350f;display:flex;align-items:center;gap:8px;margin-bottom:16px}
+
+/* ── DISCLAIMER ── */
+.disclaimer{background:#1e293b;color:#94a3b8;font-size:11px;padding:8px 24px;text-align:center;line-height:1.5}
+
+/* ── TAB NAV ── */
+.tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:52px;z-index:99;overflow-x:auto}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--gold);background:#fffbeb}
+.tab-btn.active{color:var(--gold-dark);border-bottom-color:var(--gold)}
+.tab-content{display:none;padding:20px 24px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi-grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-bottom:18px}
+.kpi-card{border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi-card .kpi-label{font-size:11px;font-weight:600;opacity:.8;margin-bottom:6px}
+.kpi-card .kpi-val{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.kpi-card .kpi-sub{font-size:11px;opacity:.75}
+.kpi-card .kpi-icon{position:absolute;right:14px;top:14px;font-size:28px;opacity:.2}
+.kpi-card.gold{background:linear-gradient(135deg,#92400e,#ca8a04);color:#fff}
+.kpi-card.dark{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff}
+.kpi-card.green{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.kpi-card.red{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff}
+.kpi-card.purple{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.kpi-card.blue{background:linear-gradient(135deg,#0369a1,#0ea5e9);color:#fff}
+
+/* ── CHART GRIDS ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-grid-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.chart-grid-12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+
+/* ── PILL / BADGE ── */
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+.pill.gold{background:#fef9c3;color:#92400e}
+.pill.red{background:#fee2e2;color:#dc2626}
+.pill.green{background:#dcfce7;color:#16a34a}
+.pill.blue{background:#e0f2fe;color:#0369a1}
+.pill.purple{background:#ede9fe;color:#7c3aed}
+.pill.gray{background:#f3f4f6;color:#374151}
+.pill.orange{background:#ffedd5;color:#ea580c}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13px;line-height:1.6}
+.alert.gold{background:#fffbeb;border:1px solid #fde047;border-left:4px solid var(--gold)}
+.alert.red{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626}
+.alert.blue{background:#f0f9ff;border:1px solid #7dd3fc;border-left:4px solid #0ea5e9}
+.alert.green{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a}
+.alert.purple{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed}
+
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{padding:9px 12px;background:#f8f6f0;font-weight:700;text-align:left;border-bottom:2px solid var(--border)}
+.dt td{padding:8px 12px;border-bottom:1px solid #f5f3ee;vertical-align:top}
+.dt tr:hover td{background:#fefce8}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* ── STRATEGY STEPS ── */
+.strategy-steps{display:flex;flex-direction:column;gap:10px}
+.strategy-step{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#fffbeb;border-radius:8px;border:1px solid #fde047}
+.step-num-circle{background:var(--gold);color:#fff;font-size:11px;font-weight:800;width:24px;height:24px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-content .st{font-size:13px;font-weight:700;margin-bottom:3px;color:var(--dark)}
+.step-content .sd{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* ── TOGGLE BUTTONS ── */
+.toggle-group{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:14px}
+.toggle-btn{padding:5px 14px;border-radius:20px;border:2px solid transparent;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;opacity:.45}
+.toggle-btn.active{opacity:1}
+
+/* ── VENUE CARDS ── */
+.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.venue-card{border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.venue-card-hd{padding:14px 16px;color:#fff}
+.venue-card-bd{padding:14px 16px;background:#fff}
+.venue-card .vt{font-size:14px;font-weight:800;margin-bottom:2px}
+.venue-card .vs{font-size:11px;opacity:.8}
+.venue-card .vl{font-size:12px;color:var(--gray);margin-bottom:6px}
+.venue-card .vv{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:8px}
+.priority-badge{display:inline-block;font-size:10px;font-weight:700;padding:3px 10px;border-radius:10px}
+.priority-badge.high{background:#fef9c3;color:#92400e;border:1px solid #fde047}
+.priority-badge.med{background:#dcfce7;color:#16a34a;border:1px solid #86efac}
+.priority-badge.low{background:#f3f4f6;color:#374151;border:1px solid #d1d5db}
+
+/* ── SWOT ── */
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--border);border-radius:12px;overflow:hidden}
+.swot-cell{padding:18px 20px}
+.swot-cell.s{background:linear-gradient(135deg,#fffbeb,#fef9c3)}
+.swot-cell.w{background:linear-gradient(135deg,#fff1f2,#fee2e2)}
+.swot-cell.o{background:linear-gradient(135deg,#f0fdf4,#dcfce7)}
+.swot-cell.t{background:linear-gradient(135deg,#f5f3ff,#ede9fe)}
+.swot-label{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:1px;margin-bottom:8px;opacity:.7}
+.swot-title{font-size:14px;font-weight:800;margin-bottom:10px}
+.swot-cell ul{list-style:none;padding:0}
+.swot-cell ul li{font-size:12px;line-height:1.6;padding:2px 0 2px 14px;position:relative}
+.swot-cell ul li::before{content:'•';position:absolute;left:0;font-weight:700}
+
+/* ── SCORE BAR ── */
+.score-row{display:flex;align-items:center;gap:10px;margin-bottom:8px;font-size:12px}
+.score-label{width:80px;font-weight:600;color:var(--dark)}
+.score-bar-wrap{flex:1;background:#f1f5f9;border-radius:4px;height:8px}
+.score-bar-fill{height:100%;border-radius:4px}
+.score-val{font-size:12px;font-weight:700;width:28px;text-align:right}
+
+/* ── TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0}
+.timeline-item{display:flex;gap:16px;padding:14px 0;border-bottom:1px solid var(--border)}
+.timeline-item:last-child{border-bottom:none}
+.timeline-dot{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0;margin-top:2px}
+.timeline-content .tl-title{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:3px}
+.timeline-content .tl-desc{font-size:12px;color:var(--gray);line-height:1.5}
+.timeline-content .tl-date{font-size:10px;font-weight:700;color:var(--gold-dark);margin-bottom:4px}
+
+footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-top:1px solid var(--border);margin-top:24px;background:#fff}
+@media(max-width:768px){
+  .kpi-grid,.kpi-grid-3{grid-template-columns:1fr 1fr}
+  .chart-grid-2,.chart-grid-21,.chart-grid-12{grid-template-columns:1fr}
+  .venue-grid{grid-template-columns:1fr}
+  .swot-grid{grid-template-columns:1fr}
+  .tab-content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- DISCLAIMER -->
+<div class="disclaimer">⚠️ 본 대시보드는 에렉스 내부 전략 검토용입니다. 수록된 수치는 공개 자료 및 업계 추정치를 기반으로 하며, 실제 수치와 다를 수 있습니다. 외부 공개 금지.</div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div>
+      <div class="topbar-logo">🍱 <span>마쯔가제</span> 브랜드 전략 대시보드 | 에렉스</div>
+      <div class="topbar-sub">Matsugaze (松風) · 오크우드 프리미어 코엑스센터 · HomeHMC 운영</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a class="back-btn" href="aerex_brand_portal.html">← 포털로 돌아가기</a>
+    <span class="gold-badge">프리미엄 일식</span>
+    <span id="nowDate" style="opacity:.65;font-size:11px"></span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <button class="tab-btn active" onclick="showTab('overview')">🏯 브랜드 개요</button>
+  <button class="tab-btn" onclick="showTab('competitive')">⚔️ 경쟁사 분석</button>
+  <button class="tab-btn" onclick="showTab('market')">📊 시장 분석</button>
+  <button class="tab-btn" onclick="showTab('strategy')">🎯 입점 전략</button>
+</div>
+
+<!-- ════════════════════════════════════════════
+     TAB 1: 브랜드 개요
+════════════════════════════════════════════ -->
+<div id="tab-overview" class="tab-content active">
+
+  <div class="brand-note">
+    ℹ️ <strong>브랜드명 안내:</strong> "마쯔가재"와 "마쯔가제(Matsugaze)"는 동일한 브랜드입니다. 공식 표기는 <strong>마쯔가제 (Matsugaze, 松風)</strong>입니다.
+  </div>
+
+  <!-- KPI ROW -->
+  <div class="kpi-grid" style="margin-bottom:18px">
+    <div class="kpi-card gold">
+      <div class="kpi-label">객단가 (코스)</div>
+      <div class="kpi-val">9만+</div>
+      <div class="kpi-sub">개별 메뉴 4~6만원</div>
+      <div class="kpi-icon">💴</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">입지</div>
+      <div class="kpi-val">COEX</div>
+      <div class="kpi-sub">오크우드 프리미어 3F</div>
+      <div class="kpi-icon">🏨</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">운영사</div>
+      <div class="kpi-val">HomeHMC</div>
+      <div class="kpi-sub">home.hmc.co.kr</div>
+      <div class="kpi-icon">🏢</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">포지셔닝</div>
+      <div class="kpi-val">호텔 파인</div>
+      <div class="kpi-sub">프리미엄 코스 일식</div>
+      <div class="kpi-icon">⭐</div>
+    </div>
+  </div>
+
+  <div class="chart-grid-21" style="margin-bottom:18px">
+    <!-- Brand Info -->
+    <div class="card">
+      <div class="card-title">🍱 브랜드 기본 정보</div>
+      <table class="dt">
+        <colgroup><col style="width:130px"><col></colgroup>
+        <tbody>
+          <tr><td><strong>공식 브랜드명</strong></td><td>마쯔가제 (Matsugaze, 松風) <span class="pill gold">프리미엄</span></td></tr>
+          <tr><td><strong>별칭·오표기</strong></td><td>마쯔가재 → 마쯔가제와 동일 브랜드</td></tr>
+          <tr><td><strong>위치</strong></td><td>서울 강남구 삼성동 오크우드 프리미어 코엑스센터 3층</td></tr>
+          <tr><td><strong>운영사</strong></td><td>HomeHMC (home.hmc.co.kr)</td></tr>
+          <tr><td><strong>컨셉</strong></td><td>제철 식재료 × 프리미엄 일식 코스 다이닝</td></tr>
+          <tr><td><strong>주요 메뉴</strong></td><td>히츠마부시, 카이센동, 텐동, 런치 마쯔코스</td></tr>
+          <tr><td><strong>가격대</strong></td><td>단품 40,000~60,000원 / 코스 90,000원+</td></tr>
+          <tr><td><strong>운영 형태</strong></td><td>단독 호텔 레스토랑 (프랜차이즈 아님, 백화점 미입점)</td></tr>
+          <tr><td><strong>에렉스 역할</strong></td><td>유통·입점 전략 검토</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Positioning Map (radar mini) -->
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="card-title">📍 포지셔닝 요약</div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center">
+        <canvas id="miniRadar" style="max-height:220px"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- SWOT -->
+  <div class="sec-title">💎 SWOT 분석</div>
+  <div class="swot-grid" style="margin-bottom:18px">
+    <div class="swot-cell s">
+      <div class="swot-label" style="color:#92400e">Strengths</div>
+      <div class="swot-title" style="color:#78350f">강점</div>
+      <ul>
+        <li>오크우드 프리미어 코엑스 호텔 앰비언스 — 최고급 분위기 제공</li>
+        <li>제철 식재료 기반 시즈널 메뉴 운영 — 품질 차별화</li>
+        <li>COEX 복합단지 접근성 — 비즈니스·MICE 수요 포착</li>
+        <li>히츠마부시 등 전문 메뉴 특화 — 장르 차별성</li>
+        <li>객단가 대비 호텔급 서비스 만족도 높음</li>
+      </ul>
+    </div>
+    <div class="swot-cell w">
+      <div class="swot-label" style="color:#dc2626">Weaknesses</div>
+      <div class="swot-title" style="color:#991b1b">약점</div>
+      <ul>
+        <li>호텔 의존성 — 투숙객 외 일반 고객 접근성 제한</li>
+        <li>단일 매장 — 확장성·브랜드 인지도 한계</li>
+        <li>호텔 외부 브랜드 인지도 낮음</li>
+        <li>가성비 지수 낮음 (코스 9만원+) — 가격 민감 고객 이탈</li>
+        <li>SNS·마케팅 채널 독자 운영 미약</li>
+      </ul>
+    </div>
+    <div class="swot-cell o">
+      <div class="swot-label" style="color:#16a34a">Opportunities</div>
+      <div class="swot-title" style="color:#15803d">기회</div>
+      <ul>
+        <li>프리미엄 캐주얼 일식 시장 성장세 지속</li>
+        <li>오마카세 저가 몰락 → 고가 포지션 공백 확대</li>
+        <li>장르 전문화(히츠마부시·우나기 전문점) 트렌드</li>
+        <li>백화점 F&B 층 프리미엄화 — 입점 수요 증가</li>
+        <li>HMR 연계 (간편식 브랜드 확장) 기회</li>
+      </ul>
+    </div>
+    <div class="swot-cell t">
+      <div class="swot-label" style="color:#7c3aed">Threats</div>
+      <div class="swot-title" style="color:#6d28d9">위협</div>
+      <ul>
+        <li>오마카세 시장 전반 2022 이후 정체·재편 국면</li>
+        <li>하코야 등 유통망 보유 경쟁사의 공격적 확장</li>
+        <li>스시로(일본 대형 체인) 한국 진출로 인지도 경쟁</li>
+        <li>고물가로 외식 소비 양극화 심화</li>
+        <li>경쟁 호텔 일식당 품질 상향 평준화</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- Menu & Concept -->
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title">🍜 주요 메뉴 구성</div>
+      <table class="dt">
+        <thead><tr><th>메뉴</th><th>카테고리</th><th>가격대</th><th>특징</th></tr></thead>
+        <tbody>
+          <tr><td><strong>히츠마부시</strong></td><td><span class="pill gold">시그니처</span></td><td>5~6만원</td><td>나고야식 장어 덮밥, 3가지 방식 시식</td></tr>
+          <tr><td><strong>카이센동</strong></td><td><span class="pill blue">해산물</span></td><td>4~5만원</td><td>제철 해산물 덮밥</td></tr>
+          <tr><td><strong>텐동</strong></td><td><span class="pill gray">정식</span></td><td>4만원대</td><td>튀김 덮밥</td></tr>
+          <tr><td><strong>런치 마쯔코스</strong></td><td><span class="pill purple">코스</span></td><td>9만원+</td><td>점심 한정 시그니처 코스</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">📍 입지 & 접근성 분석</div>
+      <div class="alert gold">
+        <strong>오크우드 프리미어 코엑스센터 3층</strong><br>
+        삼성동 COEX 인근 — 비즈니스·MICE·쇼핑 복합 수요 집중 지역. 9호선 봉은사역, 2호선 삼성역 도보권.
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="score-row">
+          <div class="score-label">비즈니스 수요</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" style="width:90%;background:var(--gold)"></div></div>
+          <div class="score-val" style="color:var(--gold-dark)">9.0</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">관광/MICE</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" style="width:85%;background:var(--gold)"></div></div>
+          <div class="score-val" style="color:var(--gold-dark)">8.5</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">일반 접근성</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" style="width:75%;background:#0ea5e9"></div></div>
+          <div class="score-val" style="color:#0369a1">7.5</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">주차/대중교통</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" style="width:80%;background:#16a34a"></div></div>
+          <div class="score-val" style="color:#15803d">8.0</div>
+        </div>
+        <div class="score-row">
+          <div class="score-label">주변 경쟁 밀도</div>
+          <div class="score-bar-wrap"><div class="score-bar-fill" style="width:65%;background:#dc2626"></div></div>
+          <div class="score-val" style="color:#dc2626">6.5</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-overview -->
+
+<!-- ════════════════════════════════════════════
+     TAB 2: 경쟁사 분석
+════════════════════════════════════════════ -->
+<div id="tab-competitive" class="tab-content">
+
+  <div class="alert gold" style="margin-bottom:16px">
+    <strong>분석 기준 (2025~2026):</strong> 프리미엄 일식 및 오마카세 인접 브랜드 중 국내 운영 중인 주요 경쟁사 5개 선정. 점수는 업계 공개 자료·소비자 리뷰 추정치 기준 (10점 만점).
+  </div>
+
+  <!-- Radar Toggle -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title">🕸️ 브랜드 경쟁력 레이더 차트 (맛/서비스/분위기/가성비/위생/접근성)</div>
+    <div class="toggle-group" id="radarToggles">
+      <button class="toggle-btn active" data-idx="0" style="background:#ca8a04;color:#fff;border-color:#ca8a04" onclick="toggleBrand(0)">마쯔가제</button>
+      <button class="toggle-btn active" data-idx="1" style="background:#dc2626;color:#fff;border-color:#dc2626" onclick="toggleBrand(1)">하코야</button>
+      <button class="toggle-btn active" data-idx="2" style="background:#7c3aed;color:#fff;border-color:#7c3aed" onclick="toggleBrand(2)">모모야마</button>
+      <button class="toggle-btn active" data-idx="3" style="background:#ea580c;color:#fff;border-color:#ea580c" onclick="toggleBrand(3)">스시로</button>
+      <button class="toggle-btn active" data-idx="4" style="background:#a16207;color:#fff;border-color:#a16207" onclick="toggleBrand(4)">무진장</button>
+      <button class="toggle-btn active" data-idx="5" style="background:#0ea5e9;color:#fff;border-color:#0ea5e9" onclick="toggleBrand(5)">스시 미소노</button>
+    </div>
+    <div style="max-width:600px;margin:0 auto">
+      <canvas id="radarChart" style="max-height:420px"></canvas>
+    </div>
+  </div>
+
+  <!-- Competitor Table -->
+  <div class="card">
+    <div class="card-title">📋 경쟁사 상세 비교표</div>
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>브랜드</th>
+          <th>운영사</th>
+          <th>포지션</th>
+          <th>채널</th>
+          <th>객단가</th>
+          <th>맛</th>
+          <th>서비스</th>
+          <th>분위기</th>
+          <th>가성비</th>
+          <th>위생</th>
+          <th>접근성</th>
+          <th>비고</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fffbeb">
+          <td><strong style="color:#92400e">🍱 마쯔가제</strong><br><span style="font-size:10px;color:#999">Matsugaze</span></td>
+          <td>HomeHMC</td>
+          <td><span class="pill gold">호텔 파인</span></td>
+          <td>단독 호텔 1개점</td>
+          <td>4~9만원+</td>
+          <td><strong>8.5</strong></td><td><strong>9.0</strong></td><td><strong>9.0</strong></td><td>5.0</td><td><strong>9.0</strong></td><td>7.5</td>
+          <td>백화점 미입점, 확장 검토 중</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#dc2626">🦞 하코야</strong><br><span style="font-size:10px;color:#999">Hakoya</span></td>
+          <td>LF Foods</td>
+          <td><span class="pill red">프리미엄 캐주얼</span></td>
+          <td>백화점 다수 + HMR</td>
+          <td>3~6만원</td>
+          <td>7.5</td><td>7.5</td><td>7.5</td><td><strong>7.5</strong></td><td>8.0</td><td><strong>8.5</strong></td>
+          <td>2006년~, HMR 확장 강점</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#7c3aed">🏯 모모야마</strong><br><span style="font-size:10px;color:#999">Momoyama</span></td>
+          <td>롯데호텔</td>
+          <td><span class="pill purple">럭셔리 호텔</span></td>
+          <td>롯데호텔 서울 단독</td>
+          <td>10만원+</td>
+          <td>8.5</td><td>9.0</td><td>9.0</td><td>4.5</td><td>9.0</td><td>7.0</td>
+          <td>마쯔가제 직접 벤치마크 대상</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#ea580c">🍣 스시로</strong><br><span style="font-size:10px;color:#999">Sushiro</span></td>
+          <td>어플러스에프앤비</td>
+          <td><span class="pill orange">프리미엄 캐주얼</span></td>
+          <td>대형몰 컨베이어벨트</td>
+          <td>2~5만원</td>
+          <td>7.0</td><td>7.5</td><td>7.5</td><td>8.0</td><td>8.0</td><td>8.5</td>
+          <td>일본 최대 회전초밥, 한국 확장 중</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#a16207">🎌 무진장</strong><br><span style="font-size:10px;color:#999">Mujinjang</span></td>
+          <td>무진장F&B</td>
+          <td><span class="pill gray">쇼핑몰 파인</span></td>
+          <td>복합쇼핑몰 체인</td>
+          <td>3~6만원</td>
+          <td>7.5</td><td>7.5</td><td>7.5</td><td>7.5</td><td>8.0</td><td>8.0</td>
+          <td>쇼핑몰 특화 프리미엄 일식 체인</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#0ea5e9">🔪 스시 미소노</strong><br><span style="font-size:10px;color:#999">Sushi Misono</span></td>
+          <td>미소노F&B</td>
+          <td><span class="pill blue">파인 오마카세</span></td>
+          <td>단독점 (소규모)</td>
+          <td>15만원+</td>
+          <td><strong>9.0</strong></td><td>9.0</td><td><strong>9.5</strong></td><td>4.0</td><td><strong>9.5</strong></td><td>6.5</td>
+          <td>파인 오마카세 최상위 포지션</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="chart-grid-2" style="margin-top:18px">
+    <div class="card">
+      <div class="card-title">💡 경쟁 포지셔닝 인사이트</div>
+      <div class="alert gold">
+        <strong>마쯔가제의 포지션:</strong> 모모야마(럭셔리 호텔)와 스시 미소노(파인 오마카세) 사이의 '프리미엄 호텔 코스 일식' 영역 점유. 가성비 약세이나 분위기·서비스·위생 고점 유지.
+      </div>
+      <div class="alert blue">
+        <strong>주요 격차:</strong> 하코야 대비 접근성(-1.0pt)·가성비(-2.5pt) 열위. 단, 분위기·서비스는 하코야 대비 +1.5pt 우위. 백화점 입점 시 접근성 격차 해소 가능.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🏆 차별화 포인트 (마쯔가제 vs. 경쟁사)</div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div class="strategy-step">
+          <div class="step-num-circle">1</div>
+          <div class="step-content">
+            <div class="st">히츠마부시 전문성</div>
+            <div class="sd">나고야식 장어덮밥 전문 — 경쟁사 대비 명확한 메뉴 아이덴티티 확보</div>
+          </div>
+        </div>
+        <div class="strategy-step">
+          <div class="step-num-circle">2</div>
+          <div class="step-content">
+            <div class="st">호텔급 서비스 + 합리적 코스</div>
+            <div class="sd">모모야마(10만원+) 대비 낮은 허들, 스시 미소노(15만원+) 대비 접근 용이</div>
+          </div>
+        </div>
+        <div class="strategy-step">
+          <div class="step-num-circle">3</div>
+          <div class="step-content">
+            <div class="st">COEX 입지 희소성</div>
+            <div class="sd">삼성동 비즈니스 허브 + MICE 수요 — 경쟁사 부재 지역 선점</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div><!-- /tab-competitive -->
+
+<!-- ════════════════════════════════════════════
+     TAB 3: 시장 분석
+════════════════════════════════════════════ -->
+<div id="tab-market" class="tab-content">
+
+  <div class="kpi-grid-3" style="margin-bottom:18px">
+    <div class="kpi-card gold">
+      <div class="kpi-label">#오마카세 해시태그 (2022 피크)</div>
+      <div class="kpi-val">60만+</div>
+      <div class="kpi-sub">이후 중저가 시장 급감</div>
+      <div class="kpi-icon">📸</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">고가 오마카세 (20만원+)</div>
+      <div class="kpi-val">견조</div>
+      <div class="kpi-sub">프리미엄 수요 분리 유지</div>
+      <div class="kpi-icon">💎</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">프리미엄 캐주얼 일식 성장</div>
+      <div class="kpi-val">↑ 성장</div>
+      <div class="kpi-sub">전문 장르(우나기·우동·돈부리)</div>
+      <div class="kpi-icon">🚀</div>
+    </div>
+  </div>
+
+  <div class="chart-grid-2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">📈 오마카세 시장 사이클 (2019~2026 추정)</div>
+      <canvas id="marketCycleChart" style="max-height:260px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">🍱 일식 장르별 시장 성장률 (2025~2026 추정)</div>
+      <canvas id="genreChart" style="max-height:260px"></canvas>
+    </div>
+  </div>
+
+  <!-- Market phases -->
+  <div class="sec-title">🔄 오마카세 시장 4단계 사이클</div>
+  <div class="timeline" style="margin-bottom:18px">
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:#dcfce7;color:#16a34a">📈</div>
+      <div class="timeline-content">
+        <div class="tl-date">2019~2021 · 성장기</div>
+        <div class="tl-title">오마카세 붐 — 프리미엄 경험 소비 급증</div>
+        <div class="tl-desc">MZ세대 고급 식문화 소비 트렌드, SNS 확산, 미식 경험 공유 문화 정착. 오마카세 업소 수 폭발적 증가.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:#fef9c3;color:#92400e">🔝</div>
+      <div class="timeline-content">
+        <div class="tl-date">2022 · 피크</div>
+        <div class="tl-title">#오마카세 해시태그 60만 돌파 — 시장 정점</div>
+        <div class="tl-desc">중저가 오마카세(5~8만원) 우후죽순 등장. 품질 저하 논란 시작. 고가(20만원+) 대기 리스트는 여전히 수개월.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:#ffedd5;color:#ea580c">⚠️</div>
+      <div class="timeline-content">
+        <div class="tl-date">2023~2024 · 재편기</div>
+        <div class="tl-title">중저가 오마카세 급감 — 양극화 심화</div>
+        <div class="tl-desc">가성비형 오마카세 폐업 속출. 소비자 눈높이 상승 + 경기 침체. 프리미엄(20만원+)은 견조, 중저가는 급락.</div>
+      </div>
+    </div>
+    <div class="timeline-item">
+      <div class="timeline-dot" style="background:#e0f2fe;color:#0369a1">🎯</div>
+      <div class="timeline-content">
+        <div class="tl-date">2025~2026 · 전문화기</div>
+        <div class="tl-title">장르 전문화 — 히츠마부시·우동·돈부리 전문점 부상</div>
+        <div class="tl-desc">오마카세 포화 → 장르 특화 전문점 선호. 히츠마부시·우나기·카이센·텐동 전문 브랜드 성장. 마쯔가제의 기회 구간.</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title">💡 HMR 연계 트렌드 (하코야 사례)</div>
+      <div class="alert gold">
+        <strong>하코야 (LF Foods):</strong> 레스토랑 브랜드 → 간편식(HMR) 확장 성공. 냉동 돈부리·소스 등 유통. 브랜드 인지도 극대화 + 유통 마진 추가 확보.
+      </div>
+      <div class="alert blue">
+        <strong>마쯔가제 적용 가능성:</strong> 히츠마부시 소스·히츠마부시 키트 HMR화 → 백화점 식품관·온라인 유통 검토. 프리미엄 간편식 시장과의 시너지.
+      </div>
+      <div class="alert green">
+        <strong>시장 규모:</strong> 국내 HMR 시장 2025년 약 5조원 추정. 일식 전문 HMR 세그먼트는 아직 미개척 분야.
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 마쯔가제 전략적 기회 매트릭스</div>
+      <table class="dt">
+        <thead><tr><th>기회</th><th>가능성</th><th>영향력</th><th>우선순위</th></tr></thead>
+        <tbody>
+          <tr><td>백화점 F&B 입점</td><td><span class="pill green">높음</span></td><td><span class="pill gold">매우 높음</span></td><td><span class="pill red">1순위</span></td></tr>
+          <tr><td>히츠마부시 HMR 출시</td><td><span class="pill gold">중간</span></td><td><span class="pill gold">높음</span></td><td><span class="pill orange">2순위</span></td></tr>
+          <tr><td>추가 호텔 입점</td><td><span class="pill green">높음</span></td><td><span class="pill gold">중간</span></td><td><span class="pill gold">3순위</span></td></tr>
+          <tr><td>SNS 브랜딩 강화</td><td><span class="pill green">매우 높음</span></td><td><span class="pill gold">중간</span></td><td><span class="pill gold">3순위</span></td></tr>
+          <tr><td>점심 런치 공략 강화</td><td><span class="pill green">매우 높음</span></td><td><span class="pill blue">중간</span></td><td><span class="pill blue">4순위</span></td></tr>
+          <tr><td>케이터링·프라이빗 다이닝</td><td><span class="pill gold">중간</span></td><td><span class="pill blue">중간</span></td><td><span class="pill gray">5순위</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /tab-market -->
+
+<!-- ════════════════════════════════════════════
+     TAB 4: 입점 전략
+════════════════════════════════════════════ -->
+<div id="tab-strategy" class="tab-content">
+
+  <div class="alert gold" style="margin-bottom:18px">
+    <strong>전략 방향:</strong> 현재 단독 호텔 레스토랑 → 백화점·복합몰 멀티 채널 확장. 브랜드 인지도 확보 후 HMR 라인업 연계. 호텔 럭셔리 이미지 유지하면서 접근성 강화.
+  </div>
+
+  <!-- Phase roadmap -->
+  <div class="sec-title">🗺️ 채널 확장 로드맵 (2026~2028)</div>
+  <div class="strategy-steps" style="margin-bottom:20px">
+    <div class="strategy-step">
+      <div class="step-num-circle">1</div>
+      <div class="step-content">
+        <div class="st">Phase 1 · 2026년 — 백화점 F&B 플래그십 입점</div>
+        <div class="sd">강남권 백화점(신세계 강남·현대 무역) 식품관 또는 6F F&B 층 입점 타진. 런치 마쯔코스 + 히츠마부시 단품 라인 운영. 호텔 앰비언스를 백화점 환경에 적용한 '시그니처 인테리어'로 차별화.</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle">2</div>
+      <div class="step-content">
+        <div class="st">Phase 2 · 2027년 — 복합몰 확장 + SNS 브랜딩</div>
+        <div class="sd">IFC몰·더현대·스타필드 등 프리미엄 복합몰 2~3개점 추가. 인스타그램·유튜브 채널 개설, '히츠마부시 먹는 법' 등 콘텐츠 마케팅으로 인지도 확산. 대기 예약 시스템 도입으로 희소성 관리.</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-num-circle">3</div>
+      <div class="step-content">
+        <div class="st">Phase 3 · 2028년 — HMR 출시 + 브랜드 라이선스 검토</div>
+        <div class="sd">히츠마부시 밀키트·소스 HMR 출시. 백화점 식품관 입점(레스토랑과 시너지). 에렉스의 F&B 유통 네트워크를 활용한 전국 유통망 구축. 지방 광역시 호텔 입점 병행 검토.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Venue recommendations -->
+  <div class="sec-title">🏬 추천 입점 후보지</div>
+  <div class="venue-grid" style="margin-bottom:20px">
+    <div class="venue-card">
+      <div class="venue-card-hd" style="background:linear-gradient(135deg,#92400e,#ca8a04)">
+        <div class="vt">신세계백화점 강남점</div>
+        <div class="vs">서울 서초구 반포대로 · 6F F&B</div>
+      </div>
+      <div class="venue-card-bd">
+        <div class="vl">강남 최대 백화점 · 연 매출 2조원+ · 프리미엄 F&B 수요 최강</div>
+        <div class="vv">예상 임대료: 高 / 매출 기대: 최상</div>
+        <span class="priority-badge high">최우선 1순위</span>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.6">
+          강남 핵심 상권, 주 타깃(40대 전문직·법인 접대) 최밀집. 단, 입점 경쟁 치열. 에렉스 기존 입점 브랜드 레퍼런스 활용 필요.
+        </div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-card-hd" style="background:linear-gradient(135deg,#1e3a5f,#1d4ed8)">
+        <div class="vt">현대백화점 무역센터점</div>
+        <div class="vs">서울 강남구 삼성동 · COEX 인근</div>
+      </div>
+      <div class="venue-card-bd">
+        <div class="vl">현 오크우드 인근 · 고객 중복률 높음 · 브랜드 연속성 확보</div>
+        <div class="vv">예상 임대료: 중~高 / 매출 기대: 상</div>
+        <span class="priority-badge high">최우선 1순위</span>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.6">
+          현 오크우드 마쯔가제와 동일 상권. 고객 중복 활용으로 브랜드 인지도 전이 유리. 코엑스몰과 연계 가능성도 검토 가치.
+        </div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-card-hd" style="background:linear-gradient(135deg,#15803d,#16a34a)">
+        <div class="vt">더현대 서울</div>
+        <div class="vs">서울 영등포구 여의도 · MZ 핫플</div>
+      </div>
+      <div class="venue-card-bd">
+        <div class="vl">2030 프리미엄 소비층 · SNS 바이럴 특화 · 체험형 F&B 강세</div>
+        <div class="vv">예상 임대료: 중 / 매출 기대: 상</div>
+        <span class="priority-badge med">2순위</span>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.6">
+          MZ세대 타깃 SNS 마케팅 전략과 시너지. 프리미엄 캐주얼 포지션으로 일부 메뉴 조정(가격 소폭 하향) 검토 필요.
+        </div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-card-hd" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+        <div class="vt">IFC몰 서울</div>
+        <div class="vs">서울 영등포구 여의도 · 글로벌 비즈니스 허브</div>
+      </div>
+      <div class="venue-card-bd">
+        <div class="vl">외국계 기업·금융권 밀집 · 법인 접대 수요 강 · 영어권 친화</div>
+        <div class="vv">예상 임대료: 중 / 매출 기대: 중~상</div>
+        <span class="priority-badge med">2순위</span>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.6">
+          글로벌 비즈니스 고객 타깃. 영문 메뉴·서비스 강화 필요. 오크우드 COEX와 유사한 비즈니스 수요 복제 가능.
+        </div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-card-hd" style="background:linear-gradient(135deg,#0369a1,#0ea5e9)">
+        <div class="vt">롯데백화점 본점</div>
+        <div class="vs">서울 중구 소공동 · 명동 관광 상권</div>
+      </div>
+      <div class="venue-card-bd">
+        <div class="vl">관광객 + 내국인 · 명동 쇼핑 수요 · 일식 친화 고객층</div>
+        <div class="vv">예상 임대료: 中 / 매출 기대: 중</div>
+        <span class="priority-badge low">3순위</span>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.6">
+          외국인 관광객 비중 높아 일식 수요 안정적. 단, 경쟁 일식 브랜드 다수 입점으로 차별화 전략 필수.
+        </div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-card-hd" style="background:linear-gradient(135deg,#374151,#6b7280)">
+        <div class="vt">스타필드 하남 / 수원</div>
+        <div class="vs">수도권 광역 복합몰</div>
+      </div>
+      <div class="venue-card-bd">
+        <div class="vl">가족 단위 + 주말 수요 · 넓은 상권 · 메가몰 집객력</div>
+        <div class="vv">예상 임대료: 低~中 / 매출 기대: 중</div>
+        <span class="priority-badge low">3순위 (2차 검토)</span>
+        <div style="margin-top:10px;font-size:12px;color:var(--gray);line-height:1.6">
+          가족 외식 수요 타깃으로 메뉴 구성 조정 필요. 코스 비중 낮추고 단품 중심 운영. Phase 2~3 검토.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Feasibility analysis -->
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title">📊 백화점 입점 타당성 분석</div>
+      <canvas id="feasibilityChart" style="max-height:260px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">⚠️ 리스크 & 대응 방안</div>
+      <table class="dt">
+        <thead><tr><th>리스크</th><th>수준</th><th>대응 방안</th></tr></thead>
+        <tbody>
+          <tr><td>호텔 이미지 희석</td><td><span class="pill red">高</span></td><td>백화점 전용 프리미엄 인테리어 + 메뉴 구성 차별화</td></tr>
+          <tr><td>임대료 수익성</td><td><span class="pill red">高</span></td><td>객단가 유지 + 테이블 회전율 최적화</td></tr>
+          <tr><td>인력 수급</td><td><span class="pill orange">中</span></td><td>오크우드 운영 노하우 이전 + 현지 채용 매뉴얼화</td></tr>
+          <tr><td>식재료 품질 관리</td><td><span class="pill orange">中</span></td><td>중앙 조달 시스템 구축, 공급망 표준화</td></tr>
+          <tr><td>브랜드 인지도 부족</td><td><span class="pill gold">中</span></td><td>SNS 캠페인·블로거 시식회·오픈 이벤트 전략 수립</td></tr>
+          <tr><td>경쟁 일식 브랜드</td><td><span class="pill gold">中</span></td><td>히츠마부시 전문성 강조 + 시즈널 메뉴 차별화</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /tab-strategy -->
+
+<!-- FOOTER -->
+<footer>
+  에렉스 브랜드전략팀 · 2026 · CONFIDENTIAL<br>
+  <span style="font-size:10px;color:#aaa">본 자료는 에렉스 내부 전략 검토용으로 외부 배포를 금합니다. 수록된 데이터는 공개 자료 및 업계 추정치 기반입니다.</span>
+</footer>
+
+<script>
+// ── Utilities ──────────────────────────────────────────────
+function showTab(id) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el => el.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+document.getElementById('nowDate').textContent = new Date().toLocaleDateString('ko-KR', {year:'numeric',month:'2-digit',day:'2-digit'});
+
+// ── Brand colors & data ────────────────────────────────────
+const BRANDS = [
+  { name: '마쯔가제',    color: '#ca8a04', data: [8.5, 9.0, 9.0, 5.0, 9.0, 7.5] },
+  { name: '하코야',      color: '#dc2626', data: [7.5, 7.5, 7.5, 7.5, 8.0, 8.5] },
+  { name: '모모야마',    color: '#7c3aed', data: [8.5, 9.0, 9.0, 4.5, 9.0, 7.0] },
+  { name: '스시로',      color: '#ea580c', data: [7.0, 7.5, 7.5, 8.0, 8.0, 8.5] },
+  { name: '무진장',      color: '#a16207', data: [7.5, 7.5, 7.5, 7.5, 8.0, 8.0] },
+  { name: '스시 미소노', color: '#0ea5e9', data: [9.0, 9.0, 9.5, 4.0, 9.5, 6.5] },
+];
+const RADAR_LABELS = ['맛', '서비스', '분위기', '가성비', '위생', '접근성'];
+
+const activeStates = BRANDS.map(() => true);
+
+// ── Mini Radar (Overview Tab) ──────────────────────────────
+const miniCtx = document.getElementById('miniRadar').getContext('2d');
+const miniRadar = new Chart(miniCtx, {
+  type: 'radar',
+  data: {
+    labels: RADAR_LABELS,
+    datasets: [{
+      label: '마쯔가제',
+      data: BRANDS[0].data,
+      borderColor: '#ca8a04',
+      backgroundColor: 'rgba(202,138,4,0.15)',
+      borderWidth: 2.5,
+      pointBackgroundColor: '#ca8a04',
+      pointRadius: 4,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      r: {
+        min: 0, max: 10, ticks: { stepSize: 2, font: { size: 10 } },
+        pointLabels: { font: { size: 11, weight: '700' } },
+        grid: { color: '#e5e7eb' },
+      }
+    }
+  }
+});
+
+// ── Full Radar Chart ───────────────────────────────────────
+const radarCtx = document.getElementById('radarChart').getContext('2d');
+
+function buildDatasets() {
+  return BRANDS.map((b, i) => ({
+    label: b.name,
+    data: activeStates[i] ? b.data : [],
+    borderColor: b.color,
+    backgroundColor: 'transparent',
+    borderWidth: i === 0 ? 3 : 2,
+    pointBackgroundColor: b.color,
+    pointRadius: i === 0 ? 5 : 4,
+    borderDash: i === 0 ? [] : (i % 2 === 0 ? [4,3] : []),
+  }));
+}
+
+const radarChart = new Chart(radarCtx, {
+  type: 'radar',
+  data: {
+    labels: RADAR_LABELS,
+    datasets: buildDatasets()
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: {
+        position: 'bottom',
+        labels: { font: { size: 11 }, padding: 14 }
+      }
+    },
+    scales: {
+      r: {
+        min: 0, max: 10, ticks: { stepSize: 2, font: { size: 10 } },
+        pointLabels: { font: { size: 12, weight: '700' } },
+        grid: { color: '#e5e7eb' },
+      }
+    }
+  }
+});
+
+function toggleBrand(idx) {
+  activeStates[idx] = !activeStates[idx];
+  const btn = document.querySelector(`#radarToggles .toggle-btn[data-idx="${idx}"]`);
+  btn.classList.toggle('active', activeStates[idx]);
+  radarChart.data.datasets = buildDatasets();
+  radarChart.update();
+}
+
+// ── Market Cycle Chart ─────────────────────────────────────
+const mcCtx = document.getElementById('marketCycleChart').getContext('2d');
+new Chart(mcCtx, {
+  type: 'line',
+  data: {
+    labels: ['2019', '2020', '2021', '2022', '2023', '2024', '2025E', '2026E'],
+    datasets: [
+      {
+        label: '프리미엄 오마카세 (20만원+)',
+        data: [40, 55, 75, 90, 88, 92, 95, 100],
+        borderColor: '#ca8a04',
+        backgroundColor: 'rgba(202,138,4,0.08)',
+        borderWidth: 2.5, tension: 0.4, fill: true, pointRadius: 4,
+      },
+      {
+        label: '중저가 오마카세 (~10만원)',
+        data: [30, 50, 80, 100, 65, 42, 32, 28],
+        borderColor: '#dc2626',
+        backgroundColor: 'rgba(220,38,38,0.06)',
+        borderWidth: 2, tension: 0.4, fill: true, pointRadius: 4,
+      },
+      {
+        label: '전문 장르 일식 (히츠마부시·우동 등)',
+        data: [20, 25, 35, 45, 60, 78, 92, 105],
+        borderColor: '#0ea5e9',
+        backgroundColor: 'rgba(14,165,233,0.06)',
+        borderWidth: 2, tension: 0.4, fill: true, pointRadius: 4,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 10 } } },
+    scales: {
+      y: { title: { display: true, text: '시장 활성도 지수 (2019=30 기준)', font: { size: 10 } }, grid: { color: '#f1f5f9' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+// ── Genre Chart ────────────────────────────────────────────
+const gcCtx = document.getElementById('genreChart').getContext('2d');
+new Chart(gcCtx, {
+  type: 'bar',
+  data: {
+    labels: ['히츠마부시\n전문', '카이센동\n전문', '우나기\n전문', '오마카세\n파인', '회전초밥', '라멘\n전문', '우동\n전문'],
+    datasets: [{
+      label: '2025~2026 성장률 추정 (%)',
+      data: [28, 22, 25, 8, 35, 15, 20],
+      backgroundColor: ['#ca8a04','#0ea5e9','#7c3aed','#dc2626','#ea580c','#16a34a','#0369a1'],
+      borderRadius: 6,
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { title: { display: true, text: 'YoY 성장률 추정 (%)', font: { size: 10 } }, grid: { color: '#f1f5f9' } },
+      x: { grid: { display: false }, ticks: { font: { size: 10 } } }
+    }
+  }
+});
+
+// ── Feasibility Chart ──────────────────────────────────────
+const fcCtx = document.getElementById('feasibilityChart').getContext('2d');
+new Chart(fcCtx, {
+  type: 'radar',
+  data: {
+    labels: ['브랜드 적합성', '수익성', '접근성 개선', '경쟁력', '운영 가능성', '성장성'],
+    datasets: [
+      {
+        label: '신세계 강남',
+        data: [9, 8, 9, 8, 7, 9],
+        borderColor: '#ca8a04', backgroundColor: 'rgba(202,138,4,0.1)', borderWidth: 2, pointRadius: 3,
+      },
+      {
+        label: '현대 무역센터',
+        data: [9, 8, 9, 8, 8, 8],
+        borderColor: '#0ea5e9', backgroundColor: 'rgba(14,165,233,0.1)', borderWidth: 2, pointRadius: 3,
+      },
+      {
+        label: '더현대 서울',
+        data: [7, 7, 8, 7, 8, 9],
+        borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.1)', borderWidth: 2, pointRadius: 3,
+      },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 10 }, padding: 10 } } },
+    scales: {
+      r: {
+        min: 0, max: 10, ticks: { stepSize: 2, font: { size: 9 } },
+        pointLabels: { font: { size: 10, weight: '700' } },
+        grid: { color: '#e5e7eb' },
+      }
+    }
+  }
+});
+</script>
+</body>
+</html>

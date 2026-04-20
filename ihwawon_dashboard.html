@@ -1,0 +1,995 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>이화원 브랜드 전략 대시보드 | 에렉스</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#7c3aed;--dark:#0f172a;--red:#dc2626;--green:#16a34a;
+  --orange:#ea580c;--blue:#1d4ed8;--yellow:#ca8a04;--gray:#6b7280;
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:#1f2937;font-size:13px}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.3)}
+.topbar-brand{display:flex;align-items:center;gap:10px}
+.topbar-brand .logo{font-size:17px;font-weight:900;letter-spacing:-0.5px}
+.topbar-brand .sub{font-size:10px;opacity:.55;margin-top:1px}
+.topbar-right{display:flex;align-items:center;gap:12px;font-size:12px}
+.back-btn{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.2);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;cursor:pointer;text-decoration:none;display:flex;align-items:center;gap:5px;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.2)}
+
+/* ── TAB NAV ── */
+.tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:52px;z-index:99;overflow-x:auto}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--accent);background:#faf5ff}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;padding:20px 24px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── DISCLAIMER ── */
+.disclaimer{background:#faf5ff;border:1px solid #ddd6fe;border-left:4px solid var(--accent);border-radius:8px;padding:10px 16px;font-size:11px;color:#6b21a8;margin-bottom:16px;display:flex;align-items:center;gap:8px}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi-card{border-radius:12px;padding:18px 20px;position:relative;overflow:hidden}
+.kpi-card .kpi-label{font-size:11px;font-weight:600;opacity:.8;margin-bottom:6px}
+.kpi-card .kpi-val{font-size:26px;font-weight:900;line-height:1;margin-bottom:4px}
+.kpi-card .kpi-sub{font-size:11px;opacity:.8;line-height:1.4}
+.kpi-card .kpi-icon{position:absolute;right:14px;top:14px;font-size:26px;opacity:.2}
+.kpi-card.purple{background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff}
+.kpi-card.green{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff}
+.kpi-card.red{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff}
+.kpi-card.dark{background:linear-gradient(135deg,#0f172a,#1e3a5f);color:#fff}
+.kpi-card.orange{background:linear-gradient(135deg,#ea580c,#f97316);color:#fff}
+.kpi-card.yellow{background:linear-gradient(135deg,#ca8a04,#eab308);color:#fff}
+
+/* ── CHART GRID ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-grid-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.chart-grid-12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+
+/* ── PILL / BADGE ── */
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+.pill.purple{background:#ede9fe;color:#7c3aed}
+.pill.red{background:#fee2e2;color:#dc2626}
+.pill.green{background:#dcfce7;color:#16a34a}
+.pill.orange{background:#ffedd5;color:#ea580c}
+.pill.blue{background:#dbeafe;color:#1d4ed8}
+.pill.yellow{background:#fef9c3;color:#92400e}
+.pill.gray{background:#f3f4f6;color:#374151}
+.pill.dark{background:#e2e8f0;color:#0f172a}
+
+/* ── ALERT / INFO BOX ── */
+.alert{border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13px;line-height:1.6}
+.alert.purple{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed}
+.alert.green{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a}
+.alert.yellow{background:#fefce8;border:1px solid #fde047;border-left:4px solid #ca8a04}
+.alert.red{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626}
+.alert.blue{background:#eff6ff;border:1px solid #93c5fd;border-left:4px solid #1d4ed8}
+
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{padding:9px 12px;background:#f8fafc;font-weight:700;text-align:left;border-bottom:2px solid var(--border)}
+.dt td{padding:8px 12px;border-bottom:1px solid #f8fafc;vertical-align:middle}
+.dt tr:hover td{background:#fafafa}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* ── HERITAGE TIMELINE ── */
+.timeline{display:flex;flex-direction:column;gap:0}
+.tl-item{display:flex;gap:0;position:relative}
+.tl-item:not(:last-child) .tl-line{flex:1;border-left:2px dashed #c4b5fd}
+.tl-dot-wrap{display:flex;flex-direction:column;align-items:center;width:36px;flex-shrink:0}
+.tl-dot{width:14px;height:14px;border-radius:50%;background:var(--accent);border:3px solid #fff;box-shadow:0 0 0 2px var(--accent);margin-top:3px;flex-shrink:0}
+.tl-line{width:2px;background:#c4b5fd;flex:1;min-height:24px}
+.tl-body{padding:0 0 20px 8px;flex:1}
+.tl-year{font-size:11px;font-weight:800;color:var(--accent);margin-bottom:2px}
+.tl-title{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:2px}
+.tl-desc{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* ── VENUE CARD ── */
+.venue-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.venue-card{border-radius:12px;border:1px solid var(--border);overflow:hidden}
+.venue-card.highlight{border-color:#7c3aed;box-shadow:0 0 0 2px #ede9fe}
+.venue-hd{padding:14px 16px;display:flex;align-items:center;justify-content:space-between}
+.venue-name{font-size:14px;font-weight:800;color:#fff}
+.venue-type{font-size:10px;font-weight:600;opacity:.8;color:#fff;margin-top:2px}
+.venue-bd{padding:14px 16px;background:#fff}
+.venue-row{display:flex;justify-content:space-between;font-size:12px;margin-bottom:6px}
+.venue-row .vl{color:var(--gray)}
+.venue-row .vv{font-weight:700;color:var(--dark)}
+
+/* ── STAR SCORE ── */
+.star-score{display:flex;align-items:center;gap:3px;font-size:11px;color:#ca8a04;font-weight:700}
+
+/* ── CHANNEL MAP ── */
+.channel-map{width:100%;border-collapse:collapse;font-size:12px}
+.channel-map th{padding:9px 10px;background:#0f172a;color:#fff;font-weight:700;text-align:center;font-size:11px}
+.channel-map th:first-child{text-align:left}
+.channel-map td{padding:8px 10px;border:1px solid var(--border);text-align:center;vertical-align:middle}
+.channel-map td:first-child{font-weight:700;background:#f8fafc;text-align:left}
+.cm-yes{color:#16a34a;font-weight:700;font-size:14px}
+.cm-no{color:#d1d5db;font-size:14px}
+.cm-opp{background:#faf5ff;color:#7c3aed;font-weight:800;font-size:12px;border-radius:4px;padding:2px 6px;white-space:nowrap}
+
+/* ── TOGGLE BUTTONS ── */
+.toggle-group{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px}
+.brand-toggle{border:2px solid;border-radius:8px;padding:4px 12px;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;background:#fff}
+.brand-toggle.active{color:#fff}
+
+/* ── SWOT ── */
+.swot-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.swot-cell{padding:18px 20px}
+.swot-cell .sw-label{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.swot-cell ul{list-style:none;padding:0}
+.swot-cell ul li{font-size:12px;line-height:1.6;padding:3px 0 3px 16px;position:relative}
+.swot-cell ul li::before{content:'▸';position:absolute;left:0;font-size:10px}
+.swot-cell.s{background:#f0fdf4}
+.swot-cell.w{background:#fff7ed}
+.swot-cell.o{background:#f5f3ff}
+.swot-cell.t{background:#fff1f2}
+
+/* ── FINANCIAL TABLE ── */
+.fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:16px}
+.fin-card{border-radius:10px;padding:16px;border:1px solid var(--border);text-align:center;background:#fff}
+.fin-card .fv{font-size:22px;font-weight:900;color:var(--accent)}
+.fin-card .fl{font-size:11px;color:var(--gray);margin-top:4px}
+.fin-card .fd{font-size:12px;font-weight:700;color:var(--dark);margin-top:2px}
+
+/* ── STRATEGY STEPS ── */
+.strategy-steps{display:flex;flex-direction:column;gap:10px}
+.strategy-step{display:flex;gap:12px;align-items:flex-start;padding:14px 16px;background:#f8fafc;border-radius:8px;border:1px solid var(--border)}
+.step-circle{background:var(--accent);color:#fff;font-size:11px;font-weight:800;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.step-body .st{font-size:13px;font-weight:700;margin-bottom:3px;color:var(--dark)}
+.step-body .sd{font-size:12px;color:var(--gray);line-height:1.5}
+
+/* ── MARKET TREND ── */
+.trend-row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:#f8fafc;border:1px solid var(--border);margin-bottom:8px}
+.trend-icon{font-size:20px;width:32px;text-align:center;flex-shrink:0}
+.trend-body .tt{font-size:13px;font-weight:700;color:var(--dark)}
+.trend-body .td{font-size:12px;color:var(--gray);margin-top:2px;line-height:1.4}
+.trend-badge{margin-left:auto;flex-shrink:0}
+
+footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-top:1px solid var(--border);margin-top:24px}
+
+@media(max-width:768px){
+  .kpi-grid{grid-template-columns:1fr 1fr}
+  .chart-grid-2,.chart-grid-21,.chart-grid-12{grid-template-columns:1fr}
+  .venue-grid{grid-template-columns:1fr}
+  .swot-grid{grid-template-columns:1fr}
+  .fin-grid{grid-template-columns:1fr 1fr}
+  .tab-content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <div>
+      <div class="logo">🌸 이화원 브랜드 전략 대시보드 | 에렉스</div>
+      <div class="sub">梨花苑 · 3대 화교 중식당 · 프리미엄 브랜드 전략</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <a class="back-btn" href="aerex_brand_portal.html">← 포털로 돌아가기</a>
+    <span id="nowDate" style="opacity:.7"></span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <button class="tab-btn active" onclick="showTab('brand')">🏮 브랜드 개요</button>
+  <button class="tab-btn" onclick="showTab('competitive')">🏆 경쟁사 분석</button>
+  <button class="tab-btn" onclick="showTab('market')">📊 시장 분석</button>
+  <button class="tab-btn" onclick="showTab('strategy')">🎯 입점 전략</button>
+</div>
+
+<!-- ════════════════════════ TAB 1: 브랜드 개요 ════════════════════════ -->
+<div id="tab-brand" class="tab-content active">
+  <div class="disclaimer">⚠️ 본 대시보드의 데이터는 에렉스 내부 리서치 기준이며, 일부 수치는 추정치를 포함합니다. 외부 공개 금지.</div>
+
+  <!-- KPI 핵심 지표 -->
+  <div class="kpi-grid">
+    <div class="kpi-card purple">
+      <div class="kpi-icon">🏮</div>
+      <div class="kpi-label">브랜드 히스토리</div>
+      <div class="kpi-val">3대</div>
+      <div class="kpi-sub">화교 정통 중식 가문<br>연희동 플래그십 기반</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-icon">🏢</div>
+      <div class="kpi-label">운영 점포 수</div>
+      <div class="kpi-val">3개</div>
+      <div class="kpi-sub">연희동·삼성동 COEX<br>천안 프라이빗</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">💰</div>
+      <div class="kpi-label">코스 객단가 (최고)</div>
+      <div class="kpi-val">68,000</div>
+      <div class="kpi-sub">원 / 1인 코스<br>디너 코스 40,000원~</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-icon">🍜</div>
+      <div class="kpi-label">시그니처 메뉴</div>
+      <div class="kpi-val">비취냉면</div>
+      <div class="kpi-sub">15,000원 · 차별화 아이템<br>화교 정통 레시피</div>
+    </div>
+  </div>
+
+  <!-- 헤리티지 스토리 + KPI 추가 -->
+  <div class="chart-grid-21" style="margin-bottom:14px">
+    <!-- 3대 헤리티지 타임라인 -->
+    <div class="card">
+      <div class="card-title">🕰️ 3대 화교 헤리티지 스토리</div>
+      <div class="alert purple" style="margin-bottom:16px">
+        <strong>브랜드 핵심 자산:</strong> 단순한 중식당이 아닌, 3대에 걸친 화교 가문의 '살아있는 음식 유산'. 국내에서 이 수준의 정통성을 가진 브랜드는 극히 드뭅니다.
+      </div>
+      <div class="timeline">
+        <div class="tl-item">
+          <div class="tl-dot-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <div class="tl-year">1세대 창업</div>
+            <div class="tl-title">화교 이민 1세대 창업</div>
+            <div class="tl-desc">중국 본토 레시피와 조리 철학을 그대로 이식. 연희동에 정착하며 재한 화교 커뮤니티의 구심점이 된 정통 중식당 시작.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot-wrap"><div class="tl-dot"></div><div class="tl-line"></div></div>
+          <div class="tl-body">
+            <div class="tl-year">2세대 계승</div>
+            <div class="tl-title">레시피 정제 & 브랜드화</div>
+            <div class="tl-desc">전통 레시피를 지키면서 현대 고객의 입맛에 맞게 정제. 비취냉면 등 시그니처 메뉴 확립. 서울 외식 씬에서 '진짜 중국 맛집'으로 인정받기 시작.</div>
+          </div>
+        </div>
+        <div class="tl-item">
+          <div class="tl-dot-wrap"><div class="tl-dot"></div></div>
+          <div class="tl-body">
+            <div class="tl-year">3세대 현재</div>
+            <div class="tl-title">프리미엄 코스 다이닝 & 멀티 거점</div>
+            <div class="tl-desc">연희동 플래그십 외 COEX 오크우드호텔(삼성동), 천안 프라이빗 운영. 코스 다이닝 체계 구축. 에렉스와 협력하여 백화점 채널 입점 가능성 탐색 중.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- 브랜드 핵심 팩트 카드 -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <div class="card">
+        <div class="card-title">🍽️ 메뉴 & 가격 구조</div>
+        <table class="dt">
+          <tr><th>메뉴</th><th>가격</th><th>포지션</th></tr>
+          <tr><td>비취냉면</td><td><strong>15,000원</strong></td><td><span class="pill purple">시그니처</span></td></tr>
+          <tr><td>삼선짬뽕</td><td><strong>10,000원</strong></td><td><span class="pill gray">접근형</span></td></tr>
+          <tr><td>런치 코스</td><td><strong>28,000~38,000원</strong></td><td><span class="pill blue">점심 프리미엄</span></td></tr>
+          <tr><td>디너 코스</td><td><strong>40,000원~</strong></td><td><span class="pill orange">저녁 코스</span></td></tr>
+          <tr><td>1인 코스</td><td><strong>68,000원</strong></td><td><span class="pill green">최고가 플래그십</span></td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <div class="card-title">📍 현재 운영 거점</div>
+        <table class="dt">
+          <tr><th>점포</th><th>위치</th><th>성격</th></tr>
+          <tr><td><strong>연희동 플래그십</strong></td><td>서대문구 연희동</td><td><span class="pill purple">헤리티지 본점</span></td></tr>
+          <tr><td><strong>COEX 오크우드</strong></td><td>삼성동 3F</td><td><span class="pill dark">호텔 입점</span></td></tr>
+          <tr><td><strong>이화원 프라이빗</strong></td><td>천안</td><td><span class="pill gray">지역 확장</span></td></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- SWOT -->
+  <div class="sec-title">📋 SWOT 분석</div>
+  <div class="swot-grid">
+    <div class="swot-cell s">
+      <div class="sw-label" style="color:#16a34a">💪 강점 (Strengths)</div>
+      <ul>
+        <li>3대 화교 가문 정통성 — 국내 유일급 헤리티지</li>
+        <li>비취냉면 등 차별화된 시그니처 메뉴</li>
+        <li>진정성 있는 브랜드 스토리 (미디어 어필 강함)</li>
+        <li>코스 다이닝 체계 이미 구축 완료</li>
+        <li>COEX 오크우드 호텔 입점 경험 보유</li>
+      </ul>
+    </div>
+    <div class="swot-cell w">
+      <div class="sw-label" style="color:#ea580c">⚠️ 약점 (Weaknesses)</div>
+      <ul>
+        <li>백화점 채널 미진입 (경쟁사 대비 인지도 열세)</li>
+        <li>가족 경영 특성상 확장 속도 제한</li>
+        <li>현재 3개 점포로 인지도 규모 작음</li>
+        <li>SNS·디지털 마케팅 역량 미흡 추정</li>
+        <li>객단가 대비 가성비 인식 낮을 수 있음</li>
+      </ul>
+    </div>
+    <div class="swot-cell o">
+      <div class="sw-label" style="color:#7c3aed">🚀 기회 (Opportunities)</div>
+      <ul>
+        <li><strong>신세계 백화점 채널 공백</strong> — 도원스타일이 현대에 집중, 신세계 비어있음</li>
+        <li>프리미엄 중식 외식 트렌드 상승 중</li>
+        <li>화교 음식 문화 재조명 (K-콘텐츠 연계)</li>
+        <li>에렉스 유통 네트워크 활용 입점 가속</li>
+        <li>코스 다이닝 수요 증가 (미슐랭 문화 확산)</li>
+      </ul>
+    </div>
+    <div class="swot-cell t">
+      <div class="sw-label" style="color:#dc2626">🔴 위협 (Threats)</div>
+      <ul>
+        <li>차이797·크리스탈제이드 등 강력한 프리미엄 경쟁사</li>
+        <li>고객단가 부담으로 방문 빈도 제한</li>
+        <li>백화점 임대료·운영비 수익성 압박</li>
+        <li>가족 경영 브랜드의 서비스 일관성 유지 난이도</li>
+        <li>중식 시장 내 캐주얼 브랜드 급성장</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 2: 경쟁사 분석 ════════════════════════ -->
+<div id="tab-competitive" class="tab-content">
+  <div class="disclaimer">⚠️ 경쟁사 데이터는 공개 정보 및 에렉스 내부 리서치 기준 추정치입니다.</div>
+
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <!-- 레이더 차트 -->
+    <div class="card">
+      <div class="card-title">🕸️ 브랜드 경쟁력 비교 레이더</div>
+      <div class="toggle-group" id="toggleGroup"></div>
+      <div style="position:relative;height:320px">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+    <!-- 경쟁사 요약 -->
+    <div class="card">
+      <div class="card-title">📊 경쟁사 핵심 지표 비교</div>
+      <table class="dt">
+        <thead>
+          <tr><th>브랜드</th><th>운영사</th><th>1인 객단가</th><th>주요 채널</th><th>점포 수</th></tr>
+        </thead>
+        <tbody>
+          <tr style="background:#faf5ff">
+            <td><strong style="color:#7c3aed">🌸 이화원</strong></td>
+            <td>에렉스</td>
+            <td><strong>68,000원</strong></td>
+            <td><span class="pill purple">호텔</span><span class="pill gray">직영</span></td>
+            <td><strong>3개</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#dc2626">도원스타일</strong></td>
+            <td>한화</td>
+            <td>68,000원~</td>
+            <td><span class="pill red">현대백화점×6</span></td>
+            <td><strong>6개</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#7c3aed">크리스탈제이드</strong></td>
+            <td>싱가포르계</td>
+            <td>80,000원~</td>
+            <td><span class="pill purple">갤러리아</span></td>
+            <td><strong>2~3개</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ca8a04">차이797</strong></td>
+            <td>-</td>
+            <td>85,000원~</td>
+            <td><span class="pill yellow">프리미엄직영</span></td>
+            <td><strong>2개</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ea580c">홍보각</strong></td>
+            <td>신라호텔</td>
+            <td>90,000원+</td>
+            <td><span class="pill orange">신라호텔</span></td>
+            <td><strong>1개</strong></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#0ea5e9">만복</strong></td>
+            <td>-</td>
+            <td>45,000원~</td>
+            <td><span class="pill blue">복합쇼핑몰</span></td>
+            <td><strong>5개+</strong></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- 채널 매핑 -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">🏬 채널 입점 매핑 — 백화점·호텔 현황</div>
+    <div class="alert purple" style="margin-bottom:14px">
+      <strong>핵심 인사이트:</strong> 도원스타일은 현대백화점 6개 점포에 집중되어 있으며 <strong>신세계 채널은 완전 공백</strong>입니다. 이화원이 신세계 프리미엄 포지셔닝으로 진입할 경우 직접 경쟁 없이 채널 독점이 가능합니다.
+    </div>
+    <div style="overflow-x:auto">
+      <table class="channel-map">
+        <thead>
+          <tr>
+            <th style="min-width:120px">브랜드</th>
+            <th>신세계<br>강남</th>
+            <th>신세계<br>타임스퀘어</th>
+            <th>신세계<br>센텀시티</th>
+            <th>현대<br>압구정</th>
+            <th>현대<br>무역센터</th>
+            <th>현대<br>더현대서울</th>
+            <th>갤러리아<br>명품관</th>
+            <th>롯데<br>에비뉴엘</th>
+            <th>신라<br>호텔</th>
+            <th>COEX<br>오크우드</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#faf5ff">
+            <td>🌸 <strong style="color:#7c3aed">이화원</strong></td>
+            <td><span class="cm-opp">진입 가능</span></td>
+            <td><span class="cm-opp">진입 가능</span></td>
+            <td><span class="cm-opp">진입 가능</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-opp">탐색 중</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#dc2626">도원스타일</strong></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-yes">✓</span></td>
+            <td><span class="cm-yes">✓</span></td>
+            <td><span class="cm-yes">✓</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#7c3aed">크리스탈제이드</strong></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-yes">✓</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ca8a04">차이797</strong></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ea580c">홍보각</strong></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-yes">✓</span></td>
+            <td><span class="cm-no">—</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#0ea5e9">만복</strong></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-yes">✓</span></td>
+            <td><span class="cm-no">—</span></td>
+            <td><span class="cm-no">—</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;font-size:11px;color:var(--gray)">
+      <span style="color:#7c3aed;font-weight:700">■ 진입 가능</span>: 채널 공백 — 직접 경쟁 없음 &nbsp;|&nbsp; <span style="color:#16a34a;font-weight:700">✓</span>: 현재 입점 &nbsp;|&nbsp; <span style="color:#d1d5db">—</span>: 미진입
+    </div>
+  </div>
+
+  <!-- 세부 경쟁사 분석 -->
+  <div class="sec-title">🔍 경쟁사 상세 분석</div>
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title" style="color:#dc2626">⚔️ 도원스타일 — 최대 경쟁사 분석</div>
+      <div class="alert red">
+        <strong>전략적 시사점:</strong> 현대백화점 6개점 집중 포진. 신세계 채널 완전 부재. 한화 계열 운영으로 신세계 그룹사와 경쟁 관계.
+      </div>
+      <table class="dt">
+        <tr><td style="width:40%;color:var(--gray)">운영사</td><td><strong>한화호텔앤드리조트</strong></td></tr>
+        <tr><td style="color:var(--gray)">브랜드 역사</td><td>50년+ 헤리티지</td></tr>
+        <tr><td style="color:var(--gray)">주요 입점처</td><td>현대백화점 압구정·무역센터·목동·천호·더현대서울·서울역</td></tr>
+        <tr><td style="color:var(--gray)">1인 코스</td><td><strong>68,000원~</strong></td></tr>
+        <tr><td style="color:var(--gray)">신세계 여부</td><td><span class="pill red">미진입</span></td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title" style="color:#7c3aed">💎 크리스탈제이드 — 글로벌 프리미엄</div>
+      <div class="alert purple">
+        <strong>차별점:</strong> 싱가포르 글로벌 브랜드. 갤러리아 명품관 포지션. 외국계 프리미엄 이미지. 이화원의 '국산 정통성'과 대비되는 포지션.
+      </div>
+      <table class="dt">
+        <tr><td style="width:40%;color:var(--gray)">본사</td><td><strong>싱가포르 (글로벌 체인)</strong></td></tr>
+        <tr><td style="color:var(--gray)">주요 입점처</td><td>갤러리아 명품관</td></tr>
+        <tr><td style="color:var(--gray)">1인 코스</td><td><strong>80,000원~</strong></td></tr>
+        <tr><td style="color:var(--gray)">포지셔닝</td><td>글로벌 광둥요리 파인다이닝</td></tr>
+        <tr><td style="color:var(--gray)">신세계 여부</td><td><span class="pill red">미진입</span></td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 3: 시장 분석 ════════════════════════ -->
+<div id="tab-market" class="tab-content">
+  <div class="disclaimer">⚠️ 시장 규모 및 성장률은 외식산업 공개 데이터 기반 추정치입니다.</div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card purple">
+      <div class="kpi-icon">📈</div>
+      <div class="kpi-label">국내 프리미엄 중식 시장</div>
+      <div class="kpi-val">~8,000억</div>
+      <div class="kpi-sub">원 규모 추정 (2025)<br>연 6~8% 성장</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">🏬</div>
+      <div class="kpi-label">백화점 F&B 매출 비중</div>
+      <div class="kpi-val">↑ 성장</div>
+      <div class="kpi-sub">식음료 MD 비중 확대<br>체험형 소비 트렌드</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-icon">👨‍👩‍👧</div>
+      <div class="kpi-label">주요 타깃 세그먼트</div>
+      <div class="kpi-val">40~60대</div>
+      <div class="kpi-sub">고소득 가족 외식<br>비즈니스 접대 수요</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-icon">🎯</div>
+      <div class="kpi-label">신세계 채널 공백</div>
+      <div class="kpi-val">전략 기회</div>
+      <div class="kpi-sub">프리미엄 중식 공백<br>도원스타일 부재</div>
+    </div>
+  </div>
+
+  <!-- 시장 트렌드 + 차트 -->
+  <div class="chart-grid-21" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📊 프리미엄 중식 시장 트렌드 & 채널 성장</div>
+      <canvas id="marketChart" style="height:300px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">🌊 주요 시장 트렌드</div>
+      <div class="trend-row">
+        <div class="trend-icon">🌟</div>
+        <div class="trend-body">
+          <div class="tt">헤리티지 다이닝 열풍</div>
+          <div class="td">오래된 맛집·전통 있는 브랜드에 대한 소비자 신뢰 급증. MZ세대의 '찐맛집' 탐방 문화</div>
+        </div>
+        <div class="trend-badge"><span class="pill green">강세</span></div>
+      </div>
+      <div class="trend-row">
+        <div class="trend-icon">💎</div>
+        <div class="trend-body">
+          <div class="tt">파인다이닝 코스 수요 증가</div>
+          <div class="td">미슐랭 가이드 서울 정착으로 코스 다이닝 문화 확산. 중식 파인다이닝 희소성 부각</div>
+        </div>
+        <div class="trend-badge"><span class="pill purple">기회</span></div>
+      </div>
+      <div class="trend-row">
+        <div class="trend-icon">🏬</div>
+        <div class="trend-body">
+          <div class="tt">백화점 F&B 고급화</div>
+          <div class="td">신세계·현대 등 프리미엄 백화점의 식음료 MD 업그레이드 전략 지속. 고급 레스토랑 수요 증가</div>
+        </div>
+        <div class="trend-badge"><span class="pill blue">진행중</span></div>
+      </div>
+      <div class="trend-row">
+        <div class="trend-icon">🍜</div>
+        <div class="trend-body">
+          <div class="tt">화교 음식 문화 재조명</div>
+          <div class="td">K-드라마·예능에서 화교 문화 콘텐츠 증가. 정통 중식 vs 중국집 구분 인식 성장</div>
+        </div>
+        <div class="trend-badge"><span class="pill orange">부상</span></div>
+      </div>
+      <div class="trend-row">
+        <div class="trend-icon">📱</div>
+        <div class="trend-body">
+          <div class="tt">SNS 기반 고급 외식 발굴</div>
+          <div class="td">인스타그램·유튜브 통한 숨은 맛집 발굴 문화. 스토리 있는 브랜드 바이럴 용이</div>
+        </div>
+        <div class="trend-badge"><span class="pill green">강세</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 신세계 채널 갭 분석 -->
+  <div class="card">
+    <div class="card-title">🎯 신세계 채널 갭 분석 — 핵심 전략 기회</div>
+    <div class="alert green">
+      <strong>전략적 결론:</strong> 신세계 백화점 프리미엄 중식 카테고리는 현재 사실상 공백 상태입니다. 도원스타일(현대 집중), 크리스탈제이드(갤러리아), 홍보각(신라호텔)이 모두 다른 채널에 위치해 있어, 이화원이 신세계 채널 최초 프리미엄 중식 브랜드로 포지셔닝할 수 있습니다.
+    </div>
+    <div class="chart-grid-2">
+      <div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--dark)">신세계 채널 프리미엄 중식 현황</div>
+        <table class="dt">
+          <tr><th>점포</th><th>프리미엄 중식 입점 현황</th><th>기회</th></tr>
+          <tr><td>신세계 강남</td><td><span class="pill red">공백</span></td><td><span class="pill green">최우선 타깃</span></td></tr>
+          <tr><td>신세계 본점</td><td><span class="pill red">공백</span></td><td><span class="pill green">타깃</span></td></tr>
+          <tr><td>신세계 타임스퀘어</td><td><span class="pill red">공백</span></td><td><span class="pill yellow">검토</span></td></tr>
+          <tr><td>신세계 센텀시티</td><td><span class="pill red">공백</span></td><td><span class="pill yellow">중장기</span></td></tr>
+        </table>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;margin-bottom:10px;color:var(--dark)">경쟁 브랜드 채널 분포</div>
+        <canvas id="channelChart" style="height:200px"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ════════════════════════ TAB 4: 입점 전략 ════════════════════════ -->
+<div id="tab-strategy" class="tab-content">
+  <div class="disclaimer">⚠️ 재무 시뮬레이션은 업계 평균치 기반 추정입니다. 실제 계약 조건에 따라 달라질 수 있습니다.</div>
+
+  <!-- 추천 입점 벤뉴 -->
+  <div class="sec-title">🏆 추천 입점 후보지 (우선순위 순)</div>
+  <div class="venue-grid" style="margin-bottom:18px">
+    <div class="venue-card highlight">
+      <div class="venue-hd" style="background:linear-gradient(135deg,#7c3aed,#a855f7)">
+        <div>
+          <div class="venue-name">신세계 강남점</div>
+          <div class="venue-type">★★★ 최우선 추천 — 도원스타일 공백 채널</div>
+        </div>
+        <span style="font-size:24px">🥇</span>
+      </div>
+      <div class="venue-bd">
+        <div class="venue-row"><span class="vl">위치</span><span class="vv">서울 강남구 반포</span></div>
+        <div class="venue-row"><span class="vl">상권 특성</span><span class="vv">고소득 강남 VIP 고객</span></div>
+        <div class="venue-row"><span class="vl">프리미엄 중식</span><span class="vv"><span class="pill red">공백</span></span></div>
+        <div class="venue-row"><span class="vl">추천 이유</span><span class="vv">도원스타일 없음, 신세계 플래그십, 강남 40~60대 타깃 최적</span></div>
+        <div class="venue-row"><span class="vl">예상 면적</span><span class="vv">150~200평 코스 다이닝</span></div>
+        <div class="venue-row"><span class="vl">예상 착공</span><span class="vv">2026 H2 협상 시작</span></div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-hd" style="background:linear-gradient(135deg,#1d4ed8,#3b82f6)">
+        <div>
+          <div class="venue-name">신세계 본점</div>
+          <div class="venue-type">★★☆ 2순위 — 명동 중심상권</div>
+        </div>
+        <span style="font-size:24px">🥈</span>
+      </div>
+      <div class="venue-bd">
+        <div class="venue-row"><span class="vl">위치</span><span class="vv">서울 중구 명동</span></div>
+        <div class="venue-row"><span class="vl">상권 특성</span><span class="vv">관광객·비즈니스·상류층 혼재</span></div>
+        <div class="venue-row"><span class="vl">프리미엄 중식</span><span class="vv"><span class="pill red">공백</span></span></div>
+        <div class="venue-row"><span class="vl">추천 이유</span><span class="vv">화교 역사 연결 스토리(명동·차이나타운 인접), 외국인 VIP 수요</span></div>
+        <div class="venue-row"><span class="vl">예상 면적</span><span class="vv">100~150평</span></div>
+        <div class="venue-row"><span class="vl">예상 착공</span><span class="vv">2027 검토</span></div>
+      </div>
+    </div>
+    <div class="venue-card">
+      <div class="venue-hd" style="background:linear-gradient(135deg,#16a34a,#22c55e)">
+        <div>
+          <div class="venue-name">롯데 에비뉴엘</div>
+          <div class="venue-type">★★☆ 3순위 — 명품 인접 프리미엄</div>
+        </div>
+        <span style="font-size:24px">🥉</span>
+      </div>
+      <div class="venue-bd">
+        <div class="venue-row"><span class="vl">위치</span><span class="vv">서울 중구 (잠실/명동)</span></div>
+        <div class="venue-row"><span class="vl">상권 특성</span><span class="vv">명품 쇼핑 고소득층</span></div>
+        <div class="venue-row"><span class="vl">프리미엄 중식</span><span class="vv"><span class="pill yellow">만복 (중저가)</span></span></div>
+        <div class="venue-row"><span class="vl">추천 이유</span><span class="vv">만복과 차별화 (코스 다이닝 vs 캐주얼), 프리미엄 포지션 공백</span></div>
+        <div class="venue-row"><span class="vl">예상 면적</span><span class="vv">120~160평</span></div>
+        <div class="venue-row"><span class="vl">예상 착공</span><span class="vv">2027~2028</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 재무 시뮬레이션 -->
+  <div class="sec-title">💰 재무 시뮬레이션 — 신세계 강남점 기준</div>
+  <div class="fin-grid" style="margin-bottom:14px">
+    <div class="fin-card">
+      <div class="fv">68,000원</div>
+      <div class="fl">1인 코스 객단가 기준</div>
+      <div class="fd">런치 38,000 / 디너 68,000원</div>
+    </div>
+    <div class="fin-card">
+      <div class="fv">~2.5억</div>
+      <div class="fl">월 매출 추정 (보수적)</div>
+      <div class="fd">일 40~50석 × 2회전 × 25일</div>
+    </div>
+    <div class="fin-card">
+      <div class="fv">~3~4억</div>
+      <div class="fl">월 매출 추정 (낙관적)</div>
+      <div class="fd">60석 풀가동 시나리오</div>
+    </div>
+  </div>
+
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">📊 수익성 구조 분석 (월 기준, 신세계 강남 추정)</div>
+      <canvas id="finChart" style="height:260px"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">⏱️ 투자 회수 시뮬레이션</div>
+      <table class="dt" style="margin-bottom:12px">
+        <tr><th>항목</th><th>금액</th><th>비고</th></tr>
+        <tr><td>초기 인테리어 투자</td><td><strong>4~6억원</strong></td><td>150평 기준</td></tr>
+        <tr><td>보증금</td><td><strong>3~5억원</strong></td><td>백화점 계약 조건</td></tr>
+        <tr><td>총 초기 투자</td><td><strong>~8~11억원</strong></td><td></td></tr>
+        <tr><td style="color:var(--green)">월 영업이익 (추정)</td><td style="color:var(--green)"><strong>~4,500만원</strong></td><td>매출의 18% 가정</td></tr>
+        <tr><td>투자 회수 기간</td><td><strong>18~24개월</strong></td><td>보수적 시나리오</td></tr>
+      </table>
+      <div class="alert green">
+        <strong>결론:</strong> 백화점 프리미엄 F&B 평균 투자회수 기간(24~36개월) 대비 <strong>양호한 수익성</strong> 예상. 헤리티지 스토리 마케팅으로 런칭 초기 버즈 기대.
+      </div>
+    </div>
+  </div>
+
+  <!-- 실행 전략 로드맵 -->
+  <div class="sec-title">🗺️ 입점 실행 로드맵</div>
+  <div class="strategy-steps">
+    <div class="strategy-step">
+      <div class="step-circle">1</div>
+      <div class="step-body">
+        <div class="st">2026 Q2~Q3 — 신세계 강남 MD팀 접촉 및 브랜드 제안서 제출</div>
+        <div class="sd">에렉스 유통 네트워크를 통해 신세계 F&B MD팀에 공식 브랜드 제안. '3대 화교 헤리티지' 스토리 중심의 브랜드 덱 준비. COEX 오크우드 입점 레퍼런스 활용.</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-circle">2</div>
+      <div class="step-body">
+        <div class="st">2026 Q3~Q4 — 계약 협상 및 공간 설계</div>
+        <div class="sd">임대 조건(보증금·임대료·수수료율) 협상. 150~200평 코스 다이닝 전용 공간 확보. 인테리어는 '중국 전통 정원 + 현대적 해석' 콘셉트로 차별화.</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-circle">3</div>
+      <div class="step-body">
+        <div class="st">2027 Q1 — 그랜드 오픈 및 헤리티지 마케팅 집중</div>
+        <div class="sd">3대 가문 스토리 미디어 노출 (조선일보·한겨레 푸드 섹션 피칭). 오픈 이벤트: 창업주 화교 스토리 전시 + 시그니처 메뉴 시식. SNS 바이럴 캠페인 동시 집행.</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-circle">4</div>
+      <div class="step-body">
+        <div class="st">2027 Q2~Q4 — 안정화 및 2호점 검토</div>
+        <div class="sd">강남점 안정화 이후 신세계 본점 또는 타임스퀘어 추가 검토. 미슐랭 가이드 추천 맛집 등재 추진. 연말 백화점 시즌 기업 선물 코스 상품 개발.</div>
+      </div>
+    </div>
+    <div class="strategy-step">
+      <div class="step-circle">5</div>
+      <div class="step-body">
+        <div class="st">2028~ — 신세계 채널 멀티 입점 & 브랜드 확장</div>
+        <div class="sd">신세계 2~3개점 안착 시 '이화원' 브랜드 국내 프리미엄 중식 No.1 포지션 확립. 신세계 채널 내 도원스타일 진입 차단 효과. 장기적으로 해외 교포 상권 타깃 글로벌 확장 검토.</div>
+      </div>
+    </div>
+  </div>
+
+  <hr class="sec-divider">
+
+  <!-- 리스크 & 대응 -->
+  <div class="chart-grid-2">
+    <div class="card">
+      <div class="card-title">⚠️ 주요 리스크 & 대응 방안</div>
+      <table class="dt">
+        <tr><th>리스크</th><th>수준</th><th>대응 방안</th></tr>
+        <tr><td>백화점 임대 수수료 압박</td><td><span class="pill red">고</span></td><td>코스 단가 유지, 회전율 관리</td></tr>
+        <tr><td>주방 인력 확보 난이도</td><td><span class="pill orange">중</span></td><td>연희동 본점 인력 트레이닝 체계화</td></tr>
+        <tr><td>브랜드 일관성 유지</td><td><span class="pill orange">중</span></td><td>본점 레시피 표준화, 매뉴얼 구축</td></tr>
+        <tr><td>경쟁 브랜드 후발 신세계 진입</td><td><span class="pill yellow">저</span></td><td>선점 효과 극대화, 장기 계약 확보</td></tr>
+        <tr><td>경기 침체 고객단가 부담</td><td><span class="pill yellow">저</span></td><td>런치 세트 강화로 접근성 확대</td></tr>
+      </table>
+    </div>
+    <div class="card">
+      <div class="card-title">💡 브랜드 포지셔닝 메시지</div>
+      <div class="alert purple">
+        <strong>핵심 메시지:</strong> "3대 화교 가문이 지켜온 정통의 맛, 이제 신세계에서 만납니다."
+      </div>
+      <div style="margin-top:12px">
+        <div style="font-size:12px;color:var(--gray);margin-bottom:8px;font-weight:700">타깃 세그먼트별 소구점</div>
+        <div class="trend-row" style="margin-bottom:8px">
+          <div class="trend-icon" style="font-size:16px">👨‍💼</div>
+          <div class="trend-body">
+            <div class="tt" style="font-size:12px">비즈니스 접대 (40~50대 임원)</div>
+            <div class="td" style="font-size:11px">정통성·격조·스토리 → '여기 데려가면 격이 다르다'</div>
+          </div>
+        </div>
+        <div class="trend-row" style="margin-bottom:8px">
+          <div class="trend-icon" style="font-size:16px">👨‍👩‍👧</div>
+          <div class="trend-body">
+            <div class="tt" style="font-size:12px">가족 특별식 (50~60대 부모)</div>
+            <div class="td" style="font-size:11px">3대 헤리티지 공감 → '우리 때 먹던 진짜 중국집'</div>
+          </div>
+        </div>
+        <div class="trend-row">
+          <div class="trend-icon" style="font-size:16px">📱</div>
+          <div class="trend-body">
+            <div class="tt" style="font-size:12px">SNS 미식가 (30~40대 MZ)</div>
+            <div class="td" style="font-size:11px">비취냉면 비주얼 + 3대 스토리 → 바이럴 맛집</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>에렉스 브랜드전략팀 · 2026 · CONFIDENTIAL &nbsp;|&nbsp; 이화원(梨花苑) 브랜드 전략 대시보드 &nbsp;|&nbsp; 본 자료는 에렉스 내부용으로 외부 공개 및 배포를 금합니다.</footer>
+
+<script>
+// ── 날짜 표시 ──
+document.getElementById('nowDate').textContent = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+
+// ── 탭 전환 ──
+function showTab(name){
+  document.querySelectorAll('.tab-content').forEach(el=>el.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(el=>el.classList.remove('active'));
+  document.getElementById('tab-'+name).classList.add('active');
+  event.currentTarget.classList.add('active');
+  // 탭 전환 후 차트 재렌더
+  if(name==='competitive') setTimeout(()=>{if(radarChart) radarChart.resize()},50);
+  if(name==='market') setTimeout(()=>{if(marketChart) marketChart.resize(); if(channelChart) channelChart.resize()},50);
+  if(name==='strategy') setTimeout(()=>{if(finChart) finChart.resize()},50);
+}
+
+// ── 레이더 차트 ──
+const brands = [
+  { label:'이화원',        color:'#7c3aed', data:[8.5,8.0,8.0,6.0,8.5,6.5], active:true },
+  { label:'도원스타일',    color:'#dc2626', data:[8.0,8.5,8.5,5.5,8.5,8.0], active:true },
+  { label:'크리스탈제이드',color:'#7c3aed', data:[8.5,8.5,9.0,4.5,9.0,7.5], active:false },
+  { label:'차이797',       color:'#ca8a04', data:[9.0,9.0,9.0,6.0,9.0,7.5], active:false },
+  { label:'홍보각',        color:'#ea580c', data:[8.5,9.0,8.5,5.0,9.0,7.0], active:false },
+  { label:'만복',          color:'#0ea5e9', data:[7.5,7.5,7.5,7.5,8.0,8.5], active:false },
+];
+const radarLabels = ['맛','서비스','분위기','가성비','위생','접근성'];
+
+const tg = document.getElementById('toggleGroup');
+brands.forEach((b,i)=>{
+  const btn = document.createElement('button');
+  btn.className = 'brand-toggle' + (b.active?' active':'');
+  btn.textContent = b.label;
+  btn.style.borderColor = b.color;
+  if(b.active){ btn.style.background = b.color; btn.style.color='#fff'; }
+  btn.addEventListener('click',()=>{
+    b.active = !b.active;
+    if(b.active){ btn.classList.add('active'); btn.style.background=b.color; btn.style.color='#fff'; }
+    else{ btn.classList.remove('active'); btn.style.background='#fff'; btn.style.color=b.color; }
+    updateRadar();
+  });
+  tg.appendChild(btn);
+});
+
+let radarChart;
+function buildRadar(){
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  radarChart = new Chart(ctx,{
+    type:'radar',
+    data:{ labels:radarLabels, datasets:[] },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      scales:{ r:{ min:0, max:10, ticks:{ stepSize:2, font:{size:10} }, pointLabels:{ font:{size:12,weight:'bold'} }, grid:{ color:'#e2e8f0' } } },
+      plugins:{ legend:{ display:false } },
+      elements:{ line:{ borderWidth:2.5 }, point:{ radius:4, hoverRadius:6 } }
+    }
+  });
+  updateRadar();
+}
+function updateRadar(){
+  radarChart.data.datasets = brands.filter(b=>b.active).map(b=>({
+    label: b.label,
+    data: b.data,
+    borderColor: b.color,
+    backgroundColor: 'transparent',
+    pointBackgroundColor: b.color,
+    pointBorderColor: '#fff',
+    pointBorderWidth: 2,
+  }));
+  radarChart.update();
+}
+buildRadar();
+
+// ── 시장 차트 ──
+let marketChart;
+const marketCtx = document.getElementById('marketChart');
+if(marketCtx){
+  marketChart = new Chart(marketCtx,{
+    type:'bar',
+    data:{
+      labels:['2021','2022','2023','2024','2025E','2026F','2027F'],
+      datasets:[
+        { label:'프리미엄 중식 시장 (억원)', data:[4800,5300,5900,6600,7200,7900,8600], backgroundColor:'rgba(124,58,237,0.7)', borderColor:'#7c3aed', borderWidth:1.5, borderRadius:4 },
+        { label:'백화점 F&B 중식 (억원)', data:[900,1050,1200,1400,1650,1900,2200], backgroundColor:'rgba(124,58,237,0.25)', borderColor:'#a855f7', borderWidth:1.5, borderRadius:4, type:'bar' }
+      ]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ position:'bottom', labels:{ font:{size:11} } } },
+      scales:{
+        y:{ beginAtZero:true, grid:{ color:'#f1f5f9' }, ticks:{ font:{size:11} } },
+        x:{ grid:{ display:false }, ticks:{ font:{size:11} } }
+      }
+    }
+  });
+}
+
+// ── 채널 차트 (도넛) ──
+let channelChart;
+const channelCtx = document.getElementById('channelChart');
+if(channelCtx){
+  channelChart = new Chart(channelCtx,{
+    type:'doughnut',
+    data:{
+      labels:['현대백화점\n(도원스타일 6개)','갤러리아\n(크리스탈제이드)','신라호텔\n(홍보각)','복합쇼핑몰\n(만복 등)','신세계\n(공백!)'],
+      datasets:[{
+        data:[6,2,1,5,0.5],
+        backgroundColor:['#dc2626','#7c3aed','#ea580c','#0ea5e9','rgba(22,163,74,0.4)'],
+        borderColor:['#fff','#fff','#fff','#fff','#16a34a'],
+        borderWidth:[2,2,2,2,3]
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{
+        legend:{ position:'right', labels:{ font:{size:10}, boxWidth:12 } },
+        tooltip:{ callbacks:{ label: ctx => ` ${ctx.label}: ${ctx.raw}개 점포` } }
+      }
+    }
+  });
+}
+
+// ── 재무 차트 ──
+let finChart;
+const finCtx = document.getElementById('finChart');
+if(finCtx){
+  finChart = new Chart(finCtx,{
+    type:'bar',
+    data:{
+      labels:['매출','식재료비','인건비','임대료/수수료','기타비용','영업이익'],
+      datasets:[{
+        data:[250,65,55,70,15,45],
+        backgroundColor:['rgba(124,58,237,0.8)','rgba(220,38,38,0.7)','rgba(234,88,12,0.7)','rgba(202,138,4,0.7)','rgba(107,114,128,0.7)','rgba(22,163,74,0.8)'],
+        borderRadius:4
+      }]
+    },
+    options:{
+      responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false },
+        tooltip:{ callbacks:{ label: ctx => ` ${ctx.raw}백만원` } }
+      },
+      scales:{
+        y:{ beginAtZero:true, ticks:{ callback: v=>v+'M', font:{size:10} }, grid:{ color:'#f1f5f9' } },
+        x:{ grid:{ display:false }, ticks:{ font:{size:11} } }
+      }
+    }
+  });
+}
+</script>
+</body>
+</html>

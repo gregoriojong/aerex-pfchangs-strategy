@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>에렉스 브랜드 전략 포털</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh}
+
+/* ── TOP BAR ── */
+.topbar{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
+.logo-area{display:flex;align-items:center;gap:14px}
+.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900}
+.logo-text{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.logo-sub{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
+.topbar-right{font-size:11px;color:rgba(255,255,255,0.45);text-align:right}
+
+/* ── HERO ── */
+.hero{padding:48px 32px 32px;text-align:center}
+.hero h1{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:10px}
+.hero h1 span{background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.hero p{font-size:13px;color:rgba(255,255,255,0.5);max-width:480px;margin:0 auto}
+
+/* ── FILTER BAR ── */
+.filterbar{display:flex;justify-content:center;gap:8px;padding:16px 32px 24px;flex-wrap:wrap}
+.filter-btn{padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.55);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.filter-btn:hover,.filter-btn.active{background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.3)}
+
+/* ── BRAND GRID ── */
+.brand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;padding:0 32px 48px;max-width:1280px;margin:0 auto}
+
+/* ── BRAND CARD ── */
+.brand-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer;text-decoration:none;display:block}
+.brand-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.2);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
+.brand-card-header{padding:24px 24px 16px;position:relative}
+.brand-emoji{font-size:36px;margin-bottom:12px;display:block}
+.brand-name{font-size:18px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
+.brand-category{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:0.5}
+.brand-badge{position:absolute;top:20px;right:20px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:8px}
+.badge-active{background:rgba(22,163,74,0.2);color:#4ade80;border:1px solid rgba(22,163,74,0.3)}
+.badge-new{background:rgba(234,88,12,0.2);color:#fb923c;border:1px solid rgba(234,88,12,0.3)}
+.badge-draft{background:rgba(107,114,128,0.2);color:#9ca3af;border:1px solid rgba(107,114,128,0.3)}
+
+.brand-card-body{padding:0 24px 20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px}
+.brand-desc{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:14px}
+.brand-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
+.brand-tag{font-size:10px;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.5)}
+
+.brand-card-footer{display:flex;align-items:center;justify-content:space-between}
+.brand-stats{display:flex;gap:16px}
+.stat-item{text-align:center}
+.stat-val{font-size:14px;font-weight:700}
+.stat-lbl{font-size:9px;opacity:0.4;margin-top:1px}
+.open-btn{font-size:11px;font-weight:700;padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;display:flex;align-items:center;gap:5px;transition:all .2s}
+.brand-card:hover .open-btn{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25)}
+
+/* ── ACCENT COLORS per brand ── */
+.card-pfchangs .brand-name{color:#60a5fa}
+.card-pfchangs{border-top:3px solid #1d4ed8}
+.card-peipei .brand-name{color:#fb923c}
+.card-peipei{border-top:3px solid #ea580c}
+.card-vietnam .brand-name{color:#4ade80}
+.card-vietnam{border-top:3px solid #16a34a}
+.card-ihwawon .brand-name{color:#c084fc}
+.card-ihwawon{border-top:3px solid #7c3aed}
+.card-matsugajae .brand-name{color:#fbbf24}
+.card-matsugajae{border-top:3px solid #ca8a04}
+
+/* ── SECTION TITLE ── */
+.section-header{padding:8px 32px 12px;max-width:1280px;margin:0 auto}
+.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3)}
+
+/* ── FOOTER ── */
+footer{text-align:center;padding:24px;font-size:10px;color:rgba(255,255,255,0.2);border-top:1px solid rgba(255,255,255,0.06)}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo-area">
+    <div class="logo-mark">🏢</div>
+    <div>
+      <div class="logo-text">AEREX Brand Portal</div>
+      <div class="logo-sub">에렉스 브랜드 전략 통합 포털</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <div id="portalDate"></div>
+    <div style="margin-top:3px;opacity:.5">CONFIDENTIAL · 내부용</div>
+  </div>
+</div>
+
+<div class="hero">
+  <h1>에렉스 <span>브랜드 전략 허브</span></h1>
+  <p>운영 브랜드별 시장 분석 · 경쟁사 비교 · 입점 전략을 한곳에서</p>
+</div>
+
+<div class="filterbar">
+  <button class="filter-btn active" onclick="filterCards('all')">전체 브랜드</button>
+  <button class="filter-btn" onclick="filterCards('asian')">아시안 퓨전</button>
+  <button class="filter-btn" onclick="filterCards('vietnam')">베트남</button>
+  <button class="filter-btn" onclick="filterCards('chinese')">중식</button>
+  <button class="filter-btn" onclick="filterCards('japanese')">일식</button>
+</div>
+
+<div class="section-header">
+  <div class="section-title">운영 브랜드 대시보드</div>
+</div>
+
+<div class="brand-grid" id="brandGrid">
+
+  <!-- ① 피에프창 -->
+  <a href="pfchangs_master_dashboard.html" class="brand-card card-pfchangs" data-cat="asian">
+    <div class="brand-card-header">
+      <span class="brand-emoji">⭐</span>
+      <div class="brand-name">P.F. Chang's</div>
+      <div class="brand-category">Asian Fusion · Premium Casual</div>
+      <span class="brand-badge badge-active">LIVE</span>
+    </div>
+    <div class="brand-card-body">
+      <div class="brand-desc">글로벌 아시안 퓨전 레스토랑. 강남역 입점 · 미국 본사 라이선스. 국내 유일 피에프창 운영.</div>
+      <div class="brand-tags">
+        <span class="brand-tag">강남역</span>
+        <span class="brand-tag">아시안 퓨전</span>
+        <span class="brand-tag">글로벌 브랜드</span>
+        <span class="brand-tag">프리미엄</span>
+      </div>
+      <div class="brand-card-footer">
+        <div class="brand-stats">
+          <div class="stat-item"><div class="stat-val" style="color:#60a5fa">1</div><div class="stat-lbl">직영점</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#60a5fa">₩65K</div><div class="stat-lbl">객단가</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
+        </div>
+        <div class="open-btn">열기 →</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- ② 페이페이 -->
+  <a href="peipei_dashboard.html" class="brand-card card-peipei" data-cat="asian">
+    <div class="brand-card-header">
+      <span class="brand-emoji">🥢</span>
+      <div class="brand-name">페이페이</div>
+      <div class="brand-category">Multi-Asian · 팬아시안 패스트캐주얼</div>
+      <span class="brand-badge badge-active">에렉스 자체</span>
+    </div>
+    <div class="brand-card-body">
+      <div class="brand-desc">에렉스 직영 멀티아시안 브랜드. 베트남·태국·싱가포르·몽골 메뉴를 한자리에. 신세계·롯데 입점 운영 중.</div>
+      <div class="brand-tags">
+        <span class="brand-tag">에렉스 직영</span>
+        <span class="brand-tag">팬아시안</span>
+        <span class="brand-tag">신세계·롯데</span>
+        <span class="brand-tag">패스트캐주얼</span>
+      </div>
+      <div class="brand-card-footer">
+        <div class="brand-stats">
+          <div class="stat-item"><div class="stat-val" style="color:#fb923c">4</div><div class="stat-lbl">직영점</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#fb923c">₩13K</div><div class="stat-lbl">객단가</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
+        </div>
+        <div class="open-btn">열기 →</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- ③ 포팟·땀땀 (베트남) -->
+  <a href="vietnam_dashboard.html" class="brand-card card-vietnam" data-cat="vietnam">
+    <div class="brand-card-header">
+      <span class="brand-emoji">🍜</span>
+      <div class="brand-name">포팟 · 땀땀</div>
+      <div class="brand-category">Vietnamese · 프리미엄 쌀국수</div>
+      <span class="brand-badge badge-new">신규 론칭</span>
+    </div>
+    <div class="brand-card-body">
+      <div class="brand-desc">포팟(신규) + 땀땀(기입점) 베트남 브랜드 전략 분석. 땀땀: 24시간 사골 육수, 롯데백화점 본점·동탄 입점.</div>
+      <div class="brand-tags">
+        <span class="brand-tag">베트남</span>
+        <span class="brand-tag">사골 쌀국수</span>
+        <span class="brand-tag">롯데백화점</span>
+        <span class="brand-tag">보양 컨셉</span>
+      </div>
+      <div class="brand-card-footer">
+        <div class="brand-stats">
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">2+</div><div class="stat-lbl">입점(땀땀)</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">₩14K</div><div class="stat-lbl">객단가</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
+        </div>
+        <div class="open-btn">열기 →</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- ④ 이화원 -->
+  <a href="ihwawon_dashboard.html" class="brand-card card-ihwawon" data-cat="chinese">
+    <div class="brand-card-header">
+      <span class="brand-emoji">🏮</span>
+      <div class="brand-name">이화원</div>
+      <div class="brand-category">Premium Chinese · 화교 3대 중식당</div>
+      <span class="brand-badge badge-draft">입점 검토</span>
+    </div>
+    <div class="brand-card-body">
+      <div class="brand-desc">화교 3대 가업 프리미엄 중식. 연희동 본점·코엑스 입점. 도원스타일 없는 신세계 채널 공백 선점 기회.</div>
+      <div class="brand-tags">
+        <span class="brand-tag">화교 정통 중식</span>
+        <span class="brand-tag">3대 가업</span>
+        <span class="brand-tag">신세계 공백</span>
+        <span class="brand-tag">코스 다이닝</span>
+      </div>
+      <div class="brand-card-footer">
+        <div class="brand-stats">
+          <div class="stat-item"><div class="stat-val" style="color:#c084fc">2</div><div class="stat-lbl">현재 입점</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#c084fc">₩68K+</div><div class="stat-lbl">객단가</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
+        </div>
+        <div class="open-btn">열기 →</div>
+      </div>
+    </div>
+  </a>
+
+  <!-- ⑤ 마쯔가제 -->
+  <a href="matsugajae_dashboard.html" class="brand-card card-matsugajae" data-cat="japanese">
+    <div class="brand-card-header">
+      <span class="brand-emoji">🍣</span>
+      <div class="brand-name">마쯔가제</div>
+      <div class="brand-category">Premium Japanese · 松風 Matsugaze</div>
+      <span class="brand-badge badge-draft">입점 검토</span>
+    </div>
+    <div class="brand-card-body">
+      <div class="brand-desc">오크우드 프리미어 코엑스 3층 프리미엄 일식. 제철 식재료 코스 다이닝. 오마카세 시장 안정화 국면 속 확장 전략.</div>
+      <div class="brand-tags">
+        <span class="brand-tag">프리미엄 일식</span>
+        <span class="brand-tag">코엑스 호텔</span>
+        <span class="brand-tag">제철 코스</span>
+        <span class="brand-tag">오마카세</span>
+      </div>
+      <div class="brand-card-footer">
+        <div class="brand-stats">
+          <div class="stat-item"><div class="stat-val" style="color:#fbbf24">1</div><div class="stat-lbl">현재 입점</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#fbbf24">₩90K+</div><div class="stat-lbl">객단가</div></div>
+          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
+        </div>
+        <div class="open-btn">열기 →</div>
+      </div>
+    </div>
+  </a>
+
+</div>
+
+<footer>에렉스 브랜드 전략 포털 · 브랜드전략팀 · 2026 · CONFIDENTIAL</footer>
+
+<script>
+document.getElementById('portalDate').textContent = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+
+function filterCards(cat) {
+  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  document.querySelectorAll('.brand-card').forEach(card=>{
+    card.style.display = (cat==='all' || card.dataset.cat===cat) ? 'block' : 'none';
+  });
+}
+</script>
+</body>
+</html>

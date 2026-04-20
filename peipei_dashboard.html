@@ -1,0 +1,1040 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>페이페이 브랜드 전략 대시보드 | 에렉스</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --accent:#ea580c;--dark:#0f172a;--red:#dc2626;--green:#16a34a;
+  --blue:#1d4ed8;--purple:#7c3aed;--yellow:#ca8a04;--gray:#6b7280;
+  --bg:#f8f4f0;--card:#fff;--border:#e2e8f0
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:#1f2937;font-size:13px}
+
+/* ── TOP BAR ── */
+.topbar{background:var(--dark);color:#fff;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:52px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.35)}
+.topbar-brand{display:flex;align-items:center;gap:14px}
+.topbar-brand .logo{font-size:18px;font-weight:900;letter-spacing:-0.5px}
+.topbar-brand .logo span{color:var(--accent)}
+.topbar-brand .sub{font-size:10px;opacity:.55;margin-top:2px}
+.back-btn{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);color:#fff;font-size:11px;font-weight:600;padding:5px 12px;border-radius:6px;cursor:pointer;text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:background .2s}
+.back-btn:hover{background:rgba(255,255,255,.2)}
+.topbar-right{display:flex;align-items:center;gap:12px;font-size:12px}
+.own-badge{background:var(--accent);color:#fff;font-size:10px;font-weight:800;padding:3px 10px;border-radius:10px;letter-spacing:.3px}
+
+/* ── TAB NAV ── */
+.tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:52px;z-index:99;overflow-x:auto}
+.tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--accent);background:#fff7f3}
+.tab-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
+.tab-content{display:none;padding:20px 24px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
+
+/* ── CARD ── */
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:12px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.6px;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+
+/* ── KPI CARDS ── */
+.kpi-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:18px}
+.kpi-card{border-radius:12px;padding:18px 20px;position:relative;overflow:hidden;color:#fff}
+.kpi-card .kpi-label{font-size:11px;font-weight:600;opacity:.8;margin-bottom:6px}
+.kpi-card .kpi-val{font-size:30px;font-weight:900;line-height:1;margin-bottom:4px}
+.kpi-card .kpi-sub{font-size:11px;opacity:.75}
+.kpi-card .kpi-icon{position:absolute;right:14px;top:14px;font-size:28px;opacity:.2}
+.kpi-card.orange{background:linear-gradient(135deg,#ea580c,#f97316)}
+.kpi-card.green{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.kpi-card.dark{background:linear-gradient(135deg,#0f172a,#1e3a5f)}
+.kpi-card.red{background:linear-gradient(135deg,#dc2626,#ef4444)}
+.kpi-card.purple{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.kpi-card.blue{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+.kpi-card.yellow{background:linear-gradient(135deg,#ca8a04,#eab308)}
+
+/* ── CHART GRID ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
+.chart-grid-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.chart-grid-12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+
+/* ── PILL / BADGE ── */
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;margin:2px}
+.pill.orange{background:#ffedd5;color:#ea580c}
+.pill.blue{background:#dbeafe;color:#1d4ed8}
+.pill.red{background:#fee2e2;color:#dc2626}
+.pill.green{background:#dcfce7;color:#16a34a}
+.pill.purple{background:#ede9fe;color:#7c3aed}
+.pill.yellow{background:#fef9c3;color:#92400e}
+.pill.gray{background:#f3f4f6;color:#374151}
+
+/* ── ALERT BOX ── */
+.alert{border-radius:10px;padding:14px 18px;margin-bottom:14px;font-size:13px;line-height:1.6}
+.alert.orange{background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #ea580c}
+.alert.blue{background:#eff6ff;border:1px solid #93c5fd;border-left:4px solid #1d4ed8}
+.alert.green{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a}
+.alert.yellow{background:#fefce8;border:1px solid #fde047;border-left:4px solid #ca8a04}
+.alert.red{background:#fff1f2;border:1px solid #fca5a5;border-left:4px solid #dc2626}
+
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{padding:9px 12px;background:#f8fafc;font-weight:700;text-align:left;border-bottom:2px solid var(--border)}
+.dt td{padding:8px 12px;border-bottom:1px solid #f8fafc;vertical-align:top}
+.dt tr:hover td{background:#fffbf8}
+
+/* ── SECTION TITLE ── */
+.sec-title{font-size:15px;font-weight:800;color:var(--dark);margin-bottom:14px;display:flex;align-items:center;gap:8px}
+.sec-divider{border:none;border-top:1px solid var(--border);margin:18px 0}
+
+/* ── BRAND HERO ── */
+.brand-hero{background:linear-gradient(135deg,#0f172a 0%,#1c2b40 50%,#2d1a0a 100%);border-radius:16px;padding:32px 36px;color:#fff;margin-bottom:18px;position:relative;overflow:hidden}
+.brand-hero::after{content:'';position:absolute;right:-40px;top:-40px;width:200px;height:200px;border-radius:50%;background:rgba(234,88,12,.15)}
+.brand-hero-title{font-size:36px;font-weight:900;letter-spacing:-1px;margin-bottom:6px}
+.brand-hero-title span{color:var(--accent)}
+.brand-hero-sub{font-size:13px;opacity:.75;margin-bottom:18px;line-height:1.6}
+.brand-hero-badges{display:flex;gap:8px;flex-wrap:wrap}
+.hero-badge{background:rgba(234,88,12,.25);border:1px solid rgba(234,88,12,.5);color:#fed7aa;font-size:11px;font-weight:700;padding:4px 12px;border-radius:8px}
+.hero-badge.own{background:var(--accent);border-color:var(--accent);color:#fff;font-size:12px;font-weight:900}
+
+/* ── LOCATION CARDS ── */
+.location-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.loc-card{border-radius:10px;padding:16px 18px;border:2px solid #fed7aa;background:linear-gradient(135deg,#fff7ed,#fff)}
+.loc-card .loc-num{font-size:10px;font-weight:800;color:var(--accent);text-transform:uppercase;margin-bottom:4px;letter-spacing:.5px}
+.loc-card .loc-name{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:6px}
+.loc-card .loc-detail{font-size:11px;color:var(--gray);line-height:1.5}
+.loc-card .loc-channel{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:6px;margin-top:6px}
+.loc-channel.shinsegae{background:#1a1a2e;color:#e0b87a}
+.loc-channel.lotte{background:#c0392b;color:#fff}
+
+/* ── MENU GRID ── */
+.menu-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.menu-item{border-radius:10px;padding:14px 16px;border:1px solid var(--border);background:#fff}
+.menu-item .menu-flag{font-size:18px;margin-bottom:6px}
+.menu-item .menu-name{font-size:13px;font-weight:700;color:var(--dark);margin-bottom:4px}
+.menu-item .menu-price{font-size:14px;font-weight:900;color:var(--accent)}
+.menu-item .menu-origin{font-size:10px;color:var(--gray);margin-top:2px}
+.menu-item.hero-menu{border-color:var(--accent);background:linear-gradient(135deg,#fff7ed,#fff)}
+
+/* ── TOGGLE BUTTONS ── */
+.toggle-group{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.toggle-btn{padding:5px 14px;border-radius:20px;border:2px solid;font-size:11px;font-weight:700;cursor:pointer;transition:all .2s;background:#fff}
+.toggle-btn.active{color:#fff}
+
+/* ── CHANNEL MAP ── */
+.channel-row{display:flex;align-items:stretch;gap:8px;margin-bottom:8px}
+.channel-label{width:110px;font-size:11px;font-weight:800;display:flex;align-items:center;padding:10px 12px;border-radius:8px;flex-shrink:0}
+.channel-label.shinsegae{background:#1a1a2e;color:#e0b87a}
+.channel-label.lotte{background:#c0392b;color:#fff}
+.channel-label.galleria{background:#2c2c54;color:#c9b49a}
+.channel-label.ifc{background:#155e75;color:#a5f3fc}
+.channel-label.hyundai{background:#15803d;color:#bbf7d0}
+.channel-tag{padding:6px 10px;border-radius:6px;font-size:11px;font-weight:600;border:1px solid var(--border);background:#f8fafc;display:flex;align-items:center;gap:4px}
+.channel-tag.has-peipei{background:#fff7ed;border-color:#fed7aa;color:#c2410c}
+.channel-tag.has-konthai{background:#fee2e2;border-color:#fca5a5;color:#991b1b}
+
+/* ── MARKET TREND ── */
+.trend-bar-wrap{margin-bottom:10px}
+.trend-bar-label{display:flex;justify-content:space-between;margin-bottom:4px;font-size:12px;font-weight:600}
+.trend-bar-bg{height:10px;background:#f1f5f9;border-radius:5px}
+.trend-bar-fill{height:100%;border-radius:5px;background:var(--accent)}
+
+/* ── STRATEGY CARDS ── */
+.strat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.strat-card{border-radius:12px;padding:18px;border:1px solid var(--border);background:#fff}
+.strat-card .strat-phase{font-size:10px;font-weight:800;text-transform:uppercase;letter-spacing:.6px;margin-bottom:8px}
+.strat-card .strat-title{font-size:14px;font-weight:800;color:var(--dark);margin-bottom:8px}
+.strat-card .strat-body{font-size:12px;color:var(--gray);line-height:1.6}
+.strat-card.phase1{border-top:3px solid var(--green)}
+.strat-card.phase2{border-top:3px solid var(--accent)}
+.strat-card.phase3{border-top:3px solid var(--purple)}
+.strat-card .strat-phase.phase1{color:var(--green)}
+.strat-card .strat-phase.phase2{color:var(--accent)}
+.strat-card .strat-phase.phase3{color:var(--purple)}
+
+/* ── EXPANSION TARGET ── */
+.target-list{display:flex;flex-direction:column;gap:8px}
+.target-item{display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:10px;border:1px solid var(--border);background:#fff}
+.target-priority{width:32px;height:32px;border-radius:50%;font-size:13px;font-weight:900;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+.target-priority.p1{background:#fef2f2;color:#dc2626;border:2px solid #dc2626}
+.target-priority.p2{background:#fff7ed;color:#ea580c;border:2px solid #ea580c}
+.target-priority.p3{background:#fefce8;color:#ca8a04;border:2px solid #ca8a04}
+.target-name{font-size:13px;font-weight:700;color:var(--dark);flex:1}
+.target-reason{font-size:11px;color:var(--gray);margin-top:2px}
+.target-score{font-size:20px;font-weight:900;color:var(--accent)}
+.target-score-label{font-size:10px;color:var(--gray)}
+
+/* ── FINANCIAL ── */
+.fin-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:14px}
+.fin-card{border-radius:10px;padding:16px;border:1px solid var(--border);text-align:center;background:#fff}
+.fin-card .fv{font-size:24px;font-weight:900;color:var(--accent)}
+.fin-card .fl{font-size:11px;color:var(--gray);margin-top:4px;line-height:1.4}
+
+footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-top:1px solid var(--border);margin-top:24px}
+@media(max-width:768px){
+  .kpi-grid,.location-grid,.strat-grid,.fin-grid,.chart-grid-2,.chart-grid-3,.chart-grid-21,.chart-grid-12{grid-template-columns:1fr}
+  .menu-grid{grid-template-columns:1fr 1fr}
+  .tab-content{padding:14px}
+}
+</style>
+</head>
+<body>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="topbar-brand">
+    <a href="aerex_brand_portal.html" class="back-btn">← 포털로 돌아가기</a>
+    <div>
+      <div class="logo"><span>페이페이</span> 브랜드 전략 대시보드 <span style="opacity:.4;font-weight:400">|</span> 에렉스</div>
+      <div class="sub">PeiPei Multi-Asian Dining · 에렉스 직영 브랜드 전략 관리</div>
+    </div>
+  </div>
+  <div class="topbar-right">
+    <span class="own-badge">✦ 에렉스 자체 브랜드</span>
+    <span id="nowDate" style="opacity:.6"></span>
+  </div>
+</div>
+
+<!-- TAB NAV -->
+<div class="tabnav">
+  <button class="tab-btn active" onclick="showTab('overview')">🏮 브랜드 개요</button>
+  <button class="tab-btn" onclick="showTab('competitive')">🏆 경쟁사 분석</button>
+  <button class="tab-btn" onclick="showTab('market')">📈 시장 분석</button>
+  <button class="tab-btn" onclick="showTab('expansion')">🗺 입점 확대 전략</button>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 1: 브랜드 개요                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-content active" id="tab-overview">
+
+  <!-- Brand Hero -->
+  <div class="brand-hero">
+    <div class="brand-hero-title"><span>페이페이</span> PeiPei</div>
+    <div class="brand-hero-sub">
+      "한국인이 즐겨 찾는 아시아 여행지 맛집 메뉴를 한자리에"<br>
+      베트남 · 태국 · 싱가포르 · 몽골리안 — Fast-Casual Multi-Asian Dining
+    </div>
+    <div class="brand-hero-badges">
+      <span class="hero-badge own">✦ 에렉스 자체 브랜드</span>
+      <span class="hero-badge">에렉스 직영 (Direct Operation)</span>
+      <span class="hero-badge">1978년 창업 · 46년 노하우</span>
+      <span class="hero-badge">신세계 + 롯데 입점</span>
+      <span class="hero-badge">현 직영 4개점</span>
+    </div>
+  </div>
+
+  <!-- KPI Cards -->
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="kpi-label">현재 직영 점포 수</div>
+      <div class="kpi-val">4</div>
+      <div class="kpi-sub">신세계 2 · 롯데 1 · 르웨스트 1</div>
+      <div class="kpi-icon">🏪</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">평균 객단가</div>
+      <div class="kpi-val">~13K</div>
+      <div class="kpi-sub">단품 9,900~15,800원</div>
+      <div class="kpi-icon">💳</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">커버 아시아 지역</div>
+      <div class="kpi-val">4</div>
+      <div class="kpi-sub">베트남·태국·싱가포르·몽골</div>
+      <div class="kpi-icon">🌏</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">2인 세트 가격</div>
+      <div class="kpi-val">32K</div>
+      <div class="kpi-sub">콘타이(45~49K) 대비 30% 저렴</div>
+      <div class="kpi-icon">👥</div>
+    </div>
+  </div>
+
+  <!-- Concept + Location -->
+  <div class="chart-grid-12" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">🎯 브랜드 컨셉</div>
+      <div class="alert orange" style="margin-bottom:10px">
+        <strong>에렉스의 직영 브랜드</strong>입니다. 제3자 라이선스·가맹이 아닌 에렉스가 직접 개발·운영하는 자체 F&B 브랜드입니다.
+      </div>
+      <div style="font-size:13px;line-height:1.8;color:#374151">
+        <strong style="color:var(--accent)">Multi-Asian One-Stop</strong> — 소비자가 한 자리에서 동남아 여행지의 맛을 경험할 수 있는 패스트캐주얼 다이닝.<br><br>
+        <span class="pill orange">베트남</span> 하노이 소고기 쌀국수, 방콕 양지 쌀국수<br>
+        <span class="pill red">태국</span> 푸팟퐁커리, 카오소이<br>
+        <span class="pill yellow">싱가포르</span> 싱가포르 스타일 메뉴<br>
+        <span class="pill gray">몽골</span> 몽골리안 스테이크 덮밥<br><br>
+        <div style="margin-top:8px;font-size:12px;color:var(--gray)">
+          타깃: 20~40대 쇼핑몰/백화점 고객, 직장인 점심, 빠른 회전이 필요한 몰 F&B존
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📍 현재 입점 현황 (4개점)</div>
+      <div class="location-grid">
+        <div class="loc-card">
+          <div class="loc-num">Location 01</div>
+          <div class="loc-name">부산 신세계 센텀시티</div>
+          <div class="loc-detail">국내 최대 복합쇼핑몰 내 입점<br>연간 방문객 2,000만+ 수준</div>
+          <span class="loc-channel shinsegae">신세계</span>
+        </div>
+        <div class="loc-card">
+          <div class="loc-num">Location 02</div>
+          <div class="loc-name">롯데백화점 서면점</div>
+          <div class="loc-detail">부산 서면 상권 핵심 백화점<br>직장인·쇼핑객 복합 수요</div>
+          <span class="loc-channel lotte">롯데</span>
+        </div>
+        <div class="loc-card">
+          <div class="loc-num">Location 03</div>
+          <div class="loc-name">대전 신세계 Art&Science</div>
+          <div class="loc-detail">2022년 오픈 신흥 랜드마크몰<br>대전·충청권 거점</div>
+          <span class="loc-channel shinsegae">신세계</span>
+        </div>
+        <div class="loc-card">
+          <div class="loc-num">Location 04</div>
+          <div class="loc-name">서울 코엑스 마곡점 (르웨스트)</div>
+          <div class="loc-detail">마곡 업무지구 르웨스트 내 입점<br>서울 서부 직장인 상권 공략</div>
+          <span class="loc-channel" style="background:#2c5282;color:#bee3f8">코엑스/르웨스트</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Menu -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title">🍜 주요 메뉴 라인업</div>
+    <div class="menu-grid">
+      <div class="menu-item hero-menu">
+        <div class="menu-flag">🥩</div>
+        <div class="menu-name">몽골리안 스테이크 덮밥</div>
+        <div class="menu-price">12,900원</div>
+        <div class="menu-origin">Mongolian Style · 시그니처</div>
+      </div>
+      <div class="menu-item hero-menu">
+        <div class="menu-flag">🦀</div>
+        <div class="menu-name">푸팟퐁커리</div>
+        <div class="menu-price">15,800원</div>
+        <div class="menu-origin">Thai Style · 최고가 메뉴</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-flag">🍜</div>
+        <div class="menu-name">방콕 양지 쌀국수</div>
+        <div class="menu-price">11,500원</div>
+        <div class="menu-origin">Thai-Vietnamese Fusion</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-flag">🫕</div>
+        <div class="menu-name">하노이 소고기 쌀국수</div>
+        <div class="menu-price">9,900원</div>
+        <div class="menu-origin">Vietnamese Style · 최저가 엔트리</div>
+      </div>
+      <div class="menu-item">
+        <div class="menu-flag">🍛</div>
+        <div class="menu-name">카오소이</div>
+        <div class="menu-price">11,000원</div>
+        <div class="menu-origin">Northern Thai Curry Noodle</div>
+      </div>
+      <div class="menu-item" style="border:1px dashed #fed7aa;background:#fff7ed">
+        <div class="menu-flag">👥</div>
+        <div class="menu-name">2인 세트</div>
+        <div class="menu-price">32,000원</div>
+        <div class="menu-origin">콘타이 대비 약 30% 경쟁력</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SWOT -->
+  <div class="sec-title">⚖️ SWOT 분석</div>
+  <div class="chart-grid-2" style="margin-bottom:18px">
+    <div class="alert green">
+      <strong>강점 (Strengths)</strong><br>
+      · 에렉스 직영 — 브랜드 일관성·품질 통제 가능<br>
+      · 신세계+롯데 양대 유통 채널 동시 확보<br>
+      · Multi-Asian 원스톱 — 카테고리 독점성<br>
+      · 가성비 포지셔닝 (2인세트 32K, 경쟁 대비 저렴)<br>
+      · 에렉스 1978년 창업, 46년 F&B 노하우 기반
+    </div>
+    <div class="alert red">
+      <strong>약점 (Weaknesses)</strong><br>
+      · 독자적 SNS/인스타그램 채널 미확인<br>
+      · 브랜드 인지도 아직 신흥 단계<br>
+      · 매장 수 4개로 규모 효과 제한<br>
+      · 다양한 국가 큐진 → 메뉴 복잡도 관리 필요
+    </div>
+    <div class="alert blue">
+      <strong>기회 (Opportunities)</strong><br>
+      · 동남아 여행 붐 → '여행지 맛집' 카테고리 성장<br>
+      · 현대백화점·갤러리아 채널 미진입 → 확장 여지<br>
+      · 서울 강북·강남 핵심 몰 공백<br>
+      · MZ세대 아시안 다이닝 관심 증가
+    </div>
+    <div class="alert yellow">
+      <strong>위협 (Threats)</strong><br>
+      · 콘타이 등 전문 단일 국가 브랜드 품질 경쟁<br>
+      · 백화점 F&B 임대료 상승 압박<br>
+      · 아시안 캐주얼 시장 경쟁 심화<br>
+      · 쌀국수·태국음식 단일 브랜드 소비자 선호 존재
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 2: 경쟁사 분석                              -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-competitive">
+
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="kpi-label">페이페이 가성비 점수</div>
+      <div class="kpi-val">8.5</div>
+      <div class="kpi-sub">경쟁사 중 최상위 수준</div>
+      <div class="kpi-icon">💯</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">접근성 점수</div>
+      <div class="kpi-val">8.5</div>
+      <div class="kpi-sub">쇼핑몰 내 최적 입지</div>
+      <div class="kpi-icon">📍</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">콘타이 맛 점수</div>
+      <div class="kpi-val">8.5</div>
+      <div class="kpi-sub">Thai Select 인증 · 태국 셰프</div>
+      <div class="kpi-icon">👨‍🍳</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">채널 겹침 현황</div>
+      <div class="kpi-val">0</div>
+      <div class="kpi-sub">페이페이↔콘타이 동일 입점 없음</div>
+      <div class="kpi-icon">✅</div>
+    </div>
+  </div>
+
+  <!-- Radar Chart -->
+  <div class="chart-grid-21" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">🕸 브랜드 경쟁력 레이더 차트 (10점 만점)</div>
+      <div class="toggle-group" id="radarToggleGroup">
+        <button class="toggle-btn active" data-idx="0" style="border-color:#ea580c;color:#ea580c" onclick="toggleRadar(0)">페이페이</button>
+        <button class="toggle-btn active" data-idx="1" style="border-color:#dc2626;color:#dc2626" onclick="toggleRadar(1)">콘타이</button>
+        <button class="toggle-btn active" data-idx="2" style="border-color:#ea580c;color:#ea580c;opacity:.7" onclick="toggleRadar(2)">반미앤코</button>
+        <button class="toggle-btn active" data-idx="3" style="border-color:#ca8a04;color:#ca8a04" onclick="toggleRadar(3)">로컬릭</button>
+        <button class="toggle-btn active" data-idx="4" style="border-color:#7c3aed;color:#7c3aed" onclick="toggleRadar(4)">마이타이</button>
+        <button class="toggle-btn active" data-idx="5" style="border-color:#0ea5e9;color:#0ea5e9" onclick="toggleRadar(5)">포베이</button>
+      </div>
+      <div style="position:relative;height:360px">
+        <canvas id="radarChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 경쟁사 프로파일 요약</div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="padding:12px;border-radius:8px;border:2px solid #ea580c;background:#fff7ed">
+          <div style="font-size:13px;font-weight:800;color:#ea580c;margin-bottom:4px">🏮 페이페이 (PeiPei) — 에렉스 자체</div>
+          <div style="font-size:11px;color:#374151;line-height:1.6">Multi-Asian 원스톱 · 직영 4개점 · 신세계+롯데<br>2인세트 32,000원 · 가성비 최강</div>
+        </div>
+        <div style="padding:12px;border-radius:8px;border:1px solid #fca5a5;background:#fff">
+          <div style="font-size:13px;font-weight:800;color:#dc2626;margin-bottom:4px">👑 콘타이 (KonThai)</div>
+          <div style="font-size:11px;color:#374151;line-height:1.6">Thai Select 인증 · 태국 셰프 전점 · 직영 ~12점<br>2인세트 45~49K · 갤러리아·IFC·현대 아이파크</div>
+        </div>
+        <div style="padding:12px;border-radius:8px;border:1px solid #fed7aa;background:#fff">
+          <div style="font-size:13px;font-weight:800;color:#ea580c;margin-bottom:4px">🥖 반미앤코 (Banh Mi & Co)</div>
+          <div style="font-size:11px;color:#374151;line-height:1.6">베트남 반미 전문 · 캐주얼 · 가성비 포지션</div>
+        </div>
+        <div style="padding:12px;border-radius:8px;border:1px solid #fde047;background:#fff">
+          <div style="font-size:13px;font-weight:800;color:#ca8a04;margin-bottom:4px">🌿 로컬릭 (Localique)</div>
+          <div style="font-size:11px;color:#374151;line-height:1.6">트렌디 아시안 캐주얼 · 쇼핑몰 중심 · 분위기 강점</div>
+        </div>
+        <div style="padding:12px;border-radius:8px;border:1px solid #c4b5fd;background:#fff">
+          <div style="font-size:13px;font-weight:800;color:#7c3aed;margin-bottom:4px">🍃 마이타이 / 🍜 포베이</div>
+          <div style="font-size:11px;color:#374151;line-height:1.6">태국/베트남 캐주얼 체인 · 가성비 경쟁</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Competitor Table -->
+  <div class="card" style="margin-bottom:18px">
+    <div class="card-title">📋 경쟁사 상세 비교표</div>
+    <table class="dt">
+      <thead>
+        <tr>
+          <th>브랜드</th>
+          <th>컨셉</th>
+          <th>2인 세트</th>
+          <th>직영점 수</th>
+          <th>주요 채널</th>
+          <th>강점</th>
+          <th>페이페이 대비</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr style="background:#fff7ed">
+          <td><strong style="color:#ea580c">🏮 페이페이</strong><br><span style="font-size:10px;color:#ea580c;font-weight:700">에렉스 자체 브랜드</span></td>
+          <td>Multi-Asian 원스톱<br>패스트캐주얼</td>
+          <td><strong>32,000원</strong></td>
+          <td>4개점</td>
+          <td><span class="pill gray">신세계</span><span class="pill gray">롯데</span></td>
+          <td>가성비·원스톱·직영</td>
+          <td>—</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#dc2626">👑 콘타이</strong></td>
+          <td>정통 태국 다이닝<br>Thai Select 인증</td>
+          <td>45~49,000원</td>
+          <td>~12개점</td>
+          <td><span class="pill gray">갤러리아</span><span class="pill gray">IFC</span><span class="pill gray">현대아이파크</span></td>
+          <td>정통성·인증·태국셰프</td>
+          <td>프리미엄 포지션<br>채널 겹침 없음</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#ea580c">🥖 반미앤코</strong></td>
+          <td>베트남 반미 전문</td>
+          <td>~25,000원</td>
+          <td>다수</td>
+          <td>다양</td>
+          <td>가성비·전문성</td>
+          <td>단일 메뉴 전문 경쟁</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#ca8a04">🌿 로컬릭</strong></td>
+          <td>트렌디 아시안 캐주얼</td>
+          <td>~30,000원</td>
+          <td>중규모</td>
+          <td>쇼핑몰 중심</td>
+          <td>분위기·트렌드</td>
+          <td>분위기 차별화 필요</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#7c3aed">🍃 마이타이</strong></td>
+          <td>태국 캐주얼 체인</td>
+          <td>~28,000원</td>
+          <td>체인</td>
+          <td>다양</td>
+          <td>인지도</td>
+          <td>태국 메뉴 직접 경쟁</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#0ea5e9">🍜 포베이</strong></td>
+          <td>대중적 베트남 쌀국수</td>
+          <td>~22,000원</td>
+          <td>다수</td>
+          <td>다양</td>
+          <td>인지도·접근성</td>
+          <td>쌀국수 메뉴 경쟁</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Channel Map -->
+  <div class="card">
+    <div class="card-title">🗺 채널별 브랜드 매핑 — 페이페이 vs 콘타이 채널 상호보완</div>
+    <div class="alert green" style="margin-bottom:14px">
+      <strong>핵심 인사이트:</strong> 페이페이(신세계·롯데)와 콘타이(갤러리아·IFC·현대)는 동일 채널 입점이 없어 직접 맞대결 없음. 상호 보완적 채널 포지셔닝. 현대백화점·갤러리아·IFC 등은 페이페이의 미개척 확장 기회.
+    </div>
+    <div class="sec-title" style="font-size:13px">채널별 현황</div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div class="channel-row">
+        <div class="channel-label shinsegae">신세계</div>
+        <div class="channel-tag has-peipei">🏮 페이페이 (센텀시티)</div>
+        <div class="channel-tag has-peipei">🏮 페이페이 (대전 Art&Science)</div>
+        <div class="channel-tag" style="opacity:.5;font-size:10px">콘타이 없음</div>
+      </div>
+      <div class="channel-row">
+        <div class="channel-label lotte">롯데백화점</div>
+        <div class="channel-tag has-peipei">🏮 페이페이 (서면점)</div>
+        <div class="channel-tag" style="opacity:.5;font-size:10px">콘타이 없음</div>
+      </div>
+      <div class="channel-row">
+        <div class="channel-label galleria">갤러리아</div>
+        <div class="channel-tag" style="opacity:.5;font-size:10px">페이페이 미진입 ← 기회</div>
+        <div class="channel-tag has-konthai">👑 콘타이 (광교)</div>
+      </div>
+      <div class="channel-row">
+        <div class="channel-label ifc">IFC몰</div>
+        <div class="channel-tag" style="opacity:.5;font-size:10px">페이페이 미진입 ← 기회</div>
+        <div class="channel-tag has-konthai">👑 콘타이</div>
+      </div>
+      <div class="channel-row">
+        <div class="channel-label hyundai">현대백화점</div>
+        <div class="channel-tag" style="opacity:.5;font-size:10px">페이페이 미진입 ← 기회</div>
+        <div class="channel-tag has-konthai">👑 콘타이 (아이파크)</div>
+      </div>
+      <div class="channel-row">
+        <div class="channel-label" style="background:#374151;color:#d1d5db">코엑스/기타</div>
+        <div class="channel-tag has-peipei">🏮 페이페이 (르웨스트)</div>
+        <div class="channel-tag" style="opacity:.5;font-size:10px">콘타이 없음</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 3: 시장 분석                                -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-market">
+
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="kpi-label">국내 아시안 다이닝 시장</div>
+      <div class="kpi-val">↑</div>
+      <div class="kpi-sub">연간 8~12% 성장 추세</div>
+      <div class="kpi-icon">📊</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">동남아 음식 MZ 선호도</div>
+      <div class="kpi-val">Top3</div>
+      <div class="kpi-sub">20~30대 외식 선호 카테고리</div>
+      <div class="kpi-icon">🌟</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">쇼핑몰 F&B 비중</div>
+      <div class="kpi-val">30%+</div>
+      <div class="kpi-sub">백화점·몰 면적 대비 계속 증가</div>
+      <div class="kpi-icon">🛍</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-label">패스트캐주얼 성장률</div>
+      <div class="kpi-val">+15%</div>
+      <div class="kpi-sub">풀서비스 대비 빠른 성장</div>
+      <div class="kpi-icon">⚡</div>
+    </div>
+  </div>
+
+  <!-- Market Trends -->
+  <div class="chart-grid-2" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">📈 아시안 다이닝 카테고리별 소비자 관심도 (상대 지수)</div>
+      <div style="margin-top:8px">
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-label"><span>🍜 베트남 (쌀국수·반미)</span><span style="color:var(--accent);font-weight:700">92</span></div>
+          <div class="trend-bar-bg"><div class="trend-bar-fill" style="width:92%"></div></div>
+        </div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-label"><span>🌶 태국 (팟타이·커리·카오소이)</span><span style="color:var(--accent);font-weight:700">85</span></div>
+          <div class="trend-bar-bg"><div class="trend-bar-fill" style="width:85%"></div></div>
+        </div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-label"><span>🦀 싱가포르 (칠리크랩·퐁퐁)</span><span style="color:var(--accent);font-weight:700">68</span></div>
+          <div class="trend-bar-bg"><div class="trend-bar-fill" style="width:68%"></div></div>
+        </div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-label"><span>🥩 몽골리안 BBQ/덮밥</span><span style="color:var(--accent);font-weight:700">55</span></div>
+          <div class="trend-bar-bg"><div class="trend-bar-fill" style="width:55%"></div></div>
+        </div>
+        <div class="trend-bar-wrap">
+          <div class="trend-bar-label"><span>🌏 멀티 아시안 (원스톱)</span><span style="color:var(--green);font-weight:700">↑ 신흥</span></div>
+          <div class="trend-bar-bg"><div class="trend-bar-fill" style="width:42%;background:var(--green)"></div></div>
+        </div>
+      </div>
+      <div class="alert orange" style="margin-top:12px">
+        멀티 아시안 원스톱 컨셉은 아직 신흥 시장이나 동남아 여행 붐 지속으로 성장 잠재력 최고
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">🛒 쇼핑몰 F&B 트렌드</div>
+      <div style="height:280px;position:relative">
+        <canvas id="marketTrendChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Consumer Insight -->
+  <div class="chart-grid-21" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">👥 소비자 인사이트 — 20~40대 아시안 다이닝 선택 기준</div>
+      <div style="height:260px;position:relative">
+        <canvas id="consumerInsightChart"></canvas>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">✈️ 동남아 여행 트렌드와 외식 연계</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-top:6px">
+        <div style="padding:10px 12px;border-radius:8px;background:#fff7ed;border:1px solid #fed7aa;font-size:12px;line-height:1.6">
+          <strong>여행 → 외식 전이 효과</strong><br>
+          태국·베트남 방문 경험자, 귀국 후 현지 맛 재현 수요 ↑. "여행지 맛집" 키워드 외식 선택 기준 상위
+        </div>
+        <div style="padding:10px 12px;border-radius:8px;background:#f0fdf4;border:1px solid #86efac;font-size:12px;line-height:1.6">
+          <strong>SNS 비주얼 소비</strong><br>
+          인스타그램·틱톡에서 동남아 음식 콘텐츠 지속 성장. 푸팟퐁커리·카오소이 비주얼 콘텐츠 바이럴 가능성
+        </div>
+        <div style="padding:10px 12px;border-radius:8px;background:#eff6ff;border:1px solid #93c5fd;font-size:12px;line-height:1.6">
+          <strong>가성비 패스트캐주얼 수요</strong><br>
+          고물가 환경에서 백화점·몰 방문객의 외식 단가 민감도 증가. 9,900~15,800원 단품 구조 경쟁력
+        </div>
+        <div style="padding:10px 12px;border-radius:8px;background:#f5f3ff;border:1px solid #c4b5fd;font-size:12px;line-height:1.6">
+          <strong>원스톱 다이닝 수요</strong><br>
+          그룹 방문 시 각자 다른 국가 요리 선택 가능한 멀티 메뉴 구조 선호 증가
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Positioning Map -->
+  <div class="card">
+    <div class="card-title">🗺 시장 포지셔닝 맵 — 가격대 × 아시아 커버리지</div>
+    <div style="height:320px;position:relative">
+      <canvas id="positioningChart"></canvas>
+    </div>
+  </div>
+
+</div>
+
+<!-- ═══════════════════════════════════════════════ -->
+<!-- TAB 4: 입점 확대 전략                           -->
+<!-- ═══════════════════════════════════════════════ -->
+<div class="tab-content" id="tab-expansion">
+
+  <div class="alert orange" style="margin-bottom:18px">
+    <strong>확대 전략 원칙:</strong> 에렉스 직영 브랜드로서 품질·운영 일관성 유지가 핵심. 채널 다각화(신세계·롯데 외 현대·갤러리아·IFC 공략)와 서울 핵심 상권 진입을 우선 추진.
+  </div>
+
+  <div class="kpi-grid">
+    <div class="kpi-card orange">
+      <div class="kpi-label">현재 점포 수</div>
+      <div class="kpi-val">4</div>
+      <div class="kpi-sub">신세계 2 · 롯데 1 · 기타 1</div>
+      <div class="kpi-icon">📍</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-label">목표 점포 수 (2027)</div>
+      <div class="kpi-val">8~10</div>
+      <div class="kpi-sub">2년 내 2배 확대 목표</div>
+      <div class="kpi-icon">🎯</div>
+    </div>
+    <div class="kpi-card blue">
+      <div class="kpi-label">미개척 핵심 채널</div>
+      <div class="kpi-val">5</div>
+      <div class="kpi-sub">현대·갤러리아·IFC·스타필드·타임스퀘어</div>
+      <div class="kpi-icon">🔓</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-label">서울 강남권 진입</div>
+      <div class="kpi-val">0</div>
+      <div class="kpi-sub">최우선 확장 과제</div>
+      <div class="kpi-icon">⚡</div>
+    </div>
+  </div>
+
+  <!-- Strategy Phases -->
+  <div class="sec-title" style="margin-bottom:12px">📋 3단계 확대 전략</div>
+  <div class="strat-grid" style="margin-bottom:18px">
+    <div class="strat-card phase1">
+      <div class="strat-phase phase1">Phase 1 · 2026 H2</div>
+      <div class="strat-title">서울 강남 거점 확보</div>
+      <div class="strat-body">
+        현재 서울 유일 점포(르웨스트)를 발판으로 강남·영등포 핵심 몰 진입.<br><br>
+        <strong>우선 타깃:</strong> 롯데백화점 강남점, 타임스퀘어, 코엑스몰<br><br>
+        에렉스의 롯데 기존 관계 레버리지 활용. 강남 오피스 상권 직장인 수요 공략.
+      </div>
+    </div>
+    <div class="strat-card phase2">
+      <div class="strat-phase phase2">Phase 2 · 2027</div>
+      <div class="strat-title">신규 채널 진입 (현대·IFC)</div>
+      <div class="strat-body">
+        콘타이 미진입 공백을 활용한 현대백화점·IFC몰 입점 추진.<br><br>
+        <strong>우선 타깃:</strong> 현대백화점 판교점, 현대 목동, IFC몰<br><br>
+        판교 IT 직장인, 목동 가족 고객 타깃. 콘타이와 채널 차별화 유지.
+      </div>
+    </div>
+    <div class="strat-card phase3">
+      <div class="strat-phase phase3">Phase 3 · 2027~2028</div>
+      <div class="strat-title">전국 스케일업 + SNS 브랜딩</div>
+      <div class="strat-body">
+        스타필드·갤러리아 진입 + 독자 SNS 채널 구축으로 브랜드 인지도 확보.<br><br>
+        <strong>우선 타깃:</strong> 스타필드 수원·하남, 갤러리아<br><br>
+        인스타그램 공식 채널 개설, 비주얼 콘텐츠 전략 병행.
+      </div>
+    </div>
+  </div>
+
+  <!-- Expansion Targets -->
+  <div class="chart-grid-21" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">🎯 우선 입점 후보지 (Priority Ranking)</div>
+      <div class="target-list">
+        <div class="target-item">
+          <div class="target-priority p1">P1</div>
+          <div style="flex:1">
+            <div class="target-name">롯데백화점 강남점</div>
+            <div class="target-reason">에렉스 기존 롯데 관계 활용 · 강남 최고 집객 · 오피스 직장인 수요</div>
+          </div>
+          <div style="text-align:right">
+            <div class="target-score">9.2</div>
+            <div class="target-score-label">입점 적합도</div>
+          </div>
+        </div>
+        <div class="target-item">
+          <div class="target-priority p1">P1</div>
+          <div style="flex:1">
+            <div class="target-name">현대백화점 판교점</div>
+            <div class="target-reason">판교 IT 직장인 상권 · 미개척 채널 첫 진입 · 콘타이 없음</div>
+          </div>
+          <div style="text-align:right">
+            <div class="target-score">8.8</div>
+            <div class="target-score-label">입점 적합도</div>
+          </div>
+        </div>
+        <div class="target-item">
+          <div class="target-priority p1">P1</div>
+          <div style="flex:1">
+            <div class="target-name">신세계 강남점</div>
+            <div class="target-reason">기존 신세계 관계 레버리지 · 강남 최상위 백화점 · 프레스티지 효과</div>
+          </div>
+          <div style="text-align:right">
+            <div class="target-score">8.6</div>
+            <div class="target-score-label">입점 적합도</div>
+          </div>
+        </div>
+        <div class="target-item">
+          <div class="target-priority p2">P2</div>
+          <div style="flex:1">
+            <div class="target-name">타임스퀘어 (영등포)</div>
+            <div class="target-reason">서울 서부 대형몰 · 다양한 연령층 · 직장인+가족 복합</div>
+          </div>
+          <div style="text-align:right">
+            <div class="target-score">8.0</div>
+            <div class="target-score-label">입점 적합도</div>
+          </div>
+        </div>
+        <div class="target-item">
+          <div class="target-priority p2">P2</div>
+          <div style="flex:1">
+            <div class="target-name">IFC몰 (여의도)</div>
+            <div class="target-reason">여의도 금융 직장인 · 고소득층 · 콘타이 없는 IFC 추가점</div>
+          </div>
+          <div style="text-align:right">
+            <div class="target-score">7.8</div>
+            <div class="target-score-label">입점 적합도</div>
+          </div>
+        </div>
+        <div class="target-item">
+          <div class="target-priority p3">P3</div>
+          <div style="flex:1">
+            <div class="target-name">스타필드 수원/하남</div>
+            <div class="target-reason">광역 집객 · 가족 단위 · 멀티 아시안 컨셉 부합</div>
+          </div>
+          <div style="text-align:right">
+            <div class="target-score">7.5</div>
+            <div class="target-score-label">입점 적합도</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">💰 점포 확대 재무 시뮬레이션</div>
+      <div class="fin-grid" style="margin-bottom:14px">
+        <div class="fin-card">
+          <div class="fv">4개</div>
+          <div class="fl">현재 직영점<br>(2026 기준)</div>
+        </div>
+        <div class="fin-card">
+          <div class="fv">+4~6개</div>
+          <div class="fl">2026 H2~<br>2027 추가 목표</div>
+        </div>
+        <div class="fin-card">
+          <div class="fv">8~10개</div>
+          <div class="fl">2027년말<br>목표 총점 수</div>
+        </div>
+      </div>
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>구분</th>
+            <th>2026 (현재)</th>
+            <th>2027 (목표)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>직영점 수</td>
+            <td>4개</td>
+            <td>8~10개</td>
+          </tr>
+          <tr>
+            <td>평균 일매출 (추정)</td>
+            <td>150~200만원/점</td>
+            <td>180~250만원/점</td>
+          </tr>
+          <tr>
+            <td>연 매출 (추정)</td>
+            <td>~22~30억원</td>
+            <td>~52~90억원</td>
+          </tr>
+          <tr>
+            <td>점 당 초기 투자</td>
+            <td colspan="2">3~5억원 (몰 내 F&B 기준)</td>
+          </tr>
+          <tr>
+            <td>손익분기 기간</td>
+            <td colspan="2">입점 후 18~24개월</td>
+          </tr>
+        </tbody>
+      </table>
+      <div class="alert green" style="margin-top:10px">
+        에렉스 직영 구조 → 가맹 수수료 없이 전체 마진 귀속. 직영 품질 통제로 브랜드 가치 보호.
+      </div>
+    </div>
+  </div>
+
+  <!-- Action Items -->
+  <div class="card">
+    <div class="card-title">✅ 즉시 실행 과제 (Quick Wins)</div>
+    <div class="chart-grid-3">
+      <div style="padding:14px;border-radius:10px;border:1px solid #86efac;background:#f0fdf4">
+        <div style="font-size:12px;font-weight:800;color:var(--green);margin-bottom:8px">🚀 즉시 (Q2 2026)</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;font-size:12px;color:#374151">
+          <li>☐ 인스타그램 공식 채널 개설</li>
+          <li>☐ 롯데백화점 강남점 입점 협상 착수</li>
+          <li>☐ 메뉴 비주얼 SNS 콘텐츠 제작</li>
+          <li>☐ 현 4개점 고객 데이터 분석</li>
+        </ul>
+      </div>
+      <div style="padding:14px;border-radius:10px;border:1px solid #fed7aa;background:#fff7ed">
+        <div style="font-size:12px;font-weight:800;color:var(--accent);margin-bottom:8px">📋 단기 (Q3~Q4 2026)</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;font-size:12px;color:#374151">
+          <li>☐ 현대백화점 신규 채널 입점 추진</li>
+          <li>☐ 신세계 강남점 입점 협의</li>
+          <li>☐ 메뉴 시즌 특선 개발 (여름 태국특선 등)</li>
+          <li>☐ 브랜드 아이덴티티 디자인 강화</li>
+        </ul>
+      </div>
+      <div style="padding:14px;border-radius:10px;border:1px solid #c4b5fd;background:#f5f3ff">
+        <div style="font-size:12px;font-weight:800;color:var(--purple);margin-bottom:8px">🎯 중장기 (2027~)</div>
+        <ul style="list-style:none;display:flex;flex-direction:column;gap:6px;font-size:12px;color:#374151">
+          <li>☐ 스타필드·갤러리아 진입</li>
+          <li>☐ 10개점 달성 기념 캠페인</li>
+          <li>☐ 지방 주요 신세계·롯데 추가</li>
+          <li>☐ 배달 채널 전략 수립</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<footer>에렉스 브랜드전략팀 · 2026 · CONFIDENTIAL</footer>
+
+<script>
+// ── Date ──
+document.getElementById('nowDate').textContent = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+
+// ── Tab Switch ──
+function showTab(id){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('tab-'+id).classList.add('active');
+  event.currentTarget.classList.add('active');
+}
+
+// ── Radar Chart ──
+const radarDatasets = [
+  {label:'페이페이',data:[7.5,7.5,7.5,8.5,7.5,8.5],borderColor:'#ea580c',borderWidth:2.5,pointBackgroundColor:'#ea580c',backgroundColor:'transparent'},
+  {label:'콘타이',data:[8.5,8.5,8.0,6.5,8.5,8.0],borderColor:'#dc2626',borderWidth:2,pointBackgroundColor:'#dc2626',backgroundColor:'transparent'},
+  {label:'반미앤코',data:[7.0,7.0,6.5,9.0,7.5,8.0],borderColor:'#f97316',borderWidth:1.5,pointBackgroundColor:'#f97316',backgroundColor:'transparent'},
+  {label:'로컬릭',data:[7.0,7.5,8.5,7.5,7.5,8.0],borderColor:'#ca8a04',borderWidth:1.5,pointBackgroundColor:'#ca8a04',backgroundColor:'transparent'},
+  {label:'마이타이',data:[7.5,7.5,7.5,7.5,7.5,8.0],borderColor:'#7c3aed',borderWidth:1.5,pointBackgroundColor:'#7c3aed',backgroundColor:'transparent'},
+  {label:'포베이',data:[7.5,7.0,7.0,8.5,7.5,8.5],borderColor:'#0ea5e9',borderWidth:1.5,pointBackgroundColor:'#0ea5e9',backgroundColor:'transparent'},
+];
+const visibleDatasets = radarDatasets.map(d=>({...d}));
+const radarChart = new Chart(document.getElementById('radarChart'),{
+  type:'radar',
+  data:{
+    labels:['맛','서비스','분위기','가성비','위생','접근성'],
+    datasets:visibleDatasets
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{r:{min:5,max:10,ticks:{stepSize:1,font:{size:10}},pointLabels:{font:{size:12,weight:'bold'}},grid:{color:'rgba(0,0,0,.07)'}}},
+    plugins:{legend:{position:'bottom',labels:{font:{size:11},padding:12}}}
+  }
+});
+
+// Toggle radar datasets
+function toggleRadar(idx){
+  const btn = document.querySelectorAll('#radarToggleGroup .toggle-btn')[idx];
+  const ds = radarChart.data.datasets[idx];
+  const isActive = btn.classList.contains('active');
+  if(isActive){
+    btn.classList.remove('active');
+    btn.style.backgroundColor='';
+    ds.borderColor = ds.borderColor+'33';
+    ds.pointBackgroundColor = ds.pointBackgroundColor+'33';
+  } else {
+    btn.classList.add('active');
+    const orig = radarDatasets[idx];
+    ds.borderColor = orig.borderColor;
+    ds.pointBackgroundColor = orig.pointBackgroundColor;
+    btn.style.backgroundColor = orig.borderColor;
+    btn.style.color = '#fff';
+  }
+  radarChart.update();
+}
+
+// ── Market Trend Chart ──
+new Chart(document.getElementById('marketTrendChart'),{
+  type:'bar',
+  data:{
+    labels:['2022','2023','2024','2025','2026E'],
+    datasets:[
+      {label:'패스트캐주얼 아시안',data:[100,112,128,147,168],backgroundColor:'#ea580c'},
+      {label:'풀서비스 아시안',data:[100,104,108,115,122],backgroundColor:'#94a3b8'},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{y:{beginAtZero:false,min:90,title:{display:true,text:'성장 지수 (2022=100)'}}},
+    plugins:{legend:{position:'bottom',labels:{font:{size:11}}}}
+  }
+});
+
+// ── Consumer Insight Chart ──
+new Chart(document.getElementById('consumerInsightChart'),{
+  type:'bar',
+  data:{
+    labels:['가성비','메뉴 다양성','접근성(몰 내)','비주얼/SNS','정통성/맛','분위기'],
+    datasets:[{
+      label:'20~40대 외식 선택 기준 중요도',
+      data:[88,72,85,65,78,60],
+      backgroundColor:['#ea580c','#f97316','#fb923c','#fdba74','#fed7aa','#ffedd5'],
+      borderRadius:6
+    }]
+  },
+  options:{
+    indexAxis:'y',
+    responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false}},
+    scales:{x:{max:100,ticks:{callback:v=>v+'점'}}}
+  }
+});
+
+// ── Positioning Chart (Bubble) ──
+new Chart(document.getElementById('positioningChart'),{
+  type:'bubble',
+  data:{
+    datasets:[
+      {label:'페이페이',data:[{x:2,y:13,r:22}],backgroundColor:'rgba(234,88,12,.7)',borderColor:'#ea580c',borderWidth:2},
+      {label:'콘타이',data:[{x:1,y:47,r:18}],backgroundColor:'rgba(220,38,38,.6)',borderColor:'#dc2626',borderWidth:2},
+      {label:'반미앤코',data:[{x:1,y:16,r:14}],backgroundColor:'rgba(249,115,22,.5)',borderColor:'#f97316',borderWidth:2},
+      {label:'로컬릭',data:[{x:2,y:28,r:13}],backgroundColor:'rgba(202,138,4,.5)',borderColor:'#ca8a04',borderWidth:2},
+      {label:'마이타이',data:[{x:1,y:24,r:13}],backgroundColor:'rgba(124,58,237,.5)',borderColor:'#7c3aed',borderWidth:2},
+      {label:'포베이',data:[{x:1,y:19,r:15}],backgroundColor:'rgba(14,165,233,.5)',borderColor:'#0ea5e9',borderWidth:2},
+    ]
+  },
+  options:{
+    responsive:true,maintainAspectRatio:false,
+    scales:{
+      x:{min:0,max:3,title:{display:true,text:'아시아 커버 국가 수 (단일→멀티)'},ticks:{callback:v=>v===1?'단일 국가':v===2?'멀티 아시안':v===0?'':v}},
+      y:{min:0,max:60,title:{display:true,text:'2인 세트 가격 (천원)'},ticks:{callback:v=>v+'K'}}
+    },
+    plugins:{
+      legend:{position:'bottom',labels:{font:{size:11}}},
+      tooltip:{callbacks:{label:ctx=>`${ctx.dataset.label}: ${ctx.raw.y}K원`}}
+    }
+  }
+});
+</script>
+</body>
+</html>
