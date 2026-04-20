@@ -23,6 +23,19 @@ body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;b
 .live-badge{background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
 
+/* ── BRAND SELECTOR ── */
+.bsel-wrap{display:flex;align-items:center;gap:3px;border-right:1px solid rgba(255,255,255,0.12);padding-right:10px;margin-right:4px}
+.bsel-lbl{font-size:9px;opacity:.4;white-space:nowrap;margin-right:3px;letter-spacing:.5px;text-transform:uppercase}
+.bsel-btn{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);cursor:pointer;white-space:nowrap;transition:all .18s;line-height:1.4}
+.bsel-btn:hover{background:rgba(255,255,255,0.14);color:#fff;border-color:rgba(255,255,255,0.3)}
+.bsel-btn.active{color:#fff;border-color:transparent}
+
+/* ── BRAND INFO STRIP ── */
+.brand-strip{display:none;background:#1e293b;border-bottom:2px solid #1d4ed8;padding:7px 24px;align-items:center;gap:12px;font-size:11px;color:rgba(255,255,255,.75)}
+.brand-strip-name{font-weight:800;font-size:13px;color:#fff}
+.brand-strip-link{color:#60a5fa;font-weight:700;text-decoration:none;margin-left:auto;white-space:nowrap}
+.brand-strip-link:hover{color:#93c5fd}
+
 /* ── TAB NAV ── */
 .tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:52px;z-index:99;overflow-x:auto}
 .tab-btn{padding:14px 20px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
@@ -183,6 +196,14 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
     </div>
   </div>
   <div class="topbar-right">
+    <div class="bsel-wrap">
+      <span class="bsel-lbl">브랜드</span>
+      <button class="bsel-btn active" id="bsel-pfchangs"    onclick="switchBrandRadar('pfchangs')"   style="background:#1d4ed8">⭐ 피에프창</button>
+      <button class="bsel-btn"        id="bsel-peipei"      onclick="switchBrandRadar('peipei')"     >🥢 페이페이</button>
+      <button class="bsel-btn"        id="bsel-vietnam"     onclick="switchBrandRadar('vietnam')"    >🍜 포팟·땀땀</button>
+      <button class="bsel-btn"        id="bsel-ihwawon"     onclick="switchBrandRadar('ihwawon')"    >🏮 이화원</button>
+      <button class="bsel-btn"        id="bsel-matsugajae"  onclick="switchBrandRadar('matsugajae')" >🍣 마쯔가제</button>
+    </div>
     <span class="live-badge">● LIVE</span>
     <span id="nowDate" style="opacity:.7"></span>
     <span style="opacity:.5">|</span>
@@ -206,6 +227,15 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
   <button class="tab-btn" onclick="showTab('snsref')">📸 SNS 참고자료</button>
   <button class="tab-btn" onclick="showTab('youtube')">▶️ 유튜브 전략</button>
   <button class="tab-btn" onclick="showTab('naverreview')">⭐ 네이버 리뷰 분석</button>
+</div>
+
+<!-- BRAND INFO STRIP (appears when non-PFC brand selected) -->
+<div class="brand-strip" id="brandInfoStrip">
+  <span id="brandInfoEmoji" style="font-size:18px"></span>
+  <span class="brand-strip-name" id="brandInfoName"></span>
+  <span style="opacity:.5">|</span>
+  <span id="brandInfoSummary"></span>
+  <a href="#" id="brandDetailLink" class="brand-strip-link">상세 대시보드 열기 →</a>
 </div>
 
 <!-- ════════════════════════ TAB 1: 핵심 대시보드 ════════════════════════ -->
@@ -2130,7 +2160,7 @@ new Chart(document.getElementById('corrChart').getContext('2d'), {
 });
 
 // ── CHART 4: Radar Main (인터랙티브 — 브랜드 토글)
-const radarBrands = [
+let radarBrands = [
   { label:'⭐ 피에프창',    data:[5,5,6,6,3,4],           color:'#1d4ed8', dash:[] },
   { label:'🥩 아웃백',      data:[9,8,8,8,9,7],           color:'#dc2626', dash:[] },
   { label:'🧄 매드포갈릭',  data:[7,7,7,7,7,6],           color:'#ea580c', dash:[] },
@@ -2157,11 +2187,12 @@ function makeRadarDatasets(visible) {
   }));
 }
 
-const radarVisible = radarBrands.map(() => true);
+let radarVisible = radarBrands.map(() => true);
+let radarLabels = ITEMS;
 const radarChart = new Chart(document.getElementById('radarMain').getContext('2d'), {
   type: 'radar',
   data: {
-    labels: ITEMS,
+    labels: radarLabels,
     datasets: makeRadarDatasets(radarVisible),
   },
   options: {
@@ -2374,6 +2405,135 @@ new Chart(document.getElementById('roiChart').getContext('2d'), {
   },
   options:{ responsive:true, scales:{ y:{ ticks:{ callback: v=>v+'만' } } }, plugins:{ legend:{ position:'bottom' } } }
 });
+
+// ── 브랜드 셀렉터 데이터베이스 ──
+const brandDatabase = {
+  pfchangs: {
+    label:'피에프창', emoji:'⭐', color:'#1d4ed8',
+    summary:'강남역 직영 · 아시안 퓨전 · 객단가 ₩65K · 경쟁사 대비 마케팅 강도 취약',
+    dashboardLink:'pfchangs_master_dashboard.html',
+    radarLabels:['홍보전략','매출활성화','세트구성','메뉴전략','할인행사','기타행사'],
+    competitors:[
+      {label:'⭐ 피에프창',     data:[5,5,6,6,3,4],              color:'#1d4ed8',dash:[]},
+      {label:'🥩 아웃백',       data:[9,8,8,8,9,7],              color:'#dc2626',dash:[]},
+      {label:'🧄 매드포갈릭',   data:[7,7,7,7,7,6],              color:'#ea580c',dash:[]},
+      {label:'🥟 차이797',      data:[7,8,8,8,6,6],              color:'#ca8a04',dash:[]},
+      {label:'💎 크리스탈제이드',data:[6,7,7,7,6,6],             color:'#7c3aed',dash:[]},
+      {label:'🌿 제이에스가든', data:[4,6,6,6,3,5],              color:'#16a34a',dash:[]},
+      {label:'🍽️ 모트32',       data:[6,6,7,8,5,6],              color:'#374151',dash:[]},
+      {label:'― 경쟁사 평균',   data:[7.0,7.0,6.9,7.0,5.7,5.7], color:'#f97316',dash:[5,3]},
+    ],
+  },
+  peipei: {
+    label:'페이페이', emoji:'🥢', color:'#ea580c',
+    summary:'에렉스 자체 직영 · 팬아시안 패스트캐주얼 · 4개 입점(신세계·롯데) · 객단가 ₩13K',
+    dashboardLink:'peipei_dashboard.html',
+    radarLabels:['상권입지','브랜드파워','메뉴차별성','가성비','서비스','성장잠재력'],
+    competitors:[
+      {label:'🥢 페이페이',  data:[8.5,5.0,7.5,8.5,7.5,8.5], color:'#ea580c',dash:[]},
+      {label:'🌶️ 콘타이',   data:[8.0,8.5,8.0,6.5,8.5,7.0], color:'#dc2626',dash:[]},
+      {label:'🥖 반미앤코',  data:[8.0,5.5,6.5,9.0,7.0,7.0], color:'#ca8a04',dash:[]},
+      {label:'🍹 마이타이',  data:[7.5,5.0,6.5,7.5,7.5,6.5], color:'#7c3aed',dash:[]},
+      {label:'🍲 포베이',    data:[8.5,6.0,7.0,8.5,7.0,7.5], color:'#16a34a',dash:[]},
+      {label:'― 경쟁사 평균',data:[8.0,6.3,7.1,7.9,7.5,7.1], color:'#f97316',dash:[5,3]},
+    ],
+  },
+  vietnam: {
+    label:'포팟·땀땀', emoji:'🍜', color:'#16a34a',
+    summary:'베트남 신규 론칭 · 땀땀 롯데 2개 입점 · 24시간 사골 육수 · 객단가 ₩14K',
+    dashboardLink:'vietnam_dashboard.html',
+    radarLabels:['상권입지','브랜드파워','메뉴차별성','가성비','서비스','성장잠재력'],
+    competitors:[
+      {label:'🍜 포팟(신규)',  data:[6.5,4.0,7.5,8.0,7.0,9.0], color:'#16a34a',dash:[]},
+      {label:'🥣 땀땀',       data:[8.0,5.5,8.0,8.0,7.5,7.5], color:'#0ea5e9',dash:[]},
+      {label:'🍲 호아빈',     data:[7.5,5.0,7.0,8.5,7.0,7.0], color:'#ea580c',dash:[]},
+      {label:'✨ 유이',        data:[8.0,5.5,8.5,7.5,7.5,8.0], color:'#ca8a04',dash:[]},
+      {label:'🍲 포베이',     data:[8.5,6.0,7.0,8.5,7.0,7.5], color:'#7c3aed',dash:[]},
+      {label:'― 경쟁사 평균', data:[7.8,5.3,7.6,8.1,7.3,7.5], color:'#f97316',dash:[5,3]},
+    ],
+  },
+  ihwawon: {
+    label:'이화원', emoji:'🏮', color:'#7c3aed',
+    summary:'화교 3대 가업 프리미엄 중식 · 연희동·코엑스 · 신세계 채널 공백 진입 기회 · 객단가 ₩68K+',
+    dashboardLink:'ihwawon_dashboard.html',
+    radarLabels:['상권입지','브랜드파워','메뉴차별성','가성비','서비스','성장잠재력'],
+    competitors:[
+      {label:'🏮 이화원',       data:[6.5,7.0,8.5,6.0,8.0,7.5], color:'#7c3aed',dash:[]},
+      {label:'🍜 도원스타일',   data:[8.0,8.5,8.0,5.5,8.5,7.0], color:'#dc2626',dash:[]},
+      {label:'💎 크리스탈제이드',data:[7.5,8.5,8.5,4.5,8.5,6.5], color:'#ea580c',dash:[]},
+      {label:'🥟 차이797',      data:[7.5,8.0,9.0,6.0,9.0,7.5], color:'#ca8a04',dash:[]},
+      {label:'🏪 만복',         data:[8.5,6.5,7.0,7.5,7.5,7.0], color:'#0ea5e9',dash:[]},
+      {label:'― 경쟁사 평균',   data:[7.9,7.9,8.1,5.9,8.4,7.0], color:'#f97316',dash:[5,3]},
+    ],
+  },
+  matsugajae: {
+    label:'마쯔가제', emoji:'🍣', color:'#ca8a04',
+    summary:'오크우드 프리미어 코엑스 3F · 프리미엄 일식 제철 코스 · 오마카세 시장 확장 검토 · 객단가 ₩90K+',
+    dashboardLink:'matsugajae_dashboard.html',
+    radarLabels:['상권입지','브랜드파워','메뉴차별성','가성비','서비스','성장잠재력'],
+    competitors:[
+      {label:'🍣 마쯔가제',  data:[7.5,6.0,9.0,5.0,9.0,7.0], color:'#ca8a04',dash:[]},
+      {label:'🥡 하코야',    data:[8.5,7.5,7.5,7.5,7.5,8.0], color:'#dc2626',dash:[]},
+      {label:'🍱 모모야마',  data:[7.0,8.0,9.0,4.5,9.0,6.5], color:'#7c3aed',dash:[]},
+      {label:'🍣 스시로',    data:[8.5,7.0,7.0,8.0,7.5,8.0], color:'#ea580c',dash:[]},
+      {label:'🍱 무진장',    data:[7.5,6.0,7.5,7.5,7.5,7.0], color:'#16a34a',dash:[]},
+      {label:'― 경쟁사 평균',data:[7.9,7.1,7.8,6.9,7.9,7.4], color:'#f97316',dash:[5,3]},
+    ],
+  },
+};
+
+let currentBrandId = 'pfchangs';
+
+function switchBrandRadar(id) {
+  currentBrandId = id;
+  const bd = brandDatabase[id];
+
+  // 셀렉터 버튼 상태
+  document.querySelectorAll('.bsel-btn').forEach(b => {
+    b.classList.remove('active');
+    b.style.background = '';
+  });
+  const activeBtn = document.getElementById('bsel-' + id);
+  activeBtn.classList.add('active');
+  activeBtn.style.background = bd.color;
+
+  // 브랜드 인포 스트립
+  const strip = document.getElementById('brandInfoStrip');
+  if (id === 'pfchangs') {
+    strip.style.display = 'none';
+  } else {
+    strip.style.display = 'flex';
+    document.getElementById('brandInfoEmoji').textContent = bd.emoji;
+    document.getElementById('brandInfoName').textContent = bd.label;
+    document.getElementById('brandInfoSummary').textContent = bd.summary;
+    const link = document.getElementById('brandDetailLink');
+    link.href = bd.dashboardLink;
+    strip.style.borderBottomColor = bd.color;
+  }
+
+  // radarBrands & labels 교체
+  radarBrands = bd.competitors;
+  radarLabels = bd.radarLabels;
+  radarVisible.length = 0;
+  radarBrands.forEach(() => radarVisible.push(true));
+
+  // 토글 버튼 재생성
+  const togglesDiv = document.getElementById('radarToggles');
+  togglesDiv.innerHTML = radarBrands.map((b, i) => {
+    const borderStyle = (b.dash && b.dash.length) ? 'dashed' : 'solid';
+    return `<button class="rtg-btn rtg-on" data-idx="${i}" onclick="toggleRadar(${i})" `+
+      `style="background:${b.color};color:#fff;border:2px ${borderStyle} ${b.color};`+
+      `border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">`+
+      `${b.label}</button>`;
+  }).join('') +
+  `<button onclick="radarSelectAll(true)" style="background:#f1f5f9;color:#374151;border:1px solid #e2e8f0;border-radius:20px;padding:3px 11px;font-size:11px;cursor:pointer">전체 ON</button>`+
+  `<button onclick="radarSelectAll(false)" style="background:#f1f5f9;color:#374151;border:1px solid #e2e8f0;border-radius:20px;padding:3px 11px;font-size:11px;cursor:pointer">전체 OFF</button>`;
+
+  // 차트 업데이트
+  radarChart.data.labels = radarLabels;
+  radarChart.data.datasets = makeRadarDatasets(radarVisible);
+  radarChart.update();
+}
 
 // ── 네이버 리뷰 레이더 차트 ──
 const nrBrands = [
