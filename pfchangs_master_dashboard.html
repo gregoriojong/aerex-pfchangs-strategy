@@ -284,8 +284,21 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
       <canvas id="corrChart" height="220"></canvas>
     </div>
     <div class="card">
-      <div class="card-title">🎯 레이더 — 피에프창 vs 경쟁사 평균 (6개 항목)</div>
-      <canvas id="radarMain" height="220"></canvas>
+      <div class="card-title">🎯 레이더 — 피에프창 vs 경쟁사 브랜드 선택 비교</div>
+      <!-- 브랜드 토글 버튼 -->
+      <div style="display:flex;flex-wrap:wrap;gap:5px;margin-bottom:10px" id="radarToggles">
+        <button class="rtg-btn rtg-on" data-idx="0" onclick="toggleRadar(0)" style="background:#1d4ed8;color:#fff;border:2px solid #1d4ed8;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">⭐ 피에프창</button>
+        <button class="rtg-btn rtg-on" data-idx="1" onclick="toggleRadar(1)" style="background:#dc2626;color:#fff;border:2px solid #dc2626;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🥩 아웃백</button>
+        <button class="rtg-btn rtg-on" data-idx="2" onclick="toggleRadar(2)" style="background:#ea580c;color:#fff;border:2px solid #ea580c;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🧄 매드포갈릭</button>
+        <button class="rtg-btn rtg-on" data-idx="3" onclick="toggleRadar(3)" style="background:#ca8a04;color:#fff;border:2px solid #ca8a04;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🥟 차이797</button>
+        <button class="rtg-btn rtg-on" data-idx="4" onclick="toggleRadar(4)" style="background:#7c3aed;color:#fff;border:2px solid #7c3aed;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">💎 크리스탈제이드</button>
+        <button class="rtg-btn rtg-on" data-idx="5" onclick="toggleRadar(5)" style="background:#16a34a;color:#fff;border:2px solid #16a34a;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🌿 제이에스가든</button>
+        <button class="rtg-btn rtg-on" data-idx="6" onclick="toggleRadar(6)" style="background:#374151;color:#fff;border:2px solid #374151;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🍽️ 모트32</button>
+        <button class="rtg-btn rtg-on" data-idx="7" onclick="toggleRadar(7)" style="background:#f97316;color:#fff;border:2px dashed #f97316;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">― 경쟁사 평균</button>
+        <button onclick="radarSelectAll(true)"  style="background:#f1f5f9;color:#374151;border:1px solid #e2e8f0;border-radius:20px;padding:3px 11px;font-size:11px;cursor:pointer">전체 ON</button>
+        <button onclick="radarSelectAll(false)" style="background:#f1f5f9;color:#374151;border:1px solid #e2e8f0;border-radius:20px;padding:3px 11px;font-size:11px;cursor:pointer">전체 OFF</button>
+      </div>
+      <canvas id="radarMain" height="240"></canvas>
     </div>
   </div>
 
@@ -1782,18 +1795,82 @@ new Chart(document.getElementById('corrChart').getContext('2d'), {
   }
 });
 
-// ── CHART 4: Radar Main
-new Chart(document.getElementById('radarMain').getContext('2d'), {
-  type:'radar',
-  data:{
+// ── CHART 4: Radar Main (인터랙티브 — 브랜드 토글)
+const radarBrands = [
+  { label:'⭐ 피에프창',    data:[5,5,6,6,3,4],           color:'#1d4ed8', dash:[] },
+  { label:'🥩 아웃백',      data:[9,8,8,8,9,7],           color:'#dc2626', dash:[] },
+  { label:'🧄 매드포갈릭',  data:[7,7,7,7,7,6],           color:'#ea580c', dash:[] },
+  { label:'🥟 차이797',     data:[7,8,8,8,6,6],           color:'#ca8a04', dash:[] },
+  { label:'💎 크리스탈제이드',data:[6,7,7,7,6,6],         color:'#7c3aed', dash:[] },
+  { label:'🌿 제이에스가든', data:[4,6,6,6,3,5],           color:'#16a34a', dash:[] },
+  { label:'🍽️ 모트32',      data:[6,6,7,8,5,6],           color:'#374151', dash:[] },
+  { label:'― 경쟁사 평균',  data:[7.0,7.0,6.9,7.0,5.7,5.7], color:'#f97316', dash:[5,3] },
+];
+
+function makeRadarDatasets(visible) {
+  return radarBrands.map((b, i) => ({
+    label: b.label,
+    data: b.data,
+    borderColor: b.color,
+    backgroundColor: visible[i] ? b.color.replace(')', ',0.08)').replace('rgb','rgba') : 'transparent',
+    borderWidth: i === 0 ? 3 : 2,
+    borderDash: b.dash,
+    pointRadius: i === 0 ? 5 : 3,
+    pointBackgroundColor: b.color,
+    hidden: !visible[i],
+  }));
+}
+
+const radarVisible = radarBrands.map(() => true);
+const radarChart = new Chart(document.getElementById('radarMain').getContext('2d'), {
+  type: 'radar',
+  data: {
     labels: ITEMS,
-    datasets:[
-      { label:'⭐ 피에프창', data:[5,5,6,6,3,4], borderColor:'#1d4ed8', backgroundColor:'rgba(29,78,216,0.15)', borderWidth:3, pointRadius:5 },
-      { label:'경쟁사 평균', data:[7.0,7.0,6.9,7.0,5.7,5.7], borderColor:'#dc2626', backgroundColor:'rgba(220,38,38,0.1)', borderWidth:2, borderDash:[5,3] }
-    ]
+    datasets: makeRadarDatasets(radarVisible),
   },
-  options:{ responsive:true, scales:{ r:{ min:0, max:10, ticks:{ stepSize:2, backdropColor:'transparent' }, pointLabels:{ font:{size:11,weight:'600'} } } }, plugins:{ legend:{ position:'bottom' } } }
+  options: {
+    responsive: true,
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2, backdropColor: 'transparent', font:{size:10} },
+        pointLabels: { font:{size:11, weight:'600'} },
+        grid: { color: 'rgba(0,0,0,0.07)' },
+      }
+    },
+    plugins: {
+      legend: { position:'bottom', labels:{ font:{size:10}, boxWidth:10, padding:8 } },
+      tooltip: { callbacks: { label: ctx => ` ${ctx.dataset.label}: ${ctx.raw}/10` } }
+    }
+  }
 });
+
+function toggleRadar(idx) {
+  radarVisible[idx] = !radarVisible[idx];
+  const btn = document.querySelectorAll('.rtg-btn')[idx];
+  const color = radarBrands[idx].color;
+  if (radarVisible[idx]) {
+    btn.style.background = color;
+    btn.style.color = '#fff';
+  } else {
+    btn.style.background = '#fff';
+    btn.style.color = color;
+  }
+  radarChart.data.datasets = makeRadarDatasets(radarVisible);
+  radarChart.update();
+}
+
+function radarSelectAll(on) {
+  radarBrands.forEach((_, i) => {
+    radarVisible[i] = on;
+    const btn = document.querySelectorAll('.rtg-btn')[i];
+    const color = radarBrands[i].color;
+    btn.style.background = on ? color : '#fff';
+    btn.style.color = on ? '#fff' : color;
+  });
+  radarChart.data.datasets = makeRadarDatasets(radarVisible);
+  radarChart.update();
+}
 
 // ── CHART 5: Weekly KPI (Tab2)
 new Chart(document.getElementById('weeklyKPI').getContext('2d'), {
