@@ -3,262 +3,980 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>에렉스 브랜드 전략 포털</title>
+<title>에렉스 브랜드 포트폴리오 대시보드</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:#0f172a;color:#f1f5f9;min-height:100vh}
+:root{
+  --blue:#1d4ed8;--dark:#0f172a;--red:#dc2626;--green:#16a34a;
+  --orange:#ea580c;--purple:#7c3aed;--yellow:#ca8a04;--gray:#6b7280;
+  --bg:#f1f5f9;--card:#fff;--border:#e2e8f0;
+  --c-pf:#1d4ed8;--c-pp:#ea580c;--c-vn:#16a34a;--c-ih:#7c3aed;--c-mg:#ca8a04
+}
+body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;background:var(--bg);color:#1f2937;font-size:13px}
 
 /* ── TOP BAR ── */
-.topbar{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-bottom:1px solid rgba(255,255,255,0.08);padding:0 32px;display:flex;align-items:center;justify-content:space-between;height:64px}
-.logo-area{display:flex;align-items:center;gap:14px}
-.logo-mark{width:40px;height:40px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:20px;font-weight:900}
-.logo-text{font-size:18px;font-weight:800;letter-spacing:-0.5px}
+.topbar{background:var(--dark);color:#fff;padding:0 28px;display:flex;align-items:center;justify-content:space-between;height:56px;position:sticky;top:0;z-index:100;box-shadow:0 2px 12px rgba(0,0,0,.4)}
+.topbar-left{display:flex;align-items:center;gap:14px}
+.logo-mark{width:36px;height:36px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;flex-shrink:0}
+.logo-text{font-size:16px;font-weight:800;letter-spacing:-0.5px}
 .logo-sub{font-size:10px;color:rgba(255,255,255,0.45);margin-top:2px}
-.topbar-right{font-size:11px;color:rgba(255,255,255,0.45);text-align:right}
+.topbar-right{display:flex;align-items:center;gap:14px;font-size:11px;color:rgba(255,255,255,.55)}
+.conf-badge{background:rgba(220,38,38,.25);color:#fca5a5;border:1px solid rgba(220,38,38,.4);font-size:10px;font-weight:700;padding:3px 9px;border-radius:8px;letter-spacing:.5px}
+.topbar-link{color:#93c5fd;font-size:11px;font-weight:700;text-decoration:none;border:1px solid rgba(147,197,253,.3);padding:4px 10px;border-radius:7px;transition:all .2s}
+.topbar-link:hover{background:rgba(147,197,253,.15);border-color:rgba(147,197,253,.6)}
 
-/* ── HERO ── */
-.hero{padding:48px 32px 32px;text-align:center}
-.hero h1{font-size:28px;font-weight:800;letter-spacing:-1px;margin-bottom:10px}
-.hero h1 span{background:linear-gradient(90deg,#60a5fa,#a78bfa);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
-.hero p{font-size:13px;color:rgba(255,255,255,0.5);max-width:480px;margin:0 auto}
+/* ── TAB NAV ── */
+.tabnav{background:#fff;border-bottom:2px solid var(--border);padding:0 24px;display:flex;gap:0;position:sticky;top:56px;z-index:99;overflow-x:auto}
+.tab-btn{padding:14px 18px;font-size:13px;font-weight:600;color:var(--gray);border:none;background:none;cursor:pointer;border-bottom:3px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all .2s;display:flex;align-items:center;gap:6px}
+.tab-btn:hover{color:var(--blue);background:#f8fafc}
+.tab-btn.active{color:var(--blue);border-bottom-color:var(--blue)}
+.tab-content{display:none;padding:22px 26px;max-width:1400px;margin:0 auto}
+.tab-content.active{display:block}
 
-/* ── FILTER BAR ── */
-.filterbar{display:flex;justify-content:center;gap:8px;padding:16px 32px 24px;flex-wrap:wrap}
-.filter-btn{padding:6px 16px;border-radius:20px;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.55);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
-.filter-btn:hover,.filter-btn.active{background:rgba(255,255,255,0.1);color:#fff;border-color:rgba(255,255,255,0.3)}
+/* ── CARDS ── */
+.card{background:var(--card);border-radius:12px;padding:20px 22px;box-shadow:0 1px 6px rgba(0,0,0,.06);border:1px solid var(--border)}
+.card-title{font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.7px;margin-bottom:14px;display:flex;align-items:center;gap:6px}
 
-/* ── BRAND GRID ── */
-.brand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:20px;padding:0 32px 48px;max-width:1280px;margin:0 auto}
+/* ── KPI GRID ── */
+.kpi-grid-5{display:grid;grid-template-columns:repeat(5,1fr);gap:13px;margin-bottom:18px}
+.kpi-grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:13px;margin-bottom:18px}
+.kpi-card{border-radius:12px;padding:18px 18px 14px;position:relative;overflow:hidden;color:#fff}
+.kpi-card .kpi-label{font-size:10px;font-weight:600;opacity:.8;margin-bottom:6px}
+.kpi-card .kpi-val{font-size:28px;font-weight:900;line-height:1;margin-bottom:4px}
+.kpi-card .kpi-sub{font-size:10px;opacity:.75}
+.kpi-card .kpi-icon{position:absolute;right:12px;top:12px;font-size:26px;opacity:.18}
+.kpi-card.blue{background:linear-gradient(135deg,#1d4ed8,#3b82f6)}
+.kpi-card.orange{background:linear-gradient(135deg,#ea580c,#f97316)}
+.kpi-card.green{background:linear-gradient(135deg,#16a34a,#22c55e)}
+.kpi-card.purple{background:linear-gradient(135deg,#7c3aed,#a855f7)}
+.kpi-card.yellow{background:linear-gradient(135deg,#ca8a04,#eab308)}
+.kpi-card.dark{background:linear-gradient(135deg,#0f172a,#1e3a5f)}
+.kpi-card.red{background:linear-gradient(135deg,#dc2626,#ef4444)}
 
-/* ── BRAND CARD ── */
-.brand-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;overflow:hidden;transition:all .3s;cursor:pointer;text-decoration:none;display:block}
-.brand-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,0.2);box-shadow:0 20px 40px rgba(0,0,0,0.4)}
-.brand-card-header{padding:24px 24px 16px;position:relative}
-.brand-emoji{font-size:36px;margin-bottom:12px;display:block}
-.brand-name{font-size:18px;font-weight:800;letter-spacing:-0.5px;margin-bottom:4px}
-.brand-category{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:0.5}
-.brand-badge{position:absolute;top:20px;right:20px;font-size:9px;font-weight:700;padding:3px 8px;border-radius:8px}
-.badge-active{background:rgba(22,163,74,0.2);color:#4ade80;border:1px solid rgba(22,163,74,0.3)}
-.badge-new{background:rgba(234,88,12,0.2);color:#fb923c;border:1px solid rgba(234,88,12,0.3)}
-.badge-draft{background:rgba(107,114,128,0.2);color:#9ca3af;border:1px solid rgba(107,114,128,0.3)}
+/* ── CHART LAYOUTS ── */
+.chart-grid-2{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.chart-grid-21{display:grid;grid-template-columns:2fr 1fr;gap:14px}
+.chart-grid-12{display:grid;grid-template-columns:1fr 2fr;gap:14px}
+.chart-grid-3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:14px}
 
-.brand-card-body{padding:0 24px 20px;border-top:1px solid rgba(255,255,255,0.06);padding-top:16px}
-.brand-desc{font-size:12px;color:rgba(255,255,255,0.5);line-height:1.7;margin-bottom:14px}
-.brand-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
-.brand-tag{font-size:10px;padding:2px 8px;border-radius:6px;background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.5)}
+/* ── TABLE ── */
+.dt{width:100%;border-collapse:collapse;font-size:12px}
+.dt th{padding:9px 12px;background:#f8fafc;font-weight:700;text-align:left;border-bottom:2px solid var(--border);white-space:nowrap}
+.dt td{padding:8px 12px;border-bottom:1px solid #f0f4f8;vertical-align:middle}
+.dt tr:hover td{background:#fafbff}
+.dt tr:last-child td{border-bottom:none}
 
-.brand-card-footer{display:flex;align-items:center;justify-content:space-between}
-.brand-stats{display:flex;gap:16px}
-.stat-item{text-align:center}
-.stat-val{font-size:14px;font-weight:700}
-.stat-lbl{font-size:9px;opacity:0.4;margin-top:1px}
-.open-btn{font-size:11px;font-weight:700;padding:7px 16px;border-radius:8px;border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.06);color:#fff;display:flex;align-items:center;gap:5px;transition:all .2s}
-.brand-card:hover .open-btn{background:rgba(255,255,255,0.12);border-color:rgba(255,255,255,0.25)}
+/* ── PILL / BADGE ── */
+.pill{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px}
+.pill.blue{background:#dbeafe;color:#1d4ed8}
+.pill.green{background:#dcfce7;color:#16a34a}
+.pill.orange{background:#ffedd5;color:#ea580c}
+.pill.purple{background:#ede9fe;color:#7c3aed}
+.pill.yellow{background:#fef3c7;color:#92400e}
+.pill.gray{background:#f3f4f6;color:#374151}
+.pill.red{background:#fee2e2;color:#dc2626}
 
-/* ── ACCENT COLORS per brand ── */
-.card-pfchangs .brand-name{color:#60a5fa}
-.card-pfchangs{border-top:3px solid #1d4ed8}
-.card-peipei .brand-name{color:#fb923c}
-.card-peipei{border-top:3px solid #ea580c}
-.card-vietnam .brand-name{color:#4ade80}
-.card-vietnam{border-top:3px solid #16a34a}
-.card-ihwawon .brand-name{color:#c084fc}
-.card-ihwawon{border-top:3px solid #7c3aed}
-.card-matsugajae .brand-name{color:#fbbf24}
-.card-matsugajae{border-top:3px solid #ca8a04}
+/* ── STATUS BADGE ── */
+.status-active{background:#dcfce7;color:#15803d;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap}
+.status-review{background:#fef9c3;color:#854d0e;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap}
+.status-expand{background:#ede9fe;color:#5b21b6;font-size:10px;font-weight:700;padding:2px 8px;border-radius:8px;white-space:nowrap}
 
-/* ── SECTION TITLE ── */
-.section-header{padding:8px 32px 12px;max-width:1280px;margin:0 auto}
-.section-title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:2px;color:rgba(255,255,255,0.3)}
+/* ── ALERT ── */
+.alert{border-radius:10px;padding:12px 16px;margin-bottom:12px;font-size:12px;line-height:1.6}
+.alert.blue{background:#eff6ff;border:1px solid #93c5fd;border-left:4px solid #1d4ed8}
+.alert.yellow{background:#fefce8;border:1px solid #fde047;border-left:4px solid #ca8a04}
+.alert.green{background:#f0fdf4;border:1px solid #86efac;border-left:4px solid #16a34a}
+.alert.purple{background:#f5f3ff;border:1px solid #c4b5fd;border-left:4px solid #7c3aed}
+.alert.orange{background:#fff7ed;border:1px solid #fed7aa;border-left:4px solid #ea580c}
+
+/* ── BRAND TOGGLE PILLS ── */
+.brand-toggles{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px}
+.btoggle{padding:5px 14px;border-radius:20px;border:2px solid transparent;font-size:12px;font-weight:700;cursor:pointer;transition:all .2s;background:#f1f5f9;color:#64748b}
+.btoggle.active-pf{background:#dbeafe;color:#1d4ed8;border-color:#1d4ed8}
+.btoggle.active-pp{background:#ffedd5;color:#ea580c;border-color:#ea580c}
+.btoggle.active-vn{background:#dcfce7;color:#16a34a;border-color:#16a34a}
+.btoggle.active-ih{background:#ede9fe;color:#7c3aed;border-color:#7c3aed}
+.btoggle.active-mg{background:#fef9c3;color:#854d0e;border-color:#ca8a04}
+
+/* ── STRENGTH CARDS ── */
+.sw-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px;margin-top:14px}
+.sw-card{border-radius:10px;padding:14px 16px;border:1px solid var(--border);background:#fff}
+.sw-card .sw-brand{font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.sw-row{font-size:11px;margin-bottom:5px;display:flex;gap:6px}
+.sw-label{font-weight:700;min-width:30px}
+.sw-text{color:#4b5563;line-height:1.4}
+
+/* ── CHANNEL MATRIX CELLS ── */
+.cell-in{background:#dcfce7;color:#15803d;font-size:13px;text-align:center;border-radius:6px;padding:3px 0}
+.cell-review{background:#fef9c3;color:#854d0e;font-size:13px;text-align:center;border-radius:6px;padding:3px 0}
+.cell-none{background:#f8fafc;color:#cbd5e1;font-size:13px;text-align:center;border-radius:6px;padding:3px 0}
+
+/* ── INSIGHT CARDS ── */
+.insight-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:12px;margin-top:14px}
+.insight-card{border-radius:10px;padding:16px;border:1px solid var(--border);background:#fff}
+.insight-card .ic-label{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.5px;opacity:.55;margin-bottom:6px}
+.insight-card .ic-title{font-size:13px;font-weight:800;margin-bottom:6px}
+.insight-card .ic-desc{font-size:11px;color:#6b7280;line-height:1.5}
+
+/* ── COMPETITIVE MATRIX ── */
+.threat-high{color:#dc2626;font-weight:700}
+.threat-med{color:#ea580c;font-weight:700}
+.threat-low{color:#16a34a;font-weight:700}
+
+/* ── DARK BRAND CARDS (Tab 5) ── */
+.dark-portal{background:linear-gradient(135deg,#0f172a 0%,#1e293b 100%);border-radius:12px;padding:24px;margin-top:0}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:20px}
+.filt-btn{padding:5px 15px;border-radius:20px;border:1px solid rgba(255,255,255,.15);background:transparent;color:rgba(255,255,255,.55);font-size:11px;font-weight:600;cursor:pointer;transition:all .2s}
+.filt-btn:hover,.filt-btn.factive{background:rgba(255,255,255,.1);color:#fff;border-color:rgba(255,255,255,.3)}
+.brand-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:18px}
+.brand-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:14px;overflow:hidden;transition:all .3s;cursor:pointer;text-decoration:none;display:block;color:#f1f5f9}
+.brand-card:hover{transform:translateY(-4px);border-color:rgba(255,255,255,.2);box-shadow:0 16px 36px rgba(0,0,0,.4)}
+.bch{padding:20px 20px 14px;position:relative}
+.b-emoji{font-size:32px;margin-bottom:10px;display:block}
+.b-name{font-size:16px;font-weight:800;letter-spacing:-.4px;margin-bottom:3px}
+.b-cat{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:1px;opacity:.45}
+.b-badge{position:absolute;top:18px;right:18px;font-size:9px;font-weight:700;padding:2px 8px;border-radius:7px}
+.badge-live{background:rgba(22,163,74,.2);color:#4ade80;border:1px solid rgba(22,163,74,.3)}
+.badge-new{background:rgba(234,88,12,.2);color:#fb923c;border:1px solid rgba(234,88,12,.3)}
+.badge-draft{background:rgba(107,114,128,.2);color:#9ca3af;border:1px solid rgba(107,114,128,.3)}
+.bcb{padding:0 20px 18px;border-top:1px solid rgba(255,255,255,.06);padding-top:14px}
+.b-desc{font-size:12px;color:rgba(255,255,255,.5);line-height:1.65;margin-bottom:12px}
+.b-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:14px}
+.b-tag{font-size:10px;padding:2px 7px;border-radius:5px;background:rgba(255,255,255,.07);color:rgba(255,255,255,.5)}
+.bcf{display:flex;align-items:center;justify-content:space-between}
+.b-stats{display:flex;gap:14px}
+.b-stat .sv{font-size:14px;font-weight:700}
+.b-stat .sl{font-size:9px;opacity:.4;margin-top:1px}
+.open-btn{font-size:11px;font-weight:700;padding:6px 14px;border-radius:7px;border:1px solid rgba(255,255,255,.15);background:rgba(255,255,255,.06);color:#fff;display:flex;align-items:center;gap:4px;transition:all .2s}
+.brand-card:hover .open-btn{background:rgba(255,255,255,.12);border-color:rgba(255,255,255,.25)}
+.bc-pf{border-top:3px solid #1d4ed8}.bc-pf .b-name{color:#60a5fa}
+.bc-pp{border-top:3px solid #ea580c}.bc-pp .b-name{color:#fb923c}
+.bc-vn{border-top:3px solid #16a34a}.bc-vn .b-name{color:#4ade80}
+.bc-ih{border-top:3px solid #7c3aed}.bc-ih .b-name{color:#c084fc}
+.bc-mg{border-top:3px solid #ca8a04}.bc-mg .b-name{color:#fbbf24}
+
+/* ── DISCLAIMER ── */
+.disclaimer{background:#f8fafc;border:1px solid var(--border);border-radius:8px;padding:10px 14px;font-size:11px;color:#94a3b8;margin-bottom:18px;display:flex;align-items:center;gap:8px}
 
 /* ── FOOTER ── */
-footer{text-align:center;padding:24px;font-size:10px;color:rgba(255,255,255,0.2);border-top:1px solid rgba(255,255,255,0.06)}
+footer{text-align:center;padding:22px;font-size:10px;color:#94a3b8;border-top:1px solid var(--border);margin-top:10px}
+
+/* ── BUBBLE CHART CONTAINER ── */
+.bubble-wrap{position:relative;height:400px}
+
+@media(max-width:768px){
+  .kpi-grid-5{grid-template-columns:repeat(2,1fr)}
+  .chart-grid-2,.chart-grid-21,.chart-grid-12,.chart-grid-3{grid-template-columns:1fr}
+}
 </style>
 </head>
 <body>
 
+<!-- ══════════════ TOP BAR ══════════════ -->
 <div class="topbar">
-  <div class="logo-area">
+  <div class="topbar-left">
     <div class="logo-mark">🏢</div>
     <div>
-      <div class="logo-text">AEREX Brand Portal</div>
-      <div class="logo-sub">에렉스 브랜드 전략 통합 포털</div>
+      <div class="logo-text">에렉스 브랜드 포트폴리오 대시보드</div>
+      <div class="logo-sub">AEREX Brand Portfolio · 브랜드전략팀</div>
     </div>
   </div>
   <div class="topbar-right">
-    <div id="portalDate"></div>
-    <div style="margin-top:3px;opacity:.5">CONFIDENTIAL · 내부용</div>
+    <a href="pfchangs_master_dashboard.html" class="topbar-link">피에프창 메인 대시보드 →</a>
+    <span id="topDate"></span>
+    <span class="conf-badge">CONFIDENTIAL</span>
   </div>
 </div>
 
-<div class="hero">
-  <h1>에렉스 <span>브랜드 전략 허브</span></h1>
-  <p>운영 브랜드별 시장 분석 · 경쟁사 비교 · 입점 전략을 한곳에서</p>
+<!-- ══════════════ TAB NAV ══════════════ -->
+<div class="tabnav">
+  <button class="tab-btn active" onclick="switchTab('t1',this)">📊 포트폴리오 개요</button>
+  <button class="tab-btn" onclick="switchTab('t2',this)">📈 브랜드 비교</button>
+  <button class="tab-btn" onclick="switchTab('t3',this)">🏪 채널 분석</button>
+  <button class="tab-btn" onclick="switchTab('t4',this)">🗺️ 경쟁사 맵핑</button>
+  <button class="tab-btn" onclick="switchTab('t5',this)">🔗 브랜드 허브</button>
 </div>
 
-<div class="filterbar">
-  <button class="filter-btn active" onclick="filterCards('all')">전체 브랜드</button>
-  <button class="filter-btn" onclick="filterCards('asian')">아시안 퓨전</button>
-  <button class="filter-btn" onclick="filterCards('vietnam')">베트남</button>
-  <button class="filter-btn" onclick="filterCards('chinese')">중식</button>
-  <button class="filter-btn" onclick="filterCards('japanese')">일식</button>
+<!-- ══════════════════════════════════════
+     TAB 1 · 포트폴리오 개요
+══════════════════════════════════════ -->
+<div class="tab-content active" id="t1">
+  <div class="disclaimer">ℹ️ 본 데이터는 2026년 4월 기준 내부 분석 자료입니다. 외부 유출 금지.</div>
+
+  <!-- KPI Row -->
+  <div class="kpi-grid-5" style="margin-bottom:20px">
+    <div class="kpi-card blue">
+      <div class="kpi-icon">🏢</div>
+      <div class="kpi-label">총 운영 브랜드</div>
+      <div class="kpi-val">5</div>
+      <div class="kpi-sub">포트폴리오 전체</div>
+    </div>
+    <div class="kpi-card orange">
+      <div class="kpi-icon">🏪</div>
+      <div class="kpi-label">총 입점 매장</div>
+      <div class="kpi-val">8+</div>
+      <div class="kpi-sub">직영·위탁 합산</div>
+    </div>
+    <div class="kpi-card purple">
+      <div class="kpi-icon">🛍️</div>
+      <div class="kpi-label">주력 채널</div>
+      <div class="kpi-val" style="font-size:16px;padding-top:4px">신세계·롯데</div>
+      <div class="kpi-sub">백화점 중심 유통</div>
+    </div>
+    <div class="kpi-card green">
+      <div class="kpi-icon">💴</div>
+      <div class="kpi-label">평균 객단가</div>
+      <div class="kpi-val">₩45K</div>
+      <div class="kpi-sub">5개 브랜드 평균</div>
+    </div>
+    <div class="kpi-card dark">
+      <div class="kpi-icon">✅</div>
+      <div class="kpi-label">분석 완료</div>
+      <div class="kpi-val">5</div>
+      <div class="kpi-sub">전 브랜드 리포트</div>
+    </div>
+  </div>
+
+  <!-- Brand Table + Donut -->
+  <div class="chart-grid-21" style="margin-bottom:18px">
+    <div class="card">
+      <div class="card-title">📋 브랜드 포트폴리오 현황 요약</div>
+      <table class="dt">
+        <thead>
+          <tr>
+            <th>브랜드명</th><th>카테고리</th><th>현재 입점</th><th>객단가</th><th>주력 채널</th><th>전략 상태</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong style="color:#1d4ed8">P.F. Chang's</strong></td>
+            <td>아시안 퓨전</td>
+            <td style="font-weight:700">1개</td>
+            <td style="font-weight:700;color:#1d4ed8">₩65K</td>
+            <td>강남역</td>
+            <td><span class="status-active">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ea580c">페이페이</strong></td>
+            <td>팬아시안</td>
+            <td style="font-weight:700">4개</td>
+            <td style="font-weight:700;color:#ea580c">₩13K</td>
+            <td>신세계·롯데</td>
+            <td><span class="status-active">ACTIVE</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#16a34a">포팟·땀땀</strong></td>
+            <td>베트남</td>
+            <td style="font-weight:700">2개+</td>
+            <td style="font-weight:700;color:#16a34a">₩14K</td>
+            <td>롯데</td>
+            <td><span class="status-review">신규검토</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#7c3aed">이화원</strong></td>
+            <td>프리미엄 중식</td>
+            <td style="font-weight:700">2개</td>
+            <td style="font-weight:700;color:#7c3aed">₩68K+</td>
+            <td>연희동·코엑스</td>
+            <td><span class="status-expand">확장검토</span></td>
+          </tr>
+          <tr>
+            <td><strong style="color:#ca8a04">마쯔가제</strong></td>
+            <td>프리미엄 일식</td>
+            <td style="font-weight:700">1개</td>
+            <td style="font-weight:700;color:#ca8a04">₩90K+</td>
+            <td>코엑스 호텔</td>
+            <td><span class="status-expand">확장검토</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="card" style="display:flex;flex-direction:column">
+      <div class="card-title">🍩 카테고리 분포</div>
+      <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:10px 0">
+        <canvas id="donutChart" height="220"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Price Tier Bar -->
+  <div class="card">
+    <div class="card-title">💴 브랜드별 객단가 비교</div>
+    <canvas id="priceBar" height="90"></canvas>
+  </div>
 </div>
 
-<div class="section-header">
-  <div class="section-title">운영 브랜드 대시보드</div>
+<!-- ══════════════════════════════════════
+     TAB 2 · 브랜드 비교
+══════════════════════════════════════ -->
+<div class="tab-content" id="t2">
+  <div class="disclaimer">ℹ️ 6개 축 레이더 차트는 정성·정량 혼합 내부 평가 기준입니다 (10점 만점).</div>
+
+  <div class="brand-toggles" id="brandToggles">
+    <button class="btoggle active-pf" data-brand="pf" onclick="toggleBrand('pf',this)">⭐ P.F. Chang's</button>
+    <button class="btoggle active-pp" data-brand="pp" onclick="toggleBrand('pp',this)">🥢 페이페이</button>
+    <button class="btoggle active-vn" data-brand="vn" onclick="toggleBrand('vn',this)">🍜 포팟·땀땀</button>
+    <button class="btoggle active-ih" data-brand="ih" onclick="toggleBrand('ih',this)">🏮 이화원</button>
+    <button class="btoggle active-mg" data-brand="mg" onclick="toggleBrand('mg',this)">🍣 마쯔가제</button>
+  </div>
+
+  <div class="chart-grid-21">
+    <div class="card">
+      <div class="card-title">📡 6축 종합 역량 비교 레이더</div>
+      <canvas id="radarChart" height="320"></canvas>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 축별 설명</div>
+      <div style="display:flex;flex-direction:column;gap:10px;margin-top:4px">
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:8px;border-left:3px solid #1d4ed8">
+          <div style="font-size:11px;font-weight:700;margin-bottom:3px">브랜드파워</div>
+          <div style="font-size:11px;color:#6b7280">소비자 인지도·선호도·SNS 버즈 합산</div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:8px;border-left:3px solid #ea580c">
+          <div style="font-size:11px;font-weight:700;margin-bottom:3px">메뉴차별성</div>
+          <div style="font-size:11px;color:#6b7280">독창적 메뉴 구성·시그니처 보유 여부</div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:8px;border-left:3px solid #16a34a">
+          <div style="font-size:11px;font-weight:700;margin-bottom:3px">가성비</div>
+          <div style="font-size:11px;color:#6b7280">객단가 대비 소비자 체감 만족도</div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:8px;border-left:3px solid #7c3aed">
+          <div style="font-size:11px;font-weight:700;margin-bottom:3px">채널접근성</div>
+          <div style="font-size:11px;color:#6b7280">백화점·몰 입점 용이성 및 채널 다양성</div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:8px;border-left:3px solid #ca8a04">
+          <div style="font-size:11px;font-weight:700;margin-bottom:3px">서비스</div>
+          <div style="font-size:11px;color:#6b7280">운영 안정성·서비스 품질 평점</div>
+        </div>
+        <div style="padding:10px 12px;background:#f8fafc;border-radius:8px;border-left:3px solid #6b7280">
+          <div style="font-size:11px;font-weight:700;margin-bottom:3px">성장잠재력</div>
+          <div style="font-size:11px;color:#6b7280">시장 트렌드 부합도·확장 가능성</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Strength / Weakness Summary -->
+  <div style="margin-top:14px">
+    <div class="card-title" style="padding:4px 0 8px;font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.7px">💡 강점·약점 요약</div>
+    <div class="sw-grid">
+      <div class="sw-card" style="border-top:3px solid #1d4ed8">
+        <div class="sw-brand" style="color:#1d4ed8">⭐ P.F. Chang's</div>
+        <div class="sw-row"><span class="sw-label" style="color:#16a34a">강점</span><span class="sw-text">글로벌 인지도, 메뉴 차별성, 프리미엄 서비스</span></div>
+        <div class="sw-row"><span class="sw-label" style="color:#dc2626">약점</span><span class="sw-text">높은 객단가로 가성비 열위, 채널 다양화 필요</span></div>
+      </div>
+      <div class="sw-card" style="border-top:3px solid #ea580c">
+        <div class="sw-brand" style="color:#ea580c">🥢 페이페이</div>
+        <div class="sw-row"><span class="sw-label" style="color:#16a34a">강점</span><span class="sw-text">탁월한 가성비, 다채널 입점, 높은 성장잠재력</span></div>
+        <div class="sw-row"><span class="sw-label" style="color:#dc2626">약점</span><span class="sw-text">브랜드파워 아직 성장 단계, 고급화 한계</span></div>
+      </div>
+      <div class="sw-card" style="border-top:3px solid #16a34a">
+        <div class="sw-brand" style="color:#16a34a">🍜 포팟·땀땀</div>
+        <div class="sw-row"><span class="sw-label" style="color:#16a34a">강점</span><span class="sw-text">베트남 트렌드 최정점, 가성비·성장잠재력 최고</span></div>
+        <div class="sw-row"><span class="sw-label" style="color:#dc2626">약점</span><span class="sw-text">브랜드 인지도 초기 단계, 채널 제한적</span></div>
+      </div>
+      <div class="sw-card" style="border-top:3px solid #7c3aed">
+        <div class="sw-brand" style="color:#7c3aed">🏮 이화원</div>
+        <div class="sw-row"><span class="sw-label" style="color:#16a34a">강점</span><span class="sw-text">3대 가업 브랜드 스토리, 높은 서비스 품질</span></div>
+        <div class="sw-row"><span class="sw-label" style="color:#dc2626">약점</span><span class="sw-text">채널 접근성 제한, 가격대 진입 장벽</span></div>
+      </div>
+      <div class="sw-card" style="border-top:3px solid #ca8a04">
+        <div class="sw-brand" style="color:#ca8a04">🍣 마쯔가제</div>
+        <div class="sw-row"><span class="sw-label" style="color:#16a34a">강점</span><span class="sw-text">최고급 메뉴 차별성, 서비스 완성도 최상위</span></div>
+        <div class="sw-row"><span class="sw-label" style="color:#dc2626">약점</span><span class="sw-text">초고가 가성비 최하, 채널·타깃 극히 제한</span></div>
+      </div>
+    </div>
+  </div>
 </div>
 
-<div class="brand-grid" id="brandGrid">
+<!-- ══════════════════════════════════════
+     TAB 3 · 채널 분석
+══════════════════════════════════════ -->
+<div class="tab-content" id="t3">
+  <div class="disclaimer">ℹ️ ✅ 입점 완료 · 🔄 검토 중 · ⬜ 미입점. 2026년 4월 기준.</div>
 
-  <!-- ① 피에프창 -->
-  <a href="pfchangs_master_dashboard.html" class="brand-card card-pfchangs" data-cat="asian">
-    <div class="brand-card-header">
-      <span class="brand-emoji">⭐</span>
-      <div class="brand-name">P.F. Chang's</div>
-      <div class="brand-category">Asian Fusion · Premium Casual</div>
-      <span class="brand-badge badge-active">LIVE</span>
-    </div>
-    <div class="brand-card-body">
-      <div class="brand-desc">글로벌 아시안 퓨전 레스토랑. 강남역 입점 · 미국 본사 라이선스. 국내 유일 피에프창 운영.</div>
-      <div class="brand-tags">
-        <span class="brand-tag">강남역</span>
-        <span class="brand-tag">아시안 퓨전</span>
-        <span class="brand-tag">글로벌 브랜드</span>
-        <span class="brand-tag">프리미엄</span>
-      </div>
-      <div class="brand-card-footer">
-        <div class="brand-stats">
-          <div class="stat-item"><div class="stat-val" style="color:#60a5fa">1</div><div class="stat-lbl">직영점</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#60a5fa">₩65K</div><div class="stat-lbl">객단가</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
-        </div>
-        <div class="open-btn">열기 →</div>
-      </div>
-    </div>
-  </a>
+  <div class="card" style="margin-bottom:16px;overflow-x:auto">
+    <div class="card-title">🗂️ 브랜드 × 채널 매트릭스</div>
+    <table class="dt" style="min-width:700px">
+      <thead>
+        <tr>
+          <th>채널</th>
+          <th style="color:#1d4ed8">P.F. Chang's</th>
+          <th style="color:#ea580c">페이페이</th>
+          <th style="color:#16a34a">포팟·땀땀</th>
+          <th style="color:#7c3aed">이화원</th>
+          <th style="color:#ca8a04">마쯔가제</th>
+        </tr>
+      </thead>
+      <tbody id="channelMatrix">
+        <!-- filled by JS -->
+      </tbody>
+    </table>
+  </div>
 
-  <!-- ② 페이페이 -->
-  <a href="peipei_dashboard.html" class="brand-card card-peipei" data-cat="asian">
-    <div class="brand-card-header">
-      <span class="brand-emoji">🥢</span>
-      <div class="brand-name">페이페이</div>
-      <div class="brand-category">Multi-Asian · 팬아시안 패스트캐주얼</div>
-      <span class="brand-badge badge-active">에렉스 자체</span>
+  <div class="chart-grid-2" style="margin-bottom:16px">
+    <div class="card">
+      <div class="card-title">📊 브랜드별 채널 커버리지</div>
+      <canvas id="channelBar" height="200"></canvas>
     </div>
-    <div class="brand-card-body">
-      <div class="brand-desc">에렉스 직영 멀티아시안 브랜드. 베트남·태국·싱가포르·몽골 메뉴를 한자리에. 신세계·롯데 입점 운영 중.</div>
-      <div class="brand-tags">
-        <span class="brand-tag">에렉스 직영</span>
-        <span class="brand-tag">팬아시안</span>
-        <span class="brand-tag">신세계·롯데</span>
-        <span class="brand-tag">패스트캐주얼</span>
-      </div>
-      <div class="brand-card-footer">
-        <div class="brand-stats">
-          <div class="stat-item"><div class="stat-val" style="color:#fb923c">4</div><div class="stat-lbl">직영점</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#fb923c">₩13K</div><div class="stat-lbl">객단가</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
-        </div>
-        <div class="open-btn">열기 →</div>
-      </div>
+    <div class="card">
+      <div class="card-title">📊 채널별 입점 브랜드 수</div>
+      <canvas id="channelByBrand" height="200"></canvas>
     </div>
-  </a>
+  </div>
 
-  <!-- ③ 포팟·땀땀 (베트남) -->
-  <a href="vietnam_dashboard.html" class="brand-card card-vietnam" data-cat="vietnam">
-    <div class="brand-card-header">
-      <span class="brand-emoji">🍜</span>
-      <div class="brand-name">포팟 · 땀땀</div>
-      <div class="brand-category">Vietnamese · 프리미엄 쌀국수</div>
-      <span class="brand-badge badge-new">신규 론칭</span>
+  <div class="card-title" style="font-size:11px;font-weight:700;color:var(--gray);text-transform:uppercase;letter-spacing:.7px;padding:4px 0 8px">💡 채널 전략 인사이트</div>
+  <div class="insight-grid">
+    <div class="insight-card" style="border-left:4px solid #7c3aed">
+      <div class="ic-label" style="color:#7c3aed">기회</div>
+      <div class="ic-title">신세계 프리미엄 중식 공백</div>
+      <div class="ic-desc">신세계강남·센텀에 도원스타일 정통 중식 부재. 이화원 신세계 채널 선점 적기.</div>
     </div>
-    <div class="brand-card-body">
-      <div class="brand-desc">포팟(신규) + 땀땀(기입점) 베트남 브랜드 전략 분석. 땀땀: 24시간 사골 육수, 롯데백화점 본점·동탄 입점.</div>
-      <div class="brand-tags">
-        <span class="brand-tag">베트남</span>
-        <span class="brand-tag">사골 쌀국수</span>
-        <span class="brand-tag">롯데백화점</span>
-        <span class="brand-tag">보양 컨셉</span>
-      </div>
-      <div class="brand-card-footer">
-        <div class="brand-stats">
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">2+</div><div class="stat-lbl">입점(땀땀)</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">₩14K</div><div class="stat-lbl">객단가</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
-        </div>
-        <div class="open-btn">열기 →</div>
-      </div>
+    <div class="insight-card" style="border-left:4px solid #ea580c">
+      <div class="ic-label" style="color:#ea580c">과제</div>
+      <div class="ic-title">페이페이 현대·갤러리아 미진출</div>
+      <div class="ic-desc">현대판교·갤러리아는 2030 여성 핵심 상권. 페이페이 팬아시안 컨셉 최적 입점 채널.</div>
     </div>
-  </a>
-
-  <!-- ④ 이화원 -->
-  <a href="ihwawon_dashboard.html" class="brand-card card-ihwawon" data-cat="chinese">
-    <div class="brand-card-header">
-      <span class="brand-emoji">🏮</span>
-      <div class="brand-name">이화원</div>
-      <div class="brand-category">Premium Chinese · 화교 3대 중식당</div>
-      <span class="brand-badge badge-draft">입점 검토</span>
+    <div class="insight-card" style="border-left:4px solid #16a34a">
+      <div class="ic-label" style="color:#16a34a">기회</div>
+      <div class="ic-title">IFC·코엑스 베트남 카테고리 공백</div>
+      <div class="ic-desc">강남·여의도 오피스 상권 베트남 식 수요 높음. 포팟 IFC몰 진출 시 선점 효과 기대.</div>
     </div>
-    <div class="brand-card-body">
-      <div class="brand-desc">화교 3대 가업 프리미엄 중식. 연희동 본점·코엑스 입점. 도원스타일 없는 신세계 채널 공백 선점 기회.</div>
-      <div class="brand-tags">
-        <span class="brand-tag">화교 정통 중식</span>
-        <span class="brand-tag">3대 가업</span>
-        <span class="brand-tag">신세계 공백</span>
-        <span class="brand-tag">코스 다이닝</span>
-      </div>
-      <div class="brand-card-footer">
-        <div class="brand-stats">
-          <div class="stat-item"><div class="stat-val" style="color:#c084fc">2</div><div class="stat-lbl">현재 입점</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#c084fc">₩68K+</div><div class="stat-lbl">객단가</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
-        </div>
-        <div class="open-btn">열기 →</div>
-      </div>
+    <div class="insight-card" style="border-left:4px solid #ca8a04">
+      <div class="ic-label" style="color:#ca8a04">과제</div>
+      <div class="ic-title">마쯔가제 단일 채널 리스크</div>
+      <div class="ic-desc">코엑스 호텔 1곳 집중. 갤러리아 명품관 · 신세계 강남 프리미엄 레스토랑 존 확장 필요.</div>
     </div>
-  </a>
-
-  <!-- ⑤ 마쯔가제 -->
-  <a href="matsugajae_dashboard.html" class="brand-card card-matsugajae" data-cat="japanese">
-    <div class="brand-card-header">
-      <span class="brand-emoji">🍣</span>
-      <div class="brand-name">마쯔가제</div>
-      <div class="brand-category">Premium Japanese · 松風 Matsugaze</div>
-      <span class="brand-badge badge-draft">입점 검토</span>
+    <div class="insight-card" style="border-left:4px solid #1d4ed8">
+      <div class="ic-label" style="color:#1d4ed8">기회</div>
+      <div class="ic-title">피에프창 신세계 강남 검토</div>
+      <div class="ic-desc">강남역 인근 신세계 강남 F&B 라인업 고급화 추세. 글로벌 아시안 퓨전 카테고리 공백 존재.</div>
     </div>
-    <div class="brand-card-body">
-      <div class="brand-desc">오크우드 프리미어 코엑스 3층 프리미엄 일식. 제철 식재료 코스 다이닝. 오마카세 시장 안정화 국면 속 확장 전략.</div>
-      <div class="brand-tags">
-        <span class="brand-tag">프리미엄 일식</span>
-        <span class="brand-tag">코엑스 호텔</span>
-        <span class="brand-tag">제철 코스</span>
-        <span class="brand-tag">오마카세</span>
-      </div>
-      <div class="brand-card-footer">
-        <div class="brand-stats">
-          <div class="stat-item"><div class="stat-val" style="color:#fbbf24">1</div><div class="stat-lbl">현재 입점</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#fbbf24">₩90K+</div><div class="stat-lbl">객단가</div></div>
-          <div class="stat-item"><div class="stat-val" style="color:#4ade80">완성</div><div class="stat-lbl">분석</div></div>
-        </div>
-        <div class="open-btn">열기 →</div>
-      </div>
+    <div class="insight-card" style="border-left:4px solid #6b7280">
+      <div class="ic-label" style="color:#6b7280">분석</div>
+      <div class="ic-title">롯데 본점 다브랜드 시너지</div>
+      <div class="ic-desc">페이페이·땀땀 이미 롯데 본점 입점. 이화원 추가 입점 시 에렉스 포트폴리오 3개 채널 집중.</div>
     </div>
-  </a>
-
+  </div>
 </div>
 
-<footer>에렉스 브랜드 전략 포털 · 브랜드전략팀 · 2026 · CONFIDENTIAL</footer>
+<!-- ══════════════════════════════════════
+     TAB 4 · 경쟁사 맵핑
+══════════════════════════════════════ -->
+<div class="tab-content" id="t4">
+  <div class="disclaimer">ℹ️ 버블 크기 = 추정 매장 수. X축 = 가성비, Y축 = 브랜드파워 (내부 평가 기준).</div>
 
+  <div class="card" style="margin-bottom:16px">
+    <div class="card-title">🫧 브랜드 포지셔닝 버블 맵 (에렉스 + 경쟁사)</div>
+    <div class="bubble-wrap">
+      <canvas id="bubbleChart"></canvas>
+    </div>
+    <div style="display:flex;gap:16px;flex-wrap:wrap;margin-top:12px;font-size:11px">
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:50%;background:#1d4ed8;display:inline-block"></span>에렉스 브랜드</span>
+      <span style="display:flex;align-items:center;gap:5px"><span style="width:12px;height:12px;border-radius:50%;background:#ef4444;display:inline-block"></span>경쟁 브랜드</span>
+      <span style="color:#6b7280">버블 크기 = 추정 매장 수</span>
+    </div>
+  </div>
+
+  <div class="card" style="margin-bottom:16px;overflow-x:auto">
+    <div class="card-title">⚔️ 브랜드별 경쟁 위협 매트릭스</div>
+    <table class="dt" style="min-width:680px">
+      <thead>
+        <tr><th>에렉스 브랜드</th><th>경쟁사 1</th><th>경쟁사 2</th><th>경쟁사 3</th><th>주요 위협 요인</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#1d4ed8">P.F. Chang's</strong></td>
+          <td>훠궈·쿵푸 <span class="pill gray">중위협</span></td>
+          <td>차이나팩토리 <span class="pill gray">중위협</span></td>
+          <td>리호 <span class="pill red">고위협</span></td>
+          <td class="threat-med">아시안 퓨전 카테고리 국내 브랜드 성장 중. 가격 경쟁력 압박.</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#ea580c">페이페이</strong></td>
+          <td>멘야무사시 <span class="pill gray">저위협</span></td>
+          <td>롤링파스타 <span class="pill gray">중위협</span></td>
+          <td>더플레이스 <span class="pill red">고위협</span></td>
+          <td class="threat-high">패스트캐주얼 멀티아시안 경쟁자 증가. 신세계·현대 채널 확보 경쟁.</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#16a34a">포팟·땀땀</strong></td>
+          <td>포베이 <span class="pill red">고위협</span></td>
+          <td>하노이의 아침 <span class="pill gray">중위협</span></td>
+          <td>미스사이공 <span class="pill gray">중위협</span></td>
+          <td class="threat-high">베트남 쌀국수 카테고리 포화 진입 국면. 브랜드 차별성 확보 필수.</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#7c3aed">이화원</strong></td>
+          <td>도원 <span class="pill red">고위협</span></td>
+          <td>홍보각 <span class="pill gray">중위협</span></td>
+          <td>차이나타운 <span class="pill gray">저위협</span></td>
+          <td class="threat-med">도원(신세계 기입점) 최대 경쟁. 신세계 공백 채널 선점이 핵심.</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#ca8a04">마쯔가제</strong></td>
+          <td>스시도쿠 <span class="pill red">고위협</span></td>
+          <td>하코야 <span class="pill gray">중위협</span></td>
+          <td>스시 사이토 <span class="pill gray">저위협</span></td>
+          <td class="threat-med">오마카세 시장 공급 과잉 우려. 코스 다이닝 차별화 지속 필요.</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="card-title">🔍 시장 공백 분석 — 경쟁 부재 기회 구간</div>
+    <div class="insight-grid">
+      <div class="insight-card" style="border-left:4px solid #7c3aed">
+        <div class="ic-label" style="color:#7c3aed">공백 발견</div>
+        <div class="ic-title">프리미엄 중식 × 신세계 채널</div>
+        <div class="ic-desc">신세계강남·센텀 내 객단가 ₩60K+ 정통 중식 브랜드 부재. 이화원 최우선 타깃.</div>
+      </div>
+      <div class="insight-card" style="border-left:4px solid #16a34a">
+        <div class="ic-label" style="color:#16a34a">공백 발견</div>
+        <div class="ic-title">베트남 × 여의도·강남 오피스</div>
+        <div class="ic-desc">IFC몰, 파르나스, 코엑스 베트남 전문점 수요 대비 공급 미달. 포팟 진출 적기.</div>
+      </div>
+      <div class="insight-card" style="border-left:4px solid #ca8a04">
+        <div class="ic-label" style="color:#ca8a04">공백 발견</div>
+        <div class="ic-title">프리미엄 일식 × 갤러리아</div>
+        <div class="ic-desc">갤러리아명품관 F&B 라인업 내 ₩80K+ 코스 일식 공백. 마쯔가제 채널 확장 시 독점 가능.</div>
+      </div>
+      <div class="insight-card" style="border-left:4px solid #ea580c">
+        <div class="ic-label" style="color:#ea580c">공백 발견</div>
+        <div class="ic-title">팬아시안 × 현대백화점</div>
+        <div class="ic-desc">현대판교·현대백화점 내 캐주얼 멀티아시안 카테고리 공백. 페이페이 핵심 확장 타깃.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB 5 · 브랜드 허브
+══════════════════════════════════════ -->
+<div class="tab-content" id="t5">
+  <div class="disclaimer">ℹ️ 각 카드를 클릭하면 해당 브랜드 개별 대시보드로 이동합니다.</div>
+
+  <div class="dark-portal">
+    <div class="filter-bar">
+      <button class="filt-btn factive" onclick="filterHub('all',this)">전체 브랜드</button>
+      <button class="filt-btn" onclick="filterHub('asian',this)">아시안 퓨전</button>
+      <button class="filt-btn" onclick="filterHub('vietnam',this)">베트남</button>
+      <button class="filt-btn" onclick="filterHub('chinese',this)">중식</button>
+      <button class="filt-btn" onclick="filterHub('japanese',this)">일식</button>
+    </div>
+
+    <div class="brand-grid" id="hubGrid">
+
+      <!-- 피에프창 -->
+      <a href="pfchangs_master_dashboard.html" class="brand-card bc-pf" data-cat="asian">
+        <div class="bch">
+          <span class="b-emoji">⭐</span>
+          <div class="b-name">P.F. Chang's</div>
+          <div class="b-cat">Asian Fusion · Premium Casual</div>
+          <span class="b-badge badge-live">LIVE</span>
+        </div>
+        <div class="bcb">
+          <div class="b-desc">글로벌 아시안 퓨전 레스토랑. 강남역 입점 · 미국 본사 라이선스. 국내 유일 피에프창 운영.</div>
+          <div class="b-tags">
+            <span class="b-tag">강남역</span><span class="b-tag">아시안 퓨전</span><span class="b-tag">글로벌 브랜드</span><span class="b-tag">프리미엄</span>
+          </div>
+          <div class="bcf">
+            <div class="b-stats">
+              <div class="b-stat"><div class="sv" style="color:#60a5fa">1</div><div class="sl">직영점</div></div>
+              <div class="b-stat"><div class="sv" style="color:#60a5fa">₩65K</div><div class="sl">객단가</div></div>
+              <div class="b-stat"><div class="sv" style="color:#4ade80">완성</div><div class="sl">분석</div></div>
+            </div>
+            <div class="open-btn">열기 →</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 페이페이 -->
+      <a href="peipei_dashboard.html" class="brand-card bc-pp" data-cat="asian">
+        <div class="bch">
+          <span class="b-emoji">🥢</span>
+          <div class="b-name">페이페이</div>
+          <div class="b-cat">Multi-Asian · 팬아시안 패스트캐주얼</div>
+          <span class="b-badge badge-live">에렉스 자체</span>
+        </div>
+        <div class="bcb">
+          <div class="b-desc">에렉스 직영 멀티아시안 브랜드. 베트남·태국·싱가포르·몽골 메뉴를 한자리에. 신세계·롯데 입점 운영 중.</div>
+          <div class="b-tags">
+            <span class="b-tag">에렉스 직영</span><span class="b-tag">팬아시안</span><span class="b-tag">신세계·롯데</span><span class="b-tag">패스트캐주얼</span>
+          </div>
+          <div class="bcf">
+            <div class="b-stats">
+              <div class="b-stat"><div class="sv" style="color:#fb923c">4</div><div class="sl">직영점</div></div>
+              <div class="b-stat"><div class="sv" style="color:#fb923c">₩13K</div><div class="sl">객단가</div></div>
+              <div class="b-stat"><div class="sv" style="color:#4ade80">완성</div><div class="sl">분석</div></div>
+            </div>
+            <div class="open-btn">열기 →</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 포팟·땀땀 -->
+      <a href="vietnam_dashboard.html" class="brand-card bc-vn" data-cat="vietnam">
+        <div class="bch">
+          <span class="b-emoji">🍜</span>
+          <div class="b-name">포팟 · 땀땀</div>
+          <div class="b-cat">Vietnamese · 프리미엄 쌀국수</div>
+          <span class="b-badge badge-new">신규 론칭</span>
+        </div>
+        <div class="bcb">
+          <div class="b-desc">포팟(신규) + 땀땀(기입점) 베트남 브랜드 전략 분석. 땀땀: 24시간 사골 육수, 롯데백화점 본점·동탄 입점.</div>
+          <div class="b-tags">
+            <span class="b-tag">베트남</span><span class="b-tag">사골 쌀국수</span><span class="b-tag">롯데백화점</span><span class="b-tag">보양 컨셉</span>
+          </div>
+          <div class="bcf">
+            <div class="b-stats">
+              <div class="b-stat"><div class="sv" style="color:#4ade80">2+</div><div class="sl">입점(땀땀)</div></div>
+              <div class="b-stat"><div class="sv" style="color:#4ade80">₩14K</div><div class="sl">객단가</div></div>
+              <div class="b-stat"><div class="sv" style="color:#4ade80">완성</div><div class="sl">분석</div></div>
+            </div>
+            <div class="open-btn">열기 →</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 이화원 -->
+      <a href="ihwawon_dashboard.html" class="brand-card bc-ih" data-cat="chinese">
+        <div class="bch">
+          <span class="b-emoji">🏮</span>
+          <div class="b-name">이화원</div>
+          <div class="b-cat">Premium Chinese · 화교 3대 중식당</div>
+          <span class="b-badge badge-draft">입점 검토</span>
+        </div>
+        <div class="bcb">
+          <div class="b-desc">화교 3대 가업 프리미엄 중식. 연희동 본점·코엑스 입점. 도원스타일 없는 신세계 채널 공백 선점 기회.</div>
+          <div class="b-tags">
+            <span class="b-tag">화교 정통 중식</span><span class="b-tag">3대 가업</span><span class="b-tag">신세계 공백</span><span class="b-tag">코스 다이닝</span>
+          </div>
+          <div class="bcf">
+            <div class="b-stats">
+              <div class="b-stat"><div class="sv" style="color:#c084fc">2</div><div class="sl">현재 입점</div></div>
+              <div class="b-stat"><div class="sv" style="color:#c084fc">₩68K+</div><div class="sl">객단가</div></div>
+              <div class="b-stat"><div class="sv" style="color:#4ade80">완성</div><div class="sl">분석</div></div>
+            </div>
+            <div class="open-btn">열기 →</div>
+          </div>
+        </div>
+      </a>
+
+      <!-- 마쯔가제 -->
+      <a href="matsugajae_dashboard.html" class="brand-card bc-mg" data-cat="japanese">
+        <div class="bch">
+          <span class="b-emoji">🍣</span>
+          <div class="b-name">마쯔가제</div>
+          <div class="b-cat">Premium Japanese · 松風 Matsugaze</div>
+          <span class="b-badge badge-draft">입점 검토</span>
+        </div>
+        <div class="bcb">
+          <div class="b-desc">오크우드 프리미어 코엑스 3층 프리미엄 일식. 제철 식재료 코스 다이닝. 오마카세 시장 안정화 국면 속 확장 전략.</div>
+          <div class="b-tags">
+            <span class="b-tag">프리미엄 일식</span><span class="b-tag">코엑스 호텔</span><span class="b-tag">제철 코스</span><span class="b-tag">오마카세</span>
+          </div>
+          <div class="bcf">
+            <div class="b-stats">
+              <div class="b-stat"><div class="sv" style="color:#fbbf24">1</div><div class="sl">현재 입점</div></div>
+              <div class="b-stat"><div class="sv" style="color:#fbbf24">₩90K+</div><div class="sl">객단가</div></div>
+              <div class="b-stat"><div class="sv" style="color:#4ade80">완성</div><div class="sl">분석</div></div>
+            </div>
+            <div class="open-btn">열기 →</div>
+          </div>
+        </div>
+      </a>
+
+    </div><!-- /brand-grid -->
+  </div><!-- /dark-portal -->
+</div>
+
+<!-- ══════════════ FOOTER ══════════════ -->
+<footer>에렉스 브랜드 포트폴리오 대시보드 · 브랜드전략팀 · 2026 · CONFIDENTIAL</footer>
+
+<!-- ══════════════ SCRIPTS ══════════════ -->
 <script>
-document.getElementById('portalDate').textContent = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
+/* ── Date ── */
+document.getElementById('topDate').textContent = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'long',day:'numeric'});
 
-function filterCards(cat) {
-  document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
-  event.target.classList.add('active');
-  document.querySelectorAll('.brand-card').forEach(card=>{
-    card.style.display = (cat==='all' || card.dataset.cat===cat) ? 'block' : 'none';
-  });
+/* ── Tab Switch ── */
+function switchTab(id, btn) {
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  btn.classList.add('active');
 }
+
+/* ── Hub Filter ── */
+function filterHub(cat, btn) {
+  document.querySelectorAll('#hubGrid .brand-card').forEach(c=>{
+    c.style.display = (cat==='all' || c.dataset.cat===cat) ? 'block' : 'none';
+  });
+  document.querySelectorAll('.filt-btn').forEach(b=>b.classList.remove('factive'));
+  btn.classList.add('factive');
+}
+
+/* ══════════════════════════════════════
+   CHART.JS CHARTS
+══════════════════════════════════════ */
+
+/* ── 1. Donut — Category Distribution ── */
+new Chart(document.getElementById('donutChart'), {
+  type: 'doughnut',
+  data: {
+    labels: ['아시안퓨전', '팬아시안', '베트남', '중식', '일식'],
+    datasets: [{
+      data: [1, 4, 2, 2, 1],
+      backgroundColor: ['#1d4ed8','#ea580c','#16a34a','#7c3aed','#ca8a04'],
+      borderWidth: 2,
+      borderColor: '#fff',
+      hoverOffset: 8
+    }]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: true,
+    plugins: {
+      legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 12 } }
+    },
+    cutout: '62%'
+  }
+});
+
+/* ── 2. Price Tier Bar ── */
+new Chart(document.getElementById('priceBar'), {
+  type: 'bar',
+  data: {
+    labels: ['P.F. Chang\'s', '페이페이', '포팟·땀땀', '이화원', '마쯔가제'],
+    datasets: [{
+      label: '객단가 (₩K)',
+      data: [65, 13, 14, 68, 90],
+      backgroundColor: ['#1d4ed8','#ea580c','#16a34a','#7c3aed','#ca8a04'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: {
+        callbacks: {
+          label: ctx => `₩${ctx.raw}K`
+        }
+      }
+    },
+    scales: {
+      y: { beginAtZero: true, ticks: { callback: v => `₩${v}K` }, grid: { color: '#f0f4f8' } },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+/* ── 3. Radar Chart ── */
+const radarLabels = ['브랜드파워','메뉴차별성','가성비','채널접근성','서비스','성장잠재력'];
+const brandData = {
+  pf: { label:'P.F. Chang\'s', data:[6,8,4,6,7,7], color:'#1d4ed8' },
+  pp: { label:'페이페이',       data:[5,7,9,9,7,8], color:'#ea580c' },
+  vn: { label:'포팟·땀땀',     data:[5,7,8,7,7,9], color:'#16a34a' },
+  ih: { label:'이화원',         data:[7,8,5,5,8,7], color:'#7c3aed' },
+  mg: { label:'마쯔가제',       data:[6,9,3,5,9,6], color:'#ca8a04' }
+};
+const activeRadar = { pf:true, pp:true, vn:true, ih:true, mg:true };
+
+function buildRadarDatasets() {
+  return Object.entries(brandData)
+    .filter(([k]) => activeRadar[k])
+    .map(([k, b]) => ({
+      label: b.label,
+      data: b.data,
+      borderColor: b.color,
+      backgroundColor: 'transparent',
+      pointBackgroundColor: b.color,
+      pointRadius: 4,
+      borderWidth: 2
+    }));
+}
+
+const radarChart = new Chart(document.getElementById('radarChart'), {
+  type: 'radar',
+  data: {
+    labels: radarLabels,
+    datasets: buildRadarDatasets()
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'bottom', labels: { font: { size: 11 }, padding: 10 } } },
+    scales: {
+      r: {
+        min: 0, max: 10,
+        ticks: { stepSize: 2, font: { size: 10 } },
+        pointLabels: { font: { size: 11, weight: '600' } },
+        grid: { color: '#e2e8f0' },
+        angleLines: { color: '#e2e8f0' }
+      }
+    }
+  }
+});
+
+function toggleBrand(key, btn) {
+  activeRadar[key] = !activeRadar[key];
+  const cls = { pf:'active-pf', pp:'active-pp', vn:'active-vn', ih:'active-ih', mg:'active-mg' };
+  if (activeRadar[key]) btn.classList.add(cls[key]);
+  else btn.classList.remove(cls[key]);
+  radarChart.data.datasets = buildRadarDatasets();
+  radarChart.update();
+}
+
+/* ── 4. Channel Matrix ── */
+const channels = [
+  '신세계 강남', '신세계 센텀', '롯데 본점', '롯데 동탄',
+  '현대 판교', '갤러리아', 'IFC몰', '코엑스', '강남역 상권'
+];
+// 0=none, 1=in, 2=review  [pf, pp, vn, ih, mg]
+const matrixData = [
+  [2,0,0,2,0],  // 신세계 강남
+  [0,1,0,2,0],  // 신세계 센텀
+  [0,1,1,2,0],  // 롯데 본점
+  [0,1,1,0,0],  // 롯데 동탄
+  [0,2,0,0,0],  // 현대 판교
+  [0,0,0,0,2],  // 갤러리아
+  [0,0,2,0,0],  // IFC몰
+  [0,0,0,1,1],  // 코엑스
+  [1,0,0,0,0],  // 강남역 상권
+];
+const cellMap = {0:{cls:'cell-none',t:'⬜'},1:{cls:'cell-in',t:'✅'},2:{cls:'cell-review',t:'🔄'}};
+const tbody = document.getElementById('channelMatrix');
+matrixData.forEach((row, ri) => {
+  const tr = document.createElement('tr');
+  tr.innerHTML = `<td style="font-weight:600">${channels[ri]}</td>` +
+    row.map(v=>`<td><div class="${cellMap[v].cls}">${cellMap[v].t}</div></td>`).join('');
+  tbody.appendChild(tr);
+});
+
+/* ── 5. Channel Coverage Bar ── */
+// count entries=1 per brand
+const brandCoverage = [1, 2, 2, 2, 1]; // pf,pp,vn,ih,mg — rough non-zero count
+new Chart(document.getElementById('channelBar'), {
+  type: 'bar',
+  data: {
+    labels: ['P.F. Chang\'s','페이페이','포팟·땀땀','이화원','마쯔가제'],
+    datasets: [{
+      label: '커버 채널 수',
+      data: brandCoverage,
+      backgroundColor: ['#1d4ed8','#ea580c','#16a34a','#7c3aed','#ca8a04'],
+      borderRadius: 6,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f0f4f8' }, max: 5 },
+      x: { grid: { display: false } }
+    }
+  }
+});
+
+/* ── 6. Channel by Brand (how many brands per channel) ── */
+const brandsPerChannel = matrixData.map(row => row.filter(v=>v===1).length);
+new Chart(document.getElementById('channelByBrand'), {
+  type: 'bar',
+  data: {
+    labels: channels,
+    datasets: [{
+      label: '입점 브랜드 수',
+      data: brandsPerChannel,
+      backgroundColor: '#1d4ed8',
+      borderRadius: 5,
+      borderSkipped: false
+    }]
+  },
+  options: {
+    indexAxis: 'y',
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      x: { beginAtZero: true, ticks: { stepSize: 1 }, grid: { color: '#f0f4f8' }, max: 5 },
+      y: { grid: { display: false }, ticks: { font: { size: 11 } } }
+    }
+  }
+});
+
+/* ── 7. Bubble Chart — Competitive Mapping ── */
+// {x: 가성비, y: 브랜드파워, r: 매장수*2.5 (min 6)}
+const aerexBubbles = [
+  { x:4, y:6, r:6,  label:"P.F. Chang's" },
+  { x:9, y:5, r:16, label:'페이페이' },
+  { x:8, y:5, r:9,  label:'포팟·땀땀' },
+  { x:5, y:7, r:9,  label:'이화원' },
+  { x:3, y:6, r:6,  label:'마쯔가제' },
+];
+const competitorBubbles = [
+  { x:6, y:8, r:24, label:'도원' },
+  { x:7, y:7, r:16, label:'홍보각' },
+  { x:8, y:7, r:28, label:'포베이' },
+  { x:9, y:6, r:22, label:'하노이의 아침' },
+  { x:7, y:6, r:18, label:'미스사이공' },
+  { x:5, y:7, r:12, label:'스시도쿠' },
+  { x:4, y:8, r:8,  label:'하코야' },
+  { x:6, y:7, r:16, label:'더플레이스' },
+  { x:8, y:6, r:20, label:'리호' },
+  { x:7, y:5, r:14, label:'차이나팩토리' },
+];
+new Chart(document.getElementById('bubbleChart'), {
+  type: 'bubble',
+  data: {
+    datasets: [
+      {
+        label: '에렉스 브랜드',
+        data: aerexBubbles.map(b=>({x:b.x,y:b.y,r:b.r,label:b.label})),
+        backgroundColor: 'rgba(29,78,216,0.7)',
+        borderColor: '#1d4ed8',
+        borderWidth: 2
+      },
+      {
+        label: '경쟁 브랜드',
+        data: competitorBubbles.map(b=>({x:b.x,y:b.y,r:b.r,label:b.label})),
+        backgroundColor: 'rgba(239,68,68,0.55)',
+        borderColor: '#ef4444',
+        borderWidth: 1.5
+      }
+    ]
+  },
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      legend: { position:'bottom', labels:{ font:{size:11}, padding:12 } },
+      tooltip: {
+        callbacks: {
+          label: ctx => {
+            const d = ctx.raw;
+            return `${d.label || ''} | 가성비 ${d.x} · 브랜드파워 ${d.y}`;
+          }
+        }
+      }
+    },
+    scales: {
+      x: {
+        min: 1, max: 10,
+        title: { display:true, text:'가성비 →', font:{size:11} },
+        grid: { color:'#f0f4f8' },
+        ticks: { stepSize: 1 }
+      },
+      y: {
+        min: 1, max: 10,
+        title: { display:true, text:'브랜드파워 →', font:{size:11} },
+        grid: { color:'#f0f4f8' },
+        ticks: { stepSize: 1 }
+      }
+    }
+  }
+});
 </script>
 </body>
 </html>
