@@ -205,6 +205,7 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
   <button class="tab-btn" onclick="showTab('factcheck')">✅ 팩트체크</button>
   <button class="tab-btn" onclick="showTab('snsref')">📸 SNS 참고자료</button>
   <button class="tab-btn" onclick="showTab('youtube')">▶️ 유튜브 전략</button>
+  <button class="tab-btn" onclick="showTab('naverreview')">⭐ 네이버 리뷰 분석</button>
 </div>
 
 <!-- ════════════════════════ TAB 1: 핵심 대시보드 ════════════════════════ -->
@@ -1654,6 +1655,339 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
 
 </div>
 
+<!-- ════════════════════════ TAB 14: 네이버 리뷰 분석 ════════════════════════ -->
+<div id="tab-naverreview" class="tab-content">
+  <div class="sec-title">⭐ 네이버 리뷰 분석 — 피에프창 vs 경쟁사</div>
+  <div style="background:#fef9c3;border:1px solid #fde68a;border-radius:8px;padding:10px 14px;margin-bottom:16px;font-size:11px;color:#78350f">
+    ⚠️ 본 데이터는 네이버 플레이스 공개 리뷰·업계 추정치 기반입니다. 정확한 수치는 네이버 사업자 계정에서 직접 확인을 권장합니다.
+  </div>
+
+  <!-- ── 레이더 차트 영역 ── -->
+  <div style="background:#fff;border-radius:12px;padding:20px;border:1px solid #e5e7eb;margin-bottom:20px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+      <div style="font-weight:700;font-size:14px;color:#1e293b">📊 리뷰 항목별 브랜드 비교 (10점 만점)</div>
+      <div style="display:flex;gap:6px">
+        <button onclick="nrSelectAll(true)"  style="font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #6b7280;background:#f3f4f6;cursor:pointer;font-weight:600">전체 ON</button>
+        <button onclick="nrSelectAll(false)" style="font-size:11px;padding:3px 10px;border-radius:12px;border:1px solid #6b7280;background:#f3f4f6;cursor:pointer;font-weight:600">전체 OFF</button>
+      </div>
+    </div>
+    <!-- 브랜드 토글 버튼 -->
+    <div id="nrToggleBar" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px">
+      <button class="nr-btn nr-on" data-idx="0" onclick="toggleNR(0)" style="background:#1d4ed8;color:#fff;border:2px solid #1d4ed8;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">⭐ 피에프창</button>
+      <button class="nr-btn nr-on" data-idx="1" onclick="toggleNR(1)" style="background:#dc2626;color:#fff;border:2px solid #dc2626;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🥩 아웃백</button>
+      <button class="nr-btn nr-on" data-idx="2" onclick="toggleNR(2)" style="background:#ea580c;color:#fff;border:2px solid #ea580c;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🧄 매드포갈릭</button>
+      <button class="nr-btn nr-on" data-idx="3" onclick="toggleNR(3)" style="background:#ca8a04;color:#fff;border:2px solid #ca8a04;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🥟 차이797</button>
+      <button class="nr-btn nr-on" data-idx="4" onclick="toggleNR(4)" style="background:#7c3aed;color:#fff;border:2px solid #7c3aed;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">💎 크리스탈제이드</button>
+      <button class="nr-btn nr-on" data-idx="5" onclick="toggleNR(5)" style="background:#374151;color:#fff;border:2px solid #374151;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🍽️ 모트32</button>
+      <button class="nr-btn nr-on" data-idx="6" onclick="toggleNR(6)" style="background:#16a34a;color:#fff;border:2px solid #16a34a;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer">🌿 제이에스가든</button>
+      <button class="nr-btn nr-on" data-idx="7" onclick="toggleNR(7)" style="background:#f97316;color:#fff;border:2px solid #f97316;border-radius:20px;padding:3px 11px;font-size:11px;font-weight:700;cursor:pointer;border-style:dashed">― 경쟁사 평균</button>
+    </div>
+    <div style="max-width:520px;margin:0 auto">
+      <canvas id="nrRadar" height="300"></canvas>
+    </div>
+  </div>
+
+  <!-- ── 브랜드별 리뷰 키워드 테이블 ── -->
+  <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:16px">
+
+    <!-- 피에프창 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #1d4ed8;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#1d4ed8;margin-bottom:12px">⭐ 피에프창</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#eff6ff">
+          <th style="padding:6px 8px;text-align:left;border-radius:4px 0 0 4px;color:#1d4ed8">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#1d4ed8">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;border-radius:0 4px 4px 0;color:#1d4ed8">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">인테리어·분위기, 접근성(강남역), 글로벌 감성</td>
+          <td style="padding:6px 8px;color:#6b7280">공간 경쟁력 ↑</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">가성비 낮음, 음식 맛 기대 이하, 메뉴 한정적</td>
+          <td style="padding:6px 8px;color:#6b7280">가격 저항 최대 약점</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">런치 세트 강화, 시그니처 메뉴 개발, 고객 응대 교육</td>
+          <td style="padding:6px 8px;color:#6b7280">우선 과제</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 아웃백 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #dc2626;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#dc2626;margin-bottom:12px">🥩 아웃백</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#fef2f2">
+          <th style="padding:6px 8px;text-align:left;color:#dc2626">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#dc2626">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;color:#dc2626">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">스테이크 품질, 가성비(런치), 패밀리 다이닝 분위기</td>
+          <td style="padding:6px 8px;color:#6b7280">충성고객 기반 탄탄</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">웨이팅 김, 주말 혼잡, 디저트 부실</td>
+          <td style="padding:6px 8px;color:#6b7280">회전율 이슈</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">예약 시스템 강화, 디저트 라인업 추가</td>
+          <td style="padding:6px 8px;color:#6b7280">예약경쟁 심화</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 매드포갈릭 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #ea580c;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#ea580c;margin-bottom:12px">🧄 매드포갈릭</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#fff7ed">
+          <th style="padding:6px 8px;text-align:left;color:#ea580c">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#ea580c">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;color:#ea580c">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">마늘 요리 독창성, 파스타 퀄리티, 인스타 감성</td>
+          <td style="padding:6px 8px;color:#6b7280">콘셉트 명확</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">마늘 향 호불호, 좁은 공간, 소음</td>
+          <td style="padding:6px 8px;color:#6b7280">타겟 제한적</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">비마늘 메뉴 추가, 방음 개선, 테이블 간격</td>
+          <td style="padding:6px 8px;color:#6b7280">공간 쾌적도</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 차이797 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #ca8a04;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#ca8a04;margin-bottom:12px">🥟 차이797</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#fefce8">
+          <th style="padding:6px 8px;text-align:left;color:#ca8a04">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#ca8a04">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;color:#ca8a04">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">정통 중식 맛, 딤섬 퀄리티, 서비스 친절</td>
+          <td style="padding:6px 8px;color:#6b7280">맛·서비스 최고 수준</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">예약 어려움, 높은 가격, 주차 불편</td>
+          <td style="padding:6px 8px;color:#6b7280">접근 장벽</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">온라인 예약 강화, 가격 다양화(런치)</td>
+          <td style="padding:6px 8px;color:#6b7280">대중성 확대</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 크리스탈제이드 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #7c3aed;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#7c3aed;margin-bottom:12px">💎 크리스탈제이드</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#f5f3ff">
+          <th style="padding:6px 8px;text-align:left;color:#7c3aed">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#7c3aed">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;color:#7c3aed">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">프리미엄 분위기, 위생 청결, 싱가포르 정통 중식</td>
+          <td style="padding:6px 8px;color:#6b7280">고급 이미지 강점</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">가성비 최하, 메뉴 단조로움, 접근성(갤러리아)</td>
+          <td style="padding:6px 8px;color:#6b7280">가격 부담 최대</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">런치 특가 메뉴, 계절 한정 메뉴, 위치 다각화</td>
+          <td style="padding:6px 8px;color:#6b7280">고객층 확대</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 모트32 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #374151;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#374151;margin-bottom:12px">🍽️ 모트32</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#f9fafb">
+          <th style="padding:6px 8px;text-align:left;color:#374151">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#374151">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;color:#374151">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">최고급 분위기·인테리어, 서비스 완성도, 위생</td>
+          <td style="padding:6px 8px;color:#6b7280">럭셔리 다이닝 최강</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">가격 매우 높음, 예약 필수·어려움, 일상 방문 불가</td>
+          <td style="padding:6px 8px;color:#6b7280">특수 목적 방문 한정</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">접근성 온라인 강화, 바 메뉴 대중화</td>
+          <td style="padding:6px 8px;color:#6b7280">신규 고객 유입</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 제이에스가든 -->
+    <div style="background:#fff;border-radius:12px;border:2px solid #16a34a;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#16a34a;margin-bottom:12px">🌿 제이에스가든</div>
+      <table style="width:100%;border-collapse:collapse;font-size:11px">
+        <tr style="background:#f0fdf4">
+          <th style="padding:6px 8px;text-align:left;color:#16a34a">구분</th>
+          <th style="padding:6px 8px;text-align:left;color:#16a34a">핵심 키워드</th>
+          <th style="padding:6px 8px;text-align:left;color:#16a34a">비고</th>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#16a34a">👍 굿</td>
+          <td style="padding:6px 8px">자연·정원 컨셉, 웰빙 메뉴, 프라이빗 공간</td>
+          <td style="padding:6px 8px;color:#6b7280">공간 차별성 강점</td>
+        </tr>
+        <tr style="border-bottom:1px solid #f1f5f9">
+          <td style="padding:6px 8px;font-weight:700;color:#dc2626">👎 배드</td>
+          <td style="padding:6px 8px">낮은 인지도, 브랜드 파워 약함, 가성비 보통</td>
+          <td style="padding:6px 8px;color:#6b7280">마케팅 부재</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 8px;font-weight:700;color:#f97316">🔧 개선</td>
+          <td style="padding:6px 8px">SNS 마케팅 강화, 브랜드 아이덴티티 구축</td>
+          <td style="padding:6px 8px;color:#6b7280">인지도 제고 시급</td>
+        </tr>
+      </table>
+    </div>
+
+    <!-- 피에프창 종합 시사점 -->
+    <div style="background:#eff6ff;border-radius:12px;border:2px solid #1d4ed8;padding:16px">
+      <div style="font-weight:700;font-size:13px;color:#1d4ed8;margin-bottom:12px">💡 피에프창 전략적 시사점</div>
+      <div style="font-size:11px;color:#1e293b;line-height:1.8">
+        <div style="margin-bottom:6px"><span style="background:#dcfce7;color:#16a34a;border-radius:4px;padding:2px 6px;font-weight:700;margin-right:6px">강점 유지</span>분위기·접근성 — 지속 투자</div>
+        <div style="margin-bottom:6px"><span style="background:#fee2e2;color:#dc2626;border-radius:4px;padding:2px 6px;font-weight:700;margin-right:6px">긴급 개선</span>맛·가성비 — 메뉴 리뉴얼 + 런치 특가 도입</div>
+        <div style="margin-bottom:6px"><span style="background:#fef9c3;color:#ca8a04;border-radius:4px;padding:2px 6px;font-weight:700;margin-right:6px">벤치마크</span>차이797(맛·서비스) / 아웃백(가성비) 전략 참고</div>
+        <div><span style="background:#f3e8ff;color:#7c3aed;border-radius:4px;padding:2px 6px;font-weight:700;margin-right:6px">차별화</span>글로벌 아시안 퓨전 — 국내 경쟁사 없는 포지션 선점</div>
+      </div>
+    </div>
+
+  </div><!-- /grid -->
+
+  <!-- ── 리뷰 항목 점수 요약표 ── -->
+  <div style="background:#fff;border-radius:12px;border:1px solid #e5e7eb;padding:20px;margin-top:20px">
+    <div style="font-weight:700;font-size:14px;color:#1e293b;margin-bottom:14px">📋 리뷰 항목 점수 요약 (업계 추정치 / 10점 만점)</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:11px;min-width:560px">
+        <thead>
+          <tr style="background:#f8fafc">
+            <th style="padding:8px 10px;text-align:left;border-bottom:2px solid #e2e8f0;font-weight:700">브랜드</th>
+            <th style="padding:8px 6px;text-align:center;border-bottom:2px solid #e2e8f0">🍜 맛</th>
+            <th style="padding:8px 6px;text-align:center;border-bottom:2px solid #e2e8f0">🤝 서비스</th>
+            <th style="padding:8px 6px;text-align:center;border-bottom:2px solid #e2e8f0">✨ 분위기</th>
+            <th style="padding:8px 6px;text-align:center;border-bottom:2px solid #e2e8f0">💰 가성비</th>
+            <th style="padding:8px 6px;text-align:center;border-bottom:2px solid #e2e8f0">🧹 위생</th>
+            <th style="padding:8px 6px;text-align:center;border-bottom:2px solid #e2e8f0">📍 접근성</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#eff6ff;font-weight:700">
+            <td style="padding:7px 10px;color:#1d4ed8">⭐ 피에프창</td>
+            <td style="padding:7px 6px;text-align:center;color:#dc2626">6.5</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a">8.0</td>
+            <td style="padding:7px 6px;text-align:center;color:#dc2626">5.5</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a">8.0</td>
+          </tr>
+          <tr>
+            <td style="padding:7px 10px;color:#dc2626">🥩 아웃백</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center">7.0</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center">6.5</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+          </tr>
+          <tr style="background:#f9fafb">
+            <td style="padding:7px 10px;color:#ea580c">🧄 매드포갈릭</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center">7.0</td>
+            <td style="padding:7px 6px;text-align:center">7.0</td>
+            <td style="padding:7px 6px;text-align:center">6.5</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+          </tr>
+          <tr>
+            <td style="padding:7px 10px;color:#ca8a04">🥟 차이797</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a;font-weight:700">8.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a;font-weight:700">8.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a;font-weight:700">8.5</td>
+            <td style="padding:7px 6px;text-align:center">7.0</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+          </tr>
+          <tr style="background:#f9fafb">
+            <td style="padding:7px 10px;color:#7c3aed">💎 크리스탈제이드</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">8.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#dc2626">5.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a">8.5</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+          </tr>
+          <tr>
+            <td style="padding:7px 10px;color:#374151">🍽️ 모트32</td>
+            <td style="padding:7px 6px;text-align:center">8.5</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a;font-weight:700">9.0</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a;font-weight:700">9.0</td>
+            <td style="padding:7px 6px;text-align:center;color:#dc2626;font-weight:700">5.0</td>
+            <td style="padding:7px 6px;text-align:center;color:#16a34a;font-weight:700">9.0</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+          </tr>
+          <tr style="background:#f9fafb">
+            <td style="padding:7px 10px;color:#16a34a">🌿 제이에스가든</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">6.0</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">7.5</td>
+          </tr>
+          <tr style="background:#fff7ed;font-weight:700">
+            <td style="padding:7px 10px;color:#f97316">― 경쟁사 평균</td>
+            <td style="padding:7px 6px;text-align:center">8.0</td>
+            <td style="padding:7px 6px;text-align:center">7.9</td>
+            <td style="padding:7px 6px;text-align:center">8.1</td>
+            <td style="padding:7px 6px;text-align:center">6.3</td>
+            <td style="padding:7px 6px;text-align:center">8.1</td>
+            <td style="padding:7px 6px;text-align:center">7.6</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div><!-- /tab-naverreview -->
+
 <!-- ════════════════════════ TAB 7: 경쟁사 랜드스케이프 ════════════════════════ -->
 <div id="tab-landscape" class="tab-content iframe-tab">
   <iframe src="pfchangs_landscape_report.html" title="경쟁사 랜드스케이프"></iframe>
@@ -2040,6 +2374,66 @@ new Chart(document.getElementById('roiChart').getContext('2d'), {
   },
   options:{ responsive:true, scales:{ y:{ ticks:{ callback: v=>v+'만' } } }, plugins:{ legend:{ position:'bottom' } } }
 });
+
+// ── 네이버 리뷰 레이더 차트 ──
+const nrBrands = [
+  { label:'⭐ 피에프창',      data:[6.5,7.5,8.0,5.5,7.5,8.0], color:'#1d4ed8', dash:[] },
+  { label:'🥩 아웃백',        data:[7.5,7.0,7.5,6.5,7.5,8.0], color:'#dc2626', dash:[] },
+  { label:'🧄 매드포갈릭',    data:[7.5,7.0,7.0,6.5,7.5,7.5], color:'#ea580c', dash:[] },
+  { label:'🥟 차이797',       data:[8.5,8.5,8.5,7.0,8.0,7.5], color:'#ca8a04', dash:[] },
+  { label:'💎 크리스탈제이드', data:[8.0,8.0,8.5,5.5,8.5,7.5], color:'#7c3aed', dash:[] },
+  { label:'🍽️ 모트32',        data:[8.5,9.0,9.0,5.0,9.0,7.5], color:'#374151', dash:[] },
+  { label:'🌿 제이에스가든',   data:[8.0,8.0,8.0,6.0,8.0,7.5], color:'#16a34a', dash:[] },
+  { label:'― 경쟁사 평균',    data:[8.0,7.9,8.1,6.3,8.1,7.6], color:'#f97316', dash:[5,3] },
+];
+function makeNRDatasets(visible) {
+  return nrBrands.map((b, i) => ({
+    label: b.label, data: b.data,
+    borderColor: b.color,
+    backgroundColor: 'transparent',
+    borderWidth: i === 0 ? 3 : 1.5,
+    borderDash: b.dash,
+    pointRadius: i === 0 ? 5 : 3,
+    pointBackgroundColor: b.color,
+    pointBorderColor: '#fff', pointBorderWidth: 1,
+    hidden: !visible[i],
+  }));
+}
+const nrVisible = nrBrands.map(() => true);
+const nrChart = new Chart(document.getElementById('nrRadar').getContext('2d'), {
+  type: 'radar',
+  data: {
+    labels: ['🍜 맛', '🤝 서비스', '✨ 분위기', '💰 가성비', '🧹 위생', '📍 접근성'],
+    datasets: makeNRDatasets(nrVisible),
+  },
+  options: {
+    responsive: true,
+    scales: { r: { min: 0, max: 10, ticks: { stepSize: 2, font: { size: 10 } }, pointLabels: { font: { size: 11 } } } },
+    plugins: { legend: { display: false } },
+  }
+});
+function toggleNR(idx) {
+  nrVisible[idx] = !nrVisible[idx];
+  const btns = document.querySelectorAll('.nr-btn');
+  const b = nrBrands[idx];
+  if (nrVisible[idx]) {
+    btns[idx].style.background = b.color; btns[idx].style.color = '#fff';
+  } else {
+    btns[idx].style.background = '#fff'; btns[idx].style.color = b.color;
+  }
+  nrChart.data.datasets = makeNRDatasets(nrVisible);
+  nrChart.update();
+}
+function nrSelectAll(on) {
+  nrBrands.forEach((b, i) => {
+    nrVisible[i] = on;
+    const btns = document.querySelectorAll('.nr-btn');
+    if (on) { btns[i].style.background = b.color; btns[i].style.color = '#fff'; }
+    else     { btns[i].style.background = '#fff';  btns[i].style.color = b.color; }
+  });
+  nrChart.data.datasets = makeNRDatasets(nrVisible);
+  nrChart.update();
+}
 </script>
 </body>
 </html>
