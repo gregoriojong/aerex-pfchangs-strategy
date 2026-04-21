@@ -23,12 +23,105 @@ body{font-family:'Pretendard','Apple SD Gothic Neo','Malgun Gothic',sans-serif;b
 .live-badge{background:#16a34a;color:#fff;font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;animation:pulse 2s infinite}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
 
-/* ── BRAND SELECTOR ── */
-.bsel-wrap{display:flex;align-items:center;gap:3px;border-right:1px solid rgba(255,255,255,0.12);padding-right:10px;margin-right:4px}
-.bsel-lbl{font-size:9px;opacity:.4;white-space:nowrap;margin-right:3px;letter-spacing:.5px;text-transform:uppercase}
-.bsel-btn{font-size:10px;font-weight:700;padding:2px 8px;border-radius:10px;border:1px solid rgba(255,255,255,0.18);background:rgba(255,255,255,0.07);color:rgba(255,255,255,0.55);cursor:pointer;white-space:nowrap;transition:all .18s;line-height:1.4}
-.bsel-btn:hover{background:rgba(255,255,255,0.14);color:#fff;border-color:rgba(255,255,255,0.3)}
-.bsel-btn.active{color:#fff;border-color:transparent}
+/* ══════════════════════════════════════
+   LEFT CONTROL PANEL — PROFESSIONAL
+══════════════════════════════════════ */
+#cpToggle{position:fixed;left:0;top:50%;transform:translateY(-50%);width:22px;height:80px;background:var(--dark);border:none;cursor:pointer;z-index:300;border-radius:0 10px 10px 0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;box-shadow:3px 0 12px rgba(0,0,0,.25);transition:left .28s cubic-bezier(.4,0,.2,1),background .15s}
+#cpToggle:hover{background:#1e293b}
+#cpToggle .hb{width:11px;height:1.5px;background:rgba(255,255,255,.65);border-radius:1px;display:block}
+#cpPanel{position:fixed;left:-308px;top:0;bottom:0;width:300px;background:#fff;z-index:290;display:flex;flex-direction:column;box-shadow:6px 0 28px rgba(0,0,0,.14);transition:left .28s cubic-bezier(.4,0,.2,1)}
+#cpBackdrop{display:none;position:fixed;inset:0;background:rgba(0,0,0,.28);z-index:280;opacity:0;transition:opacity .25s}
+#cpScrollArea{flex:1;overflow-y:auto;overflow-x:hidden}
+#cpScrollArea::-webkit-scrollbar{width:4px}
+#cpScrollArea::-webkit-scrollbar-thumb{background:#e2e8f0;border-radius:2px}
+/* Panel Header */
+.cp-ph{background:var(--dark);height:52px;padding:0 14px;display:flex;align-items:center;gap:10px;flex-shrink:0}
+.cp-ph-ico{width:30px;height:30px;background:linear-gradient(135deg,#1d4ed8,#7c3aed);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0}
+.cp-ph-info{flex:1}
+.cp-ph-ttl{font-size:13px;font-weight:700;color:#fff;letter-spacing:-.2px}
+.cp-ph-sub{font-size:9px;color:rgba(255,255,255,.32);letter-spacing:.4px;margin-top:1px}
+.cp-ph-x{width:26px;height:26px;border-radius:6px;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.07);color:rgba(255,255,255,.45);cursor:pointer;font-size:12px;display:flex;align-items:center;justify-content:center;transition:all .15s;flex-shrink:0}
+.cp-ph-x:hover{background:rgba(255,255,255,.16);color:#fff}
+/* Active brand bar */
+.cp-brand-bar{padding:10px 14px;display:flex;align-items:center;gap:9px;border-bottom:1px solid #f1f5f9;flex-shrink:0;background:#f8fafc}
+.cp-bb-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.cp-bb-name{font-size:13px;font-weight:700;flex:1;color:#1f2937}
+.cp-bb-stores{font-size:10px;color:#6b7280;background:#fff;border:1px solid #e2e8f0;padding:2px 8px;border-radius:5px}
+/* Accordion */
+.cpa{border-bottom:1px solid #f1f5f9}
+.cpa-btn{width:100%;padding:10px 14px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;gap:7px;font-size:12px;font-weight:600;color:#4b5563;text-align:left;transition:background .14s}
+.cpa-btn:hover{background:#f9fafb}
+.cpa-ico{font-size:14px;flex-shrink:0}
+.cpa-lbl{flex:1}
+.cpa-cnt{min-width:18px;height:18px;border-radius:9px;background:#1d4ed8;color:#fff;font-size:9px;font-weight:700;display:flex;align-items:center;justify-content:center;padding:0 5px}
+.cpa-arr{font-size:10px;color:#d1d5db;transition:transform .2s;flex-shrink:0}
+.cpa-body{display:none;padding:2px 12px 12px}
+.cpa.open .cpa-body{display:block}
+.cpa.open .cpa-arr{transform:rotate(180deg)}
+/* Brand radio */
+.cp-brad{display:flex;align-items:center;gap:8px;padding:7px 10px;border-radius:8px;cursor:pointer;font-size:12px;color:#374151;transition:all .14s;margin-bottom:3px;border:1.5px solid transparent}
+.cp-brad:hover{background:#f9fafb}
+.cp-brad.selected{background:#eff6ff}
+.cp-brad input[type=radio]{display:none}
+.cp-br-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
+.cp-br-name{font-weight:600;flex:1}
+.cp-br-tag{font-size:9px;color:#9ca3af;background:#f3f4f6;padding:1px 6px;border-radius:4px}
+.cp-br-cnt{font-size:10px;font-weight:700;background:#f3f4f6;padding:1px 7px;border-radius:5px;color:#374151}
+/* Store list */
+.cp-store{display:flex;align-items:center;gap:7px;padding:7px 10px;border-radius:8px;cursor:pointer;transition:background .14s;margin-bottom:2px;border:1px solid #f1f5f9}
+.cp-store:hover{background:#f9fafb;border-color:#e2e8f0}
+.cp-store input[type=checkbox]{accent-color:#1d4ed8;width:13px;height:13px;flex-shrink:0;cursor:pointer}
+.cp-store-name{font-size:11.5px;font-weight:500;color:#374151;flex:1}
+.cp-store-ch{font-size:9px;background:#f3f4f6;color:#6b7280;padding:1px 6px;border-radius:4px}
+.cp-store-live{font-size:9px;font-weight:700;background:#dcfce7;color:#16a34a;padding:1px 5px;border-radius:4px;flex-shrink:0}
+.cp-store-plan{font-size:9px;font-weight:700;background:#fef9c3;color:#92400e;padding:1px 5px;border-radius:4px;flex-shrink:0}
+/* Nav buttons */
+.cpnb{display:flex;align-items:center;gap:6px;width:100%;padding:6px 8px;border-radius:7px;border:none;background:transparent;cursor:pointer;font-size:11.5px;font-weight:500;color:#4b5563;text-align:left;transition:all .13s;margin-bottom:1px}
+.cpnb:hover{background:#f1f5f9;color:#1f2937}
+.cpnb.cpnb-active{background:#dbeafe;color:#1d4ed8;font-weight:600}
+/* Competitor list */
+.cp-comp{display:flex;align-items:center;gap:7px;padding:5px 8px;border-radius:7px;cursor:pointer;transition:background .14s;margin-bottom:2px}
+.cp-comp:hover{background:#f9fafb}
+.cp-comp input[type=checkbox]{accent-color:#1d4ed8;width:13px;height:13px;cursor:pointer;flex-shrink:0}
+.cp-comp-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.cp-comp-lbl{font-size:11px;color:#374151;flex:1}
+/* View toggle switch */
+.cp-vrow{display:flex;align-items:center;justify-content:space-between;padding:7px 8px;border-radius:7px;transition:background .14s}
+.cp-vrow:hover{background:#f9fafb}
+.cp-vlbl{font-size:11.5px;color:#374151}
+.cp-sw{position:relative;display:inline-block;width:32px;height:17px;cursor:pointer;flex-shrink:0}
+.cp-sw input{opacity:0;width:0;height:0}
+.cp-sw-t{position:absolute;inset:0;border-radius:8.5px;background:#d1d5db;transition:background .2s}
+.cp-sw input:checked+.cp-sw-t{background:#1d4ed8}
+.cp-sw-k{position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+.cp-sw input:checked~.cp-sw-t .cp-sw-k{left:16.5px}
+/* Memo */
+.cp-memo{width:100%;border:1px solid #e2e8f0;border-radius:8px;padding:9px;font-size:11.5px;color:#374151;background:#f9fafb;resize:vertical;min-height:75px;font-family:inherit;line-height:1.6;outline:none;transition:border .15s}
+.cp-memo:focus{border-color:#1d4ed8;background:#fff}
+/* Action bar */
+.cp-action-bar{padding:11px 12px;display:flex;gap:7px;flex-shrink:0;border-top:1px solid #e2e8f0;background:#fff}
+.cp-apply{flex:1;padding:8px;border-radius:8px;background:#1d4ed8;color:#fff;border:none;cursor:pointer;font-size:12px;font-weight:700;transition:background .15s}
+.cp-apply:hover{background:#1e40af}
+.cp-reset{padding:8px 12px;border-radius:8px;background:transparent;color:#6b7280;border:1px solid #e2e8f0;cursor:pointer;font-size:12px;transition:all .15s}
+.cp-reset:hover{color:#374151;border-color:#9ca3af}
+
+/* ── CONTROL PANEL ALIASES ── */
+/* Accordion aliases (cp-acc → cpa) */
+.cp-acc{border-bottom:1px solid #f1f5f9}
+.cp-acc-hd{width:100%;padding:10px 14px;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:space-between;font-size:12px;font-weight:600;color:#4b5563;text-align:left;transition:background .14s}
+.cp-acc-hd:hover{background:#f9fafb}
+.cp-acc-arr{font-size:10px;color:#d1d5db;transition:transform .2s}
+.cp-acc-body{display:none;padding:6px 12px 12px}
+.cp-acc.open .cp-acc-body{display:block}
+.cp-acc.open .cp-acc-arr{transform:rotate(180deg)}
+/* Nav button alias */
+.cp-nav-btn{padding:7px 6px;border-radius:7px;border:1px solid #e2e8f0;background:#f8fafc;cursor:pointer;font-size:10.5px;font-weight:600;color:#4b5563;transition:all .13s;text-align:center}
+.cp-nav-btn:hover{background:#dbeafe;color:#1d4ed8;border-color:#93c5fd}
+/* Toggle switch (single span variant) */
+.cp-sw-sl{position:absolute;inset:0;border-radius:8.5px;background:#d1d5db;transition:background .2s;cursor:pointer}
+.cp-sw-sl::after{content:'';position:absolute;top:1.5px;left:1.5px;width:14px;height:14px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.2);transition:left .2s}
+.cp-sw input:checked+.cp-sw-sl{background:#1d4ed8}
+.cp-sw input:checked+.cp-sw-sl::after{left:16.5px}
 
 /* ── BRAND INFO STRIP ── */
 .brand-strip{display:none;background:#1e293b;border-bottom:2px solid #1d4ed8;padding:7px 24px;align-items:center;gap:12px;font-size:11px;color:rgba(255,255,255,.75)}
@@ -196,18 +289,164 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
     </div>
   </div>
   <div class="topbar-right">
-    <div class="bsel-wrap">
-      <span class="bsel-lbl">브랜드</span>
-      <button class="bsel-btn active" id="bsel-pfchangs"    onclick="switchBrandRadar('pfchangs')"   style="background:#1d4ed8">⭐ 피에프창</button>
-      <button class="bsel-btn"        id="bsel-peipei"      onclick="switchBrandRadar('peipei')"     >🥢 페이페이</button>
-      <button class="bsel-btn"        id="bsel-vietnam"     onclick="switchBrandRadar('vietnam')"    >🍜 포팟·땀땀</button>
-      <button class="bsel-btn"        id="bsel-ihwawon"     onclick="switchBrandRadar('ihwawon')"    >🏮 이화원</button>
-      <button class="bsel-btn"        id="bsel-matsugajae"  onclick="switchBrandRadar('matsugajae')" >🍣 마쯔가제</button>
-    </div>
     <span class="live-badge">● LIVE</span>
     <span id="nowDate" style="opacity:.7"></span>
     <span style="opacity:.5">|</span>
     <span style="opacity:.7">2026-W16 기준</span>
+  </div>
+</div>
+
+<!-- ══ LEFT CONTROL PANEL ══ -->
+<button id="cpToggle" onclick="toggleCpPanel()" title="분석 컨트롤 패널">
+  <span class="hb"></span><span class="hb"></span><span class="hb"></span>
+</button>
+<div id="cpBackdrop" onclick="toggleCpPanel()"></div>
+<div id="cpPanel">
+  <!-- 헤더 -->
+  <div style="background:var(--dark);color:#fff;padding:14px 16px;display:flex;align-items:center;gap:10px;flex-shrink:0">
+    <div style="font-size:22px">🎛️</div>
+    <div style="flex:1">
+      <div style="font-size:13px;font-weight:800;letter-spacing:-.3px">P.F. Chang's 분석 패널</div>
+      <div style="font-size:10px;opacity:.6;margin-top:2px">AEREX STRATEGY AGENT · v2.0</div>
+    </div>
+    <button onclick="toggleCpPanel()" style="background:none;border:none;color:rgba(255,255,255,.7);font-size:18px;cursor:pointer;padding:4px">✕</button>
+  </div>
+
+  <!-- 필터 상태 바 -->
+  <div style="background:#f1f5f9;padding:8px 14px;display:flex;align-items:center;gap:8px;font-size:11px;border-bottom:1px solid #e2e8f0;flex-shrink:0">
+    <span id="cpFDot" style="width:7px;height:7px;border-radius:50%;background:#94a3b8;flex-shrink:0"></span>
+    <span id="cpFTxt" style="flex:1;color:#475569;font-weight:600">기본 설정 — 전체 브랜드·매장 표시</span>
+    <span id="cpFCnt" style="background:#e2e8f0;color:#64748b;padding:1px 7px;border-radius:8px;font-weight:700">0 필터</span>
+  </div>
+
+  <div id="cpScrollArea">
+
+    <!-- ① 브랜드 선택 -->
+    <div class="cp-acc open" id="acc-brand">
+      <div class="cp-acc-hd" onclick="cpAccToggle('acc-brand')">
+        <span>① 브랜드 선택</span><span class="cp-acc-arr">▾</span>
+      </div>
+      <div class="cp-acc-body">
+        <div class="cp-brad selected" id="cpr-pfchangs" onclick="cpBrandSelect('pfchangs')">
+          <span style="font-size:18px">⭐</span>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">P.F. Chang's</div>
+            <div style="font-size:10px;color:#64748b">중식 파인캐주얼 · 강남역</div>
+          </div>
+          <span class="cp-store-live">LIVE</span>
+        </div>
+        <div class="cp-brad" id="cpr-peipei" onclick="cpBrandSelect('peipei')">
+          <span style="font-size:18px">🥢</span>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">페이페이</div>
+            <div style="font-size:10px;color:#64748b">중화 딤섬·코스 · 4개점</div>
+          </div>
+          <span class="cp-store-live">LIVE</span>
+        </div>
+        <div class="cp-brad" id="cpr-vietnam" onclick="cpBrandSelect('vietnam')">
+          <span style="font-size:18px">🍜</span>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">포팟·땀땀</div>
+            <div style="font-size:10px;color:#64748b">베트남 · 2개점</div>
+          </div>
+          <span class="cp-store-live">LIVE</span>
+        </div>
+        <div class="cp-brad" id="cpr-ihwawon" onclick="cpBrandSelect('ihwawon')">
+          <span style="font-size:18px">🏮</span>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">이화원</div>
+            <div style="font-size:10px;color:#64748b">중화 파인다이닝 · 2개점</div>
+          </div>
+          <span class="cp-store-live">LIVE</span>
+        </div>
+        <div class="cp-brad" id="cpr-matsugajae" onclick="cpBrandSelect('matsugajae')">
+          <span style="font-size:18px">🍣</span>
+          <div style="flex:1">
+            <div style="font-size:12px;font-weight:700">마쯔가제</div>
+            <div style="font-size:10px;color:#64748b">일식 오마카세 · 코엑스</div>
+          </div>
+          <span class="cp-store-live">LIVE</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- ② 매장 선택 -->
+    <div class="cp-acc open" id="acc-store">
+      <div class="cp-acc-hd" onclick="cpAccToggle('acc-store')">
+        <span>② 매장 선택</span><span class="cp-acc-arr">▾</span>
+      </div>
+      <div class="cp-acc-body" id="cpStoreList">
+        <!-- JS로 동적 생성 -->
+      </div>
+    </div>
+
+    <!-- ③ 경쟁사 비교 -->
+    <div class="cp-acc" id="acc-comp">
+      <div class="cp-acc-hd" onclick="cpAccToggle('acc-comp')">
+        <span>③ 경쟁사 비교</span><span class="cp-acc-arr">▾</span>
+      </div>
+      <div class="cp-acc-body" id="cpCompList">
+        <!-- JS로 동적 생성 -->
+      </div>
+    </div>
+
+    <!-- ④ 탭 바로가기 -->
+    <div class="cp-acc" id="acc-nav">
+      <div class="cp-acc-hd" onclick="cpAccToggle('acc-nav')">
+        <span>④ 탭 바로가기</span><span class="cp-acc-arr">▾</span>
+      </div>
+      <div class="cp-acc-body" style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+        <button class="cp-nav-btn" onclick="showTab('dashboard');toggleCpPanel()">📊 대시보드</button>
+        <button class="cp-nav-btn" onclick="showTab('weekly');toggleCpPanel()">📅 주간업데이트</button>
+        <button class="cp-nav-btn" onclick="showTab('competitive');toggleCpPanel()">🏆 경쟁사분석</button>
+        <button class="cp-nav-btn" onclick="showTab('sns');toggleCpPanel()">📱 SNS전략</button>
+        <button class="cp-nav-btn" onclick="showTab('naver');toggleCpPanel()">🟢 네이버전략</button>
+        <button class="cp-nav-btn" onclick="showTab('app');toggleCpPanel()">📲 앱구축전략</button>
+        <button class="cp-nav-btn" onclick="showTab('landscape');toggleCpPanel()">🗺️ 랜드스케이프</button>
+        <button class="cp-nav-btn" onclick="showTab('strategy');toggleCpPanel()">📋 전략리포트</button>
+        <button class="cp-nav-btn" onclick="showTab('sheet');toggleCpPanel()">📚 용어·SWOT</button>
+      </div>
+    </div>
+
+    <!-- ⑤ 뷰 설정 -->
+    <div class="cp-acc" id="acc-view">
+      <div class="cp-acc-hd" onclick="cpAccToggle('acc-view')">
+        <span>⑤ 뷰 설정</span><span class="cp-acc-arr">▾</span>
+      </div>
+      <div class="cp-acc-body">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:12px;color:#475569;font-weight:600">레이더 채우기 (Fill)</span>
+          <label class="cp-sw"><input type="checkbox" id="cpSwFill" onchange="cpViewToggle('fill',this)" checked><span class="cp-sw-sl"></span></label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px">
+          <span style="font-size:12px;color:#475569;font-weight:600">차트 애니메이션</span>
+          <label class="cp-sw"><input type="checkbox" id="cpSwAnim" onchange="cpViewToggle('anim',this)" checked><span class="cp-sw-sl"></span></label>
+        </div>
+        <div style="display:flex;align-items:center;justify-content:space-between">
+          <span style="font-size:12px;color:#475569;font-weight:600">데이터 라벨 표시</span>
+          <label class="cp-sw"><input type="checkbox" id="cpSwLabel" onchange="cpViewToggle('label',this)"><span class="cp-sw-sl"></span></label>
+        </div>
+      </div>
+    </div>
+
+    <!-- ⑥ 메모 -->
+    <div class="cp-acc" id="acc-memo">
+      <div class="cp-acc-hd" onclick="cpAccToggle('acc-memo')">
+        <span>⑥ 분석 메모</span><span class="cp-acc-arr">▾</span>
+      </div>
+      <div class="cp-acc-body">
+        <textarea id="cpMemo" placeholder="분석 내용, 인사이트, 다음 액션 등 자유롭게 입력..." oninput="cpSaveMemo()"
+          style="width:100%;height:100px;border:1px solid #e2e8f0;border-radius:6px;padding:8px;font-size:12px;font-family:inherit;resize:vertical;box-sizing:border-box;color:#334155"></textarea>
+        <div style="font-size:10px;color:#94a3b8;margin-top:4px;text-align:right">자동 저장됨</div>
+      </div>
+    </div>
+
+  </div><!-- /cpScrollArea -->
+
+  <!-- 액션 바 -->
+  <div style="padding:12px 14px;border-top:1px solid #e2e8f0;display:flex;gap:8px;flex-shrink:0">
+    <button onclick="cpResetAll()" style="flex:1;padding:8px;border:1.5px solid #e2e8f0;border-radius:8px;background:#f8fafc;font-size:12px;font-weight:700;color:#475569;cursor:pointer">↺ 초기화</button>
+    <button onclick="cpExport()" style="flex:1;padding:8px;border:none;border-radius:8px;background:var(--dark);font-size:12px;font-weight:700;color:#fff;cursor:pointer">⬇ 내보내기</button>
   </div>
 </div>
 
@@ -2488,14 +2727,16 @@ function switchBrandRadar(id) {
   currentBrandId = id;
   const bd = brandDatabase[id];
 
-  // 셀렉터 버튼 상태
-  document.querySelectorAll('.bsel-btn').forEach(b => {
-    b.classList.remove('active');
-    b.style.background = '';
+  // 패널 브랜드 라디오 상태 동기화
+  document.querySelectorAll('.cp-brad').forEach(b => b.classList.remove('selected'));
+  const cpBradEl = document.getElementById('cpr-' + id);
+  if (cpBradEl) {
+    cpBradEl.classList.add('selected');
+    cpBradEl.style.borderColor = bd.color;
+  }
+  document.querySelectorAll('.cp-brad').forEach(b => {
+    if (!b.classList.contains('selected')) b.style.borderColor = '';
   });
-  const activeBtn = document.getElementById('bsel-' + id);
-  activeBtn.classList.add('active');
-  activeBtn.style.background = bd.color;
 
   // 브랜드 인포 스트립
   const strip = document.getElementById('brandInfoStrip');
@@ -2594,6 +2835,199 @@ function nrSelectAll(on) {
   nrChart.data.datasets = makeNRDatasets(nrVisible);
   nrChart.update();
 }
+
+/* ══════════════════════════════════════
+   LEFT CONTROL PANEL — JS
+══════════════════════════════════════ */
+(function(){
+  const BRANDS = {
+    pfchangs:  { label:"P.F. Chang's", icon:'⭐', color:'#1d4ed8',
+                 comps:['리호','차이나팩토리','훠궈·쿵푸'], compColors:['#ef4444','#f97316','#8b5cf6'] },
+    peipei:    { label:'페이페이',    icon:'🥢', color:'#ea580c',
+                 comps:['콘타이','더플레이스','리호'], compColors:['#f97316','#10b981','#ef4444'] },
+    vietnam:   { label:'포팟·땀땀',  icon:'🍜', color:'#10b981',
+                 comps:['포베이','하노이의아침','미스사이공'], compColors:['#3b82f6','#a16207','#8b5cf6'] },
+    ihwawon:   { label:'이화원',     icon:'🏮', color:'#8b5cf6',
+                 comps:['도원스타일','홍보각','차이797'], compColors:['#dc2626','#2563eb','#d97706'] },
+    matsugajae:{ label:'마쯔가제',   icon:'🍣', color:'#f59e0b',
+                 comps:['스시도쿠','하코야','스시사이토'], compColors:['#ef4444','#3b82f6','#6b7280'] }
+  };
+
+  const STORES = {
+    pfchangs:   [{ name:'강남역 직영점',          status:'live', ch:'직영' }],
+    peipei:     [{ name:'신세계 센텀시티',         status:'live', ch:'신세계' },
+                 { name:'롯데 서면',               status:'live', ch:'롯데' },
+                 { name:'대전 신세계 Art&Science', status:'live', ch:'신세계' },
+                 { name:'코엑스(마곡)',             status:'live', ch:'기타' }],
+    vietnam:    [{ name:'롯데 본점',               status:'live', ch:'롯데' },
+                 { name:'롯데 동탄',               status:'live', ch:'롯데' }],
+    ihwawon:    [{ name:'연희동 본점',             status:'live', ch:'직영' },
+                 { name:'코엑스 오크우드',         status:'live', ch:'코엑스' }],
+    matsugajae: [{ name:'오크우드 코엑스 3F',     status:'live', ch:'호텔' }]
+  };
+
+  let _open = false;
+  let _currentBrand = 'pfchangs';
+  let _compState = {};
+
+  // 초기 경쟁사 상태
+  Object.keys(BRANDS).forEach(k => {
+    _compState[k] = {};
+    BRANDS[k].comps.forEach(c => _compState[k][c] = true);
+  });
+
+  /* ── 패널 열기/닫기 ── */
+  window.toggleCpPanel = function() {
+    _open = !_open;
+    const panel   = document.getElementById('cpPanel');
+    const toggle  = document.getElementById('cpToggle');
+    const backdrop= document.getElementById('cpBackdrop');
+    panel.style.left   = _open ? '0px' : '-308px';
+    toggle.style.left  = _open ? '300px' : '0px';
+    if (_open) {
+      backdrop.style.display = 'block';
+      requestAnimationFrame(() => backdrop.style.opacity = '1');
+    } else {
+      backdrop.style.opacity = '0';
+      setTimeout(() => backdrop.style.display = 'none', 280);
+    }
+  };
+
+  /* ── 아코디언 ── */
+  window.cpAccToggle = function(id) {
+    document.getElementById(id).classList.toggle('open');
+  };
+
+  /* ── 브랜드 선택 ── */
+  window.cpBrandSelect = function(id) {
+    _currentBrand = id;
+    // 라디오 UI 업데이트
+    document.querySelectorAll('.cp-brad').forEach(el => {
+      el.classList.remove('selected');
+      el.style.borderColor = '';
+    });
+    const el = document.getElementById('cpr-' + id);
+    if (el) { el.classList.add('selected'); el.style.borderColor = BRANDS[id].color; }
+    // 매장 리스트 재생성
+    cpBuildStoreList(id);
+    // 경쟁사 리스트 재생성
+    cpBuildCompList(id);
+    // 메인 레이더 전환
+    if (typeof switchBrandRadar === 'function') switchBrandRadar(id);
+    cpUpdateFilterBar();
+  };
+
+  /* ── 매장 리스트 생성 ── */
+  function cpBuildStoreList(brandId) {
+    const stores = STORES[brandId] || [];
+    const el = document.getElementById('cpStoreList');
+    el.innerHTML = stores.map((s,i) => `
+      <div class="cp-store">
+        <input type="checkbox" id="cpStore-${brandId}-${i}" checked onchange="cpStoreFilter()">
+        <span class="cp-store-name">${s.name}</span>
+        <span class="cp-store-ch">${s.ch}</span>
+        <span class="cp-store-live">LIVE</span>
+      </div>`).join('');
+  }
+
+  /* ── 경쟁사 리스트 생성 ── */
+  function cpBuildCompList(brandId) {
+    const bd = BRANDS[brandId];
+    const el = document.getElementById('cpCompList');
+    el.innerHTML = `<div style="font-size:10px;color:#94a3b8;font-weight:600;margin-bottom:8px;padding:0 2px">경쟁사 레이더 표시 선택</div>` +
+      bd.comps.map((c,i) => `
+        <div class="cp-comp">
+          <input type="checkbox" id="cpComp-${brandId}-${i}" ${_compState[brandId][c]?'checked':''} onchange="cpCompFilter('${brandId}','${c}',this)">
+          <span class="cp-comp-dot" style="background:${bd.compColors[i]}"></span>
+          <span class="cp-comp-lbl">${c}</span>
+        </div>`).join('');
+  }
+
+  /* ── 매장 필터 (현재 로깅 용도) ── */
+  window.cpStoreFilter = function() { cpUpdateFilterBar(); };
+
+  /* ── 경쟁사 필터 ── */
+  window.cpCompFilter = function(brandId, comp, cb) {
+    _compState[brandId][comp] = cb.checked;
+    cpUpdateFilterBar();
+  };
+
+  /* ── 뷰 토글 ── */
+  window.cpViewToggle = function(type, cb) {
+    // 레이더 차트가 있으면 fill/animation 제어
+    if (typeof window.radarChart !== 'undefined' && window.radarChart) {
+      if (type === 'fill') {
+        window.radarChart.data.datasets.forEach(ds => ds.fill = cb.checked);
+        window.radarChart.update();
+      } else if (type === 'anim') {
+        window.radarChart.options.animation = cb.checked ? {duration:800} : false;
+      }
+    }
+    cpUpdateFilterBar();
+  };
+
+  /* ── 메모 자동저장 ── */
+  window.cpSaveMemo = function() {
+    const v = document.getElementById('cpMemo').value;
+    try { localStorage.setItem('cp_memo_pfc', v); } catch(e){}
+  };
+
+  /* ── 초기화 ── */
+  window.cpResetAll = function() {
+    cpBrandSelect('pfchangs');
+    document.querySelectorAll('#cpStoreList input[type=checkbox]').forEach(c => c.checked = true);
+    document.getElementById('cpSwFill').checked  = true;
+    document.getElementById('cpSwAnim').checked  = true;
+    document.getElementById('cpSwLabel').checked = false;
+    Object.keys(BRANDS).forEach(k => BRANDS[k].comps.forEach(c => _compState[k][c] = true));
+    cpBuildCompList(_currentBrand);
+    cpUpdateFilterBar();
+  };
+
+  /* ── 내보내기 ── */
+  window.cpExport = function() {
+    const memo = document.getElementById('cpMemo').value;
+    const bd   = BRANDS[_currentBrand];
+    const txt  = `[에렉스 분석 패널 내보내기]\n브랜드: ${bd.label}\n날짜: ${new Date().toLocaleDateString('ko-KR')}\n\n메모:\n${memo || '(없음)'}`;
+    const a = document.createElement('a');
+    a.href = 'data:text/plain;charset=utf-8,' + encodeURIComponent(txt);
+    a.download = `aerex_panel_${_currentBrand}_${Date.now()}.txt`;
+    a.click();
+  };
+
+  /* ── 필터 상태 바 ── */
+  window.cpUpdateFilterBar = function() {
+    let cnt = 0;
+    const bd = BRANDS[_currentBrand];
+    const offComps = bd.comps.filter(c => !_compState[_currentBrand][c]);
+    cnt += offComps.length;
+    const dot = document.getElementById('cpFDot');
+    const txt = document.getElementById('cpFTxt');
+    const cntEl= document.getElementById('cpFCnt');
+    if (cnt === 0) {
+      dot.style.background = '#94a3b8';
+      txt.textContent = `${bd.icon} ${bd.label} — 전체 표시`;
+    } else {
+      dot.style.background = '#f59e0b';
+      txt.textContent = `${bd.icon} ${bd.label} · ${cnt}개 필터 적용`;
+    }
+    cntEl.textContent = cnt + ' 필터';
+    cntEl.style.background = cnt > 0 ? '#fef3c7' : '#e2e8f0';
+    cntEl.style.color       = cnt > 0 ? '#92400e' : '#64748b';
+  };
+
+  /* ── 초기 렌더링 ── */
+  document.addEventListener('DOMContentLoaded', function() {
+    cpBuildStoreList('pfchangs');
+    cpBuildCompList('pfchangs');
+    // 저장된 메모 복원
+    try {
+      const saved = localStorage.getItem('cp_memo_pfc');
+      if (saved) document.getElementById('cpMemo').value = saved;
+    } catch(e){}
+    cpUpdateFilterBar();
+  });
+})();
 </script>
 </body>
 </html>
