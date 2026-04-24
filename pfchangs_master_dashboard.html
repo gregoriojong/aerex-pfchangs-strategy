@@ -762,6 +762,201 @@ footer{text-align:center;padding:28px;color:var(--gray);font-size:11px;border-to
     <strong>⚠️ 경쟁 구도 핵심 인사이트:</strong> 아웃백은 이미 "가족 캐주얼 1위"를 점령. 정면 대결은 불가. 피에프창의 생존 전략은
     <strong>"아시안 퓨전 + 합리적 프리미엄 (4~7만원)"</strong> 블루오션 명확화. 차이797(중식 가성비)·크리스탈제이드(프리미엄 중식) 사이의 공백 선점.
   </div>
+
+  <!-- ── NEW: 가격 벤치마킹 + 채널 경쟁 ── -->
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">💴 가격 벤치마킹 — 메인메뉴 평균 객단가 비교</div>
+      <canvas id="priceBenchChart" height="220"></canvas>
+      <div style="font-size:10px;color:#94a3b8;margin-top:6px">⚠️ 추정치 기반 (공개 메뉴판·배달앱 2026.04 기준)</div>
+    </div>
+    <div class="card">
+      <div class="card-title">📊 배달앱·온라인 채널 현황 비교</div>
+      <div style="overflow-x:auto;margin-top:4px">
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead>
+            <tr style="background:#1e3a5f;color:#fff">
+              <th style="padding:7px 10px;text-align:left">브랜드</th>
+              <th style="padding:7px 8px;text-align:center">배달의민족</th>
+              <th style="padding:7px 8px;text-align:center">쿠팡이츠</th>
+              <th style="padding:7px 8px;text-align:center">요기요</th>
+              <th style="padding:7px 8px;text-align:center">자사앱</th>
+              <th style="padding:7px 8px;text-align:center">종합</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr style="background:#eff6ff;font-weight:700">
+              <td style="padding:7px 10px">⭐ 피에프창</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center"><span style="background:#fee2e2;color:#dc2626;padding:2px 6px;border-radius:4px;font-size:10px">0/4</span></td>
+            </tr>
+            <tr>
+              <td style="padding:7px 10px">🥩 아웃백</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center"><span style="background:#dcfce7;color:#16a34a;padding:2px 6px;border-radius:4px;font-size:10px">4/4</span></td>
+            </tr>
+            <tr style="background:#f9fafb">
+              <td style="padding:7px 10px">🧄 매드포갈릭</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#ea580c">△</td>
+              <td style="text-align:center;color:#ea580c">△</td>
+              <td style="text-align:center"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;font-size:10px">2/4</span></td>
+            </tr>
+            <tr>
+              <td style="padding:7px 10px">🥟 차이797</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#ea580c">△</td>
+              <td style="text-align:center;color:#ea580c">△</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;font-size:10px">2/4</span></td>
+            </tr>
+            <tr style="background:#f9fafb">
+              <td style="padding:7px 10px">💎 크리스탈제이드</td>
+              <td style="text-align:center;color:#ea580c">△</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center"><span style="background:#fee2e2;color:#dc2626;padding:2px 6px;border-radius:4px;font-size:10px">0/4</span></td>
+            </tr>
+            <tr>
+              <td style="padding:7px 10px">🌿 제이에스가든</td>
+              <td style="text-align:center;color:#16a34a">✓</td>
+              <td style="text-align:center;color:#ea580c">△</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center;color:#dc2626">✗</td>
+              <td style="text-align:center"><span style="background:#fef3c7;color:#92400e;padding:2px 6px;border-radius:4px;font-size:10px">1/4</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="font-size:10px;color:#94a3b8;margin-top:5px">✓=입점완료 △=일부입점 ✗=미입점 ⚠️추정</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NEW: 채널별 경쟁 현황 매트릭스 ── -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">🏬 채널별 경쟁 점포 현황 매트릭스 — 2026.04 기준</div>
+    <div style="overflow-x:auto">
+      <table style="width:100%;border-collapse:collapse;font-size:11.5px;min-width:620px">
+        <thead>
+          <tr style="background:#1e3a5f;color:#fff;text-align:center">
+            <th style="padding:9px 12px;text-align:left;min-width:130px">브랜드</th>
+            <th style="padding:9px 10px">신세계</th>
+            <th style="padding:9px 10px">롯데</th>
+            <th style="padding:9px 10px">현대</th>
+            <th style="padding:9px 10px">AK·갤러리아</th>
+            <th style="padding:9px 10px">코엑스·IFC</th>
+            <th style="padding:9px 10px">직영·기타</th>
+            <th style="padding:9px 10px;background:#1d4ed8">합계</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="background:#eff6ff;font-weight:700">
+            <td style="padding:8px 12px">⭐ 피에프창</td>
+            <td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">0</td>
+            <td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center;color:#1d4ed8">1</td>
+            <td style="text-align:center;background:#dbeafe;color:#1d4ed8;font-weight:800">1</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px">🥩 아웃백</td>
+            <td style="text-align:center">3</td><td style="text-align:center">5</td><td style="text-align:center">4</td>
+            <td style="text-align:center">2</td><td style="text-align:center">1</td><td style="text-align:center">30</td>
+            <td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:800">45</td>
+          </tr>
+          <tr style="background:#f9fafb">
+            <td style="padding:8px 12px">🧄 매드포갈릭</td>
+            <td style="text-align:center">2</td><td style="text-align:center">3</td><td style="text-align:center">2</td>
+            <td style="text-align:center">1</td><td style="text-align:center">1</td><td style="text-align:center">10</td>
+            <td style="text-align:center;background:#fee2e2;color:#dc2626;font-weight:800">19</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px">🥟 차이797</td>
+            <td style="text-align:center">1</td><td style="text-align:center">2</td><td style="text-align:center">3</td>
+            <td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">5</td>
+            <td style="text-align:center;background:#fef3c7;color:#92400e;font-weight:800">12</td>
+          </tr>
+          <tr style="background:#f9fafb">
+            <td style="padding:8px 12px">💎 크리스탈제이드</td>
+            <td style="text-align:center">0</td><td style="text-align:center">1</td><td style="text-align:center">0</td>
+            <td style="text-align:center">0</td><td style="text-align:center">2</td><td style="text-align:center">0</td>
+            <td style="text-align:center;font-weight:800">3</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 12px">🌿 제이에스가든</td>
+            <td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">1</td>
+            <td style="text-align:center">0</td><td style="text-align:center">0</td><td style="text-align:center">2</td>
+            <td style="text-align:center;font-weight:800">3</td>
+          </tr>
+          <tr style="background:#f0fdf4;font-weight:700;color:#16a34a">
+            <td style="padding:8px 12px">📍 경쟁사 합계</td>
+            <td style="text-align:center">6</td><td style="text-align:center">11</td><td style="text-align:center">10</td>
+            <td style="text-align:center">3</td><td style="text-align:center">5</td><td style="text-align:center">47</td>
+            <td style="text-align:center;font-weight:800">82</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="margin-top:10px;padding:10px 14px;background:#fef9c3;border-radius:8px;font-size:12px;color:#78350f">
+      💡 <strong>이사 관점 포인트:</strong> 롯데(11개)·현대(10개) 채널이 경쟁사 집중 채널. 피에프창은 강남역 직영 1개뿐 — 신세계 센텀·현대 판교 등 프리미엄 쇼핑몰 채널 공략 시 경쟁사 밀도 상대적 낮음.
+    </div>
+  </div>
+
+  <!-- ── NEW: 리뷰 경쟁력 + 위협 스코어카드 ── -->
+  <div class="chart-grid-2" style="margin-bottom:14px">
+    <div class="card">
+      <div class="card-title">⭐ 리뷰 경쟁력 분석 — 네이버 평점 × 리뷰 수</div>
+      <canvas id="reviewBubble" height="240"></canvas>
+      <div style="font-size:10px;color:#94a3b8;margin-top:4px">버블 크기 = 인스타 팔로워 규모 / ⚠️추정치</div>
+    </div>
+    <div class="card">
+      <div class="card-title">🎯 경쟁사 위협 스코어카드 — 대응 우선순위</div>
+      <div style="overflow-x:auto">
+        <table style="width:100%;border-collapse:collapse;font-size:11px">
+          <thead>
+            <tr style="background:#1e3a5f;color:#fff">
+              <th style="padding:7px 10px;text-align:left">경쟁사</th>
+              <th style="padding:7px 8px;text-align:center">마케팅</th>
+              <th style="padding:7px 8px;text-align:center">채널</th>
+              <th style="padding:7px 8px;text-align:center">가격</th>
+              <th style="padding:7px 8px;text-align:center">성장</th>
+              <th style="padding:7px 8px;text-align:center">위협도</th>
+              <th style="padding:7px 8px;text-align:center">우선순위</th>
+            </tr>
+          </thead>
+          <tbody id="threatScoreBody"></tbody>
+        </table>
+      </div>
+      <div style="margin-top:10px;font-size:11px;color:#475569;line-height:1.7;padding:8px 10px;background:#f8fafc;border-radius:7px">
+        <strong>📌 전략 핵심 대응:</strong><br>
+        🔴 <b>아웃백</b> — 정면 경쟁 NO. 아시안 퓨전 차별화 강화<br>
+        🟠 <b>매드포갈릭</b> — IP 콜라보·SNS 팔로워 격차 역전 필요<br>
+        🟡 <b>차이797</b> — 중식 카테고리 겹침 최소화, 프리미엄 포지션 명확화
+      </div>
+    </div>
+  </div>
+
+  <!-- ── NEW: 출점 속도 비교 ── -->
+  <div class="card" style="margin-bottom:14px">
+    <div class="card-title">🚀 경쟁사 출점 속도 비교 — 연도별 누적 점포 수 추이</div>
+    <div class="chart-grid-2" style="gap:14px">
+      <canvas id="storeGrowthChart" height="220"></canvas>
+      <div>
+        <div style="font-size:12px;font-weight:700;color:#1e3a5f;margin-bottom:10px">📊 연평균 출점 성장률 (CAGR 2021→2026)</div>
+        <div id="cagrList" style="display:flex;flex-direction:column;gap:7px"></div>
+        <div style="margin-top:14px;padding:10px 12px;background:#fef9c3;border-radius:7px;font-size:11.5px;color:#78350f">
+          💡 <strong>전략 인사이트:</strong> 아웃백·매드포갈릭은 연 8~15% 출점 성장 중. 피에프창은 강남역 1개로 고착 위험 — 2026 하반기 내 2호점 출점으로 브랜드 가시성 확보 필수.
+        </div>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ════════════════════════ TAB 4: SNS 전략 ════════════════════════ -->
@@ -2835,6 +3030,151 @@ function nrSelectAll(on) {
   nrChart.data.datasets = makeNRDatasets(nrVisible);
   nrChart.update();
 }
+
+/* ══════════════════════════════════════
+   NEW COMPETITIVE ANALYSIS CHARTS
+══════════════════════════════════════ */
+
+// ── 가격 벤치마킹 차트
+new Chart(document.getElementById('priceBenchChart').getContext('2d'), {
+  type: 'bar',
+  data: {
+    labels: ['피에프창', '아웃백', '매드포갈릭', '차이797', '크리스탈\n제이드', '제이에스\n가든', '모트32'],
+    datasets: [{
+      label: '1인 평균 객단가 (원)',
+      data: [65000, 42000, 38000, 32000, 72000, 55000, 120000],
+      backgroundColor: ['#1d4ed8','#dc2626','#ea580c','#ca8a04','#7c3aed','#16a34a','#374151'],
+      borderRadius: 6
+    }]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      tooltip: { callbacks: { label: ctx => '₩' + ctx.raw.toLocaleString() } }
+    },
+    scales: {
+      y: { ticks: { callback: v => '₩' + (v/1000) + 'K' }, beginAtZero: true }
+    }
+  }
+});
+
+// ── 리뷰 경쟁력 버블 차트 (X:리뷰수, Y:평점, R:팔로워규모)
+new Chart(document.getElementById('reviewBubble').getContext('2d'), {
+  type: 'bubble',
+  data: {
+    datasets: [
+      { label:'피에프창', data:[{x:320, y:4.2, r:8}],  backgroundColor:'rgba(29,78,216,.75)',  borderColor:'#1d4ed8' },
+      { label:'아웃백',   data:[{x:8500,y:4.3, r:22}], backgroundColor:'rgba(220,38,38,.6)',   borderColor:'#dc2626' },
+      { label:'매드포갈릭',data:[{x:3200,y:4.1,r:14}], backgroundColor:'rgba(234,88,12,.65)',  borderColor:'#ea580c' },
+      { label:'차이797',  data:[{x:2800,y:4.4,r:12}],  backgroundColor:'rgba(202,138,4,.65)',  borderColor:'#ca8a04' },
+      { label:'크리스탈제이드',data:[{x:950,y:4.5,r:9}],backgroundColor:'rgba(124,58,237,.65)',borderColor:'#7c3aed' },
+      { label:'제이에스가든',data:[{x:720,y:4.6,r:9}], backgroundColor:'rgba(22,163,74,.65)',  borderColor:'#16a34a' },
+    ]
+  },
+  options: {
+    responsive: true,
+    plugins: {
+      legend: { position:'bottom', labels:{ boxWidth:10, font:{ size:10 } } },
+      tooltip: { callbacks: { label: ctx => `${ctx.dataset.label}: 리뷰 ${ctx.raw.x}개 · 평점 ${ctx.raw.y}` } }
+    },
+    scales: {
+      x: { title:{ display:true, text:'네이버 플레이스 리뷰 수 (추정)', font:{size:10} }, min:0 },
+      y: { title:{ display:true, text:'평균 평점', font:{size:10} }, min:3.5, max:5 }
+    }
+  }
+});
+
+// ── 위협 스코어카드
+(function(){
+  const threats = [
+    { name:'🥩 아웃백',     mkt:9, ch:9, price:8, growth:6, priority:'🔴 즉시대응' },
+    { name:'🧄 매드포갈릭', mkt:7, ch:7, price:7, growth:8, priority:'🟠 단기대응' },
+    { name:'🥟 차이797',    mkt:6, ch:7, price:9, growth:7, priority:'🟠 단기대응' },
+    { name:'💎 크리스탈제이드',mkt:4,ch:5,price:5, growth:5, priority:'🟡 관찰' },
+    { name:'🌿 제이에스가든',mkt:3, ch:4, price:6, growth:4, priority:'🟡 관찰' },
+    { name:'🍽️ 모트32',    mkt:3, ch:3, price:3, growth:3, priority:'⚪ 저위협' },
+  ];
+  const tbody = document.getElementById('threatScoreBody');
+  const scoreBg = s => s>=8?'#fee2e2':s>=6?'#fef3c7':'#f0fdf4';
+  const scoreColor = s => s>=8?'#dc2626':s>=6?'#92400e':'#16a34a';
+  tbody.innerHTML = threats.map(t => {
+    const total = Math.round((t.mkt + t.ch + t.price + t.growth) / 4 * 10) / 10;
+    const bar = Math.round(total * 10);
+    return `<tr style="border-bottom:1px solid #f1f5f9">
+      <td style="padding:7px 10px;font-weight:600">${t.name}</td>
+      <td style="text-align:center;background:${scoreBg(t.mkt)};color:${scoreColor(t.mkt)};font-weight:700">${t.mkt}</td>
+      <td style="text-align:center;background:${scoreBg(t.ch)};color:${scoreColor(t.ch)};font-weight:700">${t.ch}</td>
+      <td style="text-align:center;background:${scoreBg(t.price)};color:${scoreColor(t.price)};font-weight:700">${t.price}</td>
+      <td style="text-align:center;background:${scoreBg(t.growth)};color:${scoreColor(t.growth)};font-weight:700">${t.growth}</td>
+      <td style="padding:6px 8px">
+        <div style="background:#f1f5f9;border-radius:4px;height:8px;overflow:hidden">
+          <div style="width:${bar}%;height:100%;background:${scoreColor(total)};border-radius:4px"></div>
+        </div>
+        <div style="text-align:center;font-size:10px;font-weight:700;color:${scoreColor(total)};margin-top:2px">${total}/10</div>
+      </td>
+      <td style="text-align:center;font-size:10px;font-weight:700">${t.priority}</td>
+    </tr>`;
+  }).join('');
+})();
+
+// ── 출점 속도 비교 차트
+(function(){
+  const years = ['2021','2022','2023','2024','2025','2026E'];
+  const storeGrowthData = [
+    { label:'아웃백',    data:[35,37,39,41,43,45], color:'#dc2626' },
+    { label:'매드포갈릭',data:[8, 10,12,15,17,19], color:'#ea580c' },
+    { label:'차이797',   data:[7, 8, 9, 10,11,12], color:'#ca8a04' },
+    { label:'크리스탈제이드',data:[1,2,2,3,3,3],  color:'#7c3aed' },
+    { label:'피에프창',  data:[1, 1, 1, 1, 1, 1],  color:'#1d4ed8', borderDash:[5,5] },
+  ];
+
+  new Chart(document.getElementById('storeGrowthChart').getContext('2d'), {
+    type: 'line',
+    data: {
+      labels: years,
+      datasets: storeGrowthData.map(d => ({
+        label: d.label,
+        data: d.data,
+        borderColor: d.color,
+        backgroundColor: d.color + '18',
+        fill: false,
+        tension: 0.3,
+        borderWidth: d.label === '피에프창' ? 2.5 : 1.5,
+        borderDash: d.borderDash || [],
+        pointRadius: 3
+      }))
+    },
+    options: {
+      responsive: true,
+      plugins: { legend:{ position:'bottom', labels:{ boxWidth:10, font:{size:10} } } },
+      scales: { y:{ beginAtZero:false, title:{ display:true, text:'누적 점포 수', font:{size:10} } } }
+    }
+  });
+
+  // CAGR 리스트
+  const cagrEl = document.getElementById('cagrList');
+  const cagrData = [
+    { name:'아웃백',    start:35, end:45, color:'#dc2626' },
+    { name:'매드포갈릭',start:8,  end:19, color:'#ea580c' },
+    { name:'차이797',   start:7,  end:12, color:'#ca8a04' },
+    { name:'크리스탈제이드',start:1,end:3,color:'#7c3aed' },
+    { name:'피에프창',  start:1,  end:1,  color:'#1d4ed8' },
+  ];
+  cagrEl.innerHTML = cagrData.map(d => {
+    const cagr = (Math.pow(d.end/d.start, 1/5) - 1) * 100;
+    const w = Math.min(100, Math.abs(cagr) * 4);
+    return `<div>
+      <div style="display:flex;justify-content:space-between;font-size:11px;margin-bottom:3px">
+        <span style="font-weight:600">${d.name}</span>
+        <span style="font-weight:700;color:${d.color}">${cagr>=0?'+':''}${cagr.toFixed(1)}%</span>
+      </div>
+      <div style="background:#f1f5f9;border-radius:4px;height:7px">
+        <div style="width:${w}%;height:100%;background:${d.color};border-radius:4px"></div>
+      </div>
+    </div>`;
+  }).join('');
+})();
 
 /* ══════════════════════════════════════
    LEFT CONTROL PANEL — JS
